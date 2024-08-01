@@ -1,27 +1,25 @@
 # Дополнительное практическое задание по модулю: "Подробнее о функциях."
 # Назаров ПВ
 
-import inspect
-
 def calculate_structure_sum(args):
- # print(args)
   count = 0 # переменная счетчика
-  # params = locals().keys()
-  # # Сразу копируйте ключи, пока locals() не наполнился другими переменными!
-  # param_list = list(params)
-  # # Продолжение функции
-  # print(param_list)
   for i in range(len(args)):
     # определили тип аргументов
-    print("\nData type of argument: ",type(args[i]),args[i])
+    #print("\nData type of argument: ",type(args[i]),args[i])
     if type(args[i]) == int:
       count += args[i]
     elif type(args[i]) == str:
       count += len(args[i])
     elif type(args[i]) == list:
       count += calculate_structure_sum(args[i])
-    #elif type(args[i]) == dict:
-
+    elif type(args[i]) == tuple:
+      count += calculate_structure_sum(args[i])
+    elif type(args[i]) == set:
+      temp_list = list(args[i])
+      count += calculate_structure_sum(temp_list)
+    elif type(args[i]) == dict:
+      pairs = list(args[i].items()) 
+      count += calculate_structure_sum(pairs)
   return count
 
 
