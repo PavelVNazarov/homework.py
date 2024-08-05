@@ -10,7 +10,7 @@ def calculate_structure_sum(*args):
         count += i
       case str():
         count += len(i)
-      case (list()|tuple()|set()):
+      case list()|tuple()|set():
         count += calculate_structure_sum(*i)
       case dict():
         count += calculate_structure_sum(*i.keys())
