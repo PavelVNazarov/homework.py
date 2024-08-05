@@ -2,30 +2,28 @@
 # Назаров ПВ
 
 class House:
-    houses_history = []
+    houses_history = list()
 
-    def __new__(cls,*args):
-        if cls.houses_history not in cls.houses_history:
-            cls.houses_history.append(cls)
-        return cls.houses_history
-        
+    def __new__(cls,*args,**kwargs):
+        return super().__new__(cls)
+
     def __init__(self, name, number_of_floors):
         self.name = name
         self.number_of_floors = number_of_floors
-        House.houses_history.append(self)
-    
+        House.houses_history.append(self.name)
+
+    def __del__(self):
+        House.houses_history.remove(self.name)
+        print(self.name," снесён, но он останется в истории")
+
+  
     def __len__(self):
         return self.number_of_floors
 
     def __str__(self):
         h = 'Название {self.name} количество этажей {number_of_floors}'
-        return h.format(self=self, number_of_floors=self.number_of_floors)
+        return h.format(self=self,   number_of_floors=self.number_of_floors)
 
-    def __del__(self):
-        print(self.name," снесён, но он останется в истории")
-
-
-    
     def __eq__(self, other):
       if isinstance(other, House):
         return self.number_of_floors == other.number_of_floors
@@ -73,7 +71,3 @@ del h2
 del h3
 
 print(House.houses_history)
-    
-
-
-
