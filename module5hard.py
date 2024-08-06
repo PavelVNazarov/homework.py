@@ -1,5 +1,70 @@
 # Дополнительное практическое задание по модулю: "Классы и объекты."
 # Назаров ПВ
+# module5hard.py
+
+class UrTube:
+  #users(список объектов User), videos(список объектов Video), current_user(текущий пользователь, User)
+
+  def __init__(self, users, videos, current_user):
+    self.users = users
+    self.videos = videos
+    self.current_user = current_user
+
+  def add_user(self, User):
+    self.users.append(User)
+    
+  def add_video(self, Video):
+    self.videos.append(Video)
+
+  def get_current_user(self):
+    return self.current_user
+    
+  def set_current_user(self, User):
+    self.current_user = User
+
+  def log_in(self, nikname,pasword):
+    if nikname == self. :
+      self.current_user = User
+    else:
+      register()
+
+  def register(self, nikname,pasword,age):
+    if self.age < 18:
+      print('Вам нет 18 лет, пожалуйста покиньте страницу')
+    elif self.nikname == self.nikname:
+      print(f"Пользователь {nickname} уже существует")
+    else:
+      self.users.append(User)
+      self.current_user = User
+
+  def log_out(self):
+    self.current_user = None
+
+  def add(Video):
+    if self.Video not in videos:
+      self.videos.append(Video)
+
+
+class Video:
+   # title(заголовок, строка), duration(продолжительность, секунды), time_now(секунда остановки (изначально 0)), adult_mode(ограничение по возрасту, bool (False по умолчанию))
+  
+  def __init__(self, title, duration, time_now, adult_mode, bool):
+    self.title =  title
+    self.duration = duration
+    self.time_now = time_now
+    self.adult_mode = adult_mode
+    self.bool = bool
+    bool = False
+
+   
+
+class User:
+  # Класс пользователь, содержащий атрибуты: логин и пароль
+  
+  def __init__(self, nickname, pasword, age):
+    self.username = nickname
+    self.pasword = pasword
+    self.age = age
 
 
 
