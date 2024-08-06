@@ -23,12 +23,16 @@ class UrTube:
     self.current_user = User
 
   def log_in(self, nikname,pasword):
-    if nikname == self. :
+    if self.nikname in User and self.pasword == pasword:
       self.current_user = User
     else:
       register()
 
   def register(self, nikname,pasword,age):
+    print('Пожалуйста, пройдите регистрацию: ')
+    nikname = input('Введите ваш никнейм: ')
+    pasword = input('Введите ваш пароль: ')
+    age = input('Введите ваш возраст: ')
     if self.age < 18:
       print('Вам нет 18 лет, пожалуйста покиньте страницу')
     elif self.nikname == self.nikname:
@@ -41,8 +45,27 @@ class UrTube:
     self.current_user = None
 
   def add(Video):
-    if self.Video not in videos:
+    if self.Video not in self.videos:
       self.videos.append(Video)
+
+  def get_video(self, search_Video):
+    if lower(search_Video) in lower(videos):
+      return Video
+    else:
+      return None
+
+  def watch_video(self, wait_vidoe):
+    if self.current_user is None:
+      print("Вы не авторизованы")
+    elif self.current_user.age < 18:
+      print(f"Вам нет 18 лет, пожалуйста покиньте страницу")
+    elif self.wait_video in self.videos:
+      for i in self.videos.time_now:
+        print('i')
+        time.sleep(100)
+      print('Конец видео')
+
+
 
 
 class Video:
@@ -88,6 +111,10 @@ ur.watch_video('Для чего девушкам парень программи
 
 # Проверка входа в другой аккаунт
 ur.register('vasya_pupkin', 'F8098FM8fjm9jmi', 55)
+print(ur.current_user)
+
+# Попытка воспроизведения несуществующего видео
+ur.watch_video('Лучший язык программирования 2024 года!')
 print(ur.current_user)
 
 # Попытка воспроизведения несуществующего видео
