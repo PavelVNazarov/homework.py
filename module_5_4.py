@@ -1,19 +1,19 @@
 # Домашняя работа по уроку "Различие атрибутов класса и экземпляра."
 # Назаров ПВ
 
-class House:
-    houses_history = list()
+houses_history = []
 
     def __new__(cls,*args,**kwargs):
-        return super().__new__(cls)
+        cls.houses_history.append(args[0])
+        return object.__new__(cls)
 
     def __init__(self, name, number_of_floors):
         self.name = name
         self.number_of_floors = number_of_floors
-        House.houses_history.append(self.name)
+       # House.houses_history.append(self.name)
 
     def __del__(self):
-        House.houses_history.remove(self.name)
+        #House.houses_history.remove(self.name)
         print(self.name," снесён, но он останется в истории")
 
   
