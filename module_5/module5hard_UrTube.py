@@ -2,49 +2,122 @@
 # Назаров ПВ
 # module5hard.py
 
+import time
+
+class Video:
+    # title(заголовок, строка), duration(продолжительность, секунды), time_now(секунда остановки (изначально 0)), adult_mode(ограничение по возрасту, bool (False по умолчанию))
+    Video = []
+
+    def __init__(self, title, duration, time_now=0, adult_mode = False):
+        self.title = title
+        self.duration = duration
+        self.time_now = time_now
+        self.adult_mode = adult_mode
+
+    def __str__(self):
+        h = '{title}, {duration}, {time_now}, {adult_mode}.'
+        return h.format(self=self,
+                        title=self.title,
+                        duration=self.duration,
+                        time_now=self.time_now,
+                        adult_mode=self.adult_mode)
+
+
+class User:
+    # Класс пользователь, содержащий атрибуты: логин и пароль
+    User = []
+
+    def __init__(self,
+                 nickname,
+                 #pasword = hash('pasword'),
+                 pasword,
+                 age):
+        self.nickname = nickname
+        self.pasword = pasword
+        self.age = age
+
+          
 class UrTube:
-    # users(список объектов User), videos(список объектов Video), current_user(текущий пользователь, User)
-
-    def __init__(self, users, videos, current_user):
-        self.users = users
-        self.videos = videos
-        self.current_user = current_user
-
-    def add_user(self, User):
-        self.users.append(User)
-
-    def add_video(self, Video):
-        self.videos.append(Video)
-
-    def get_current_user(self):
-        return self.current_user
-
-    def set_current_user(self, User):
-        self.current_user = User
-
-    def log_in(self, nikname, pasword):
-        if nikname == self.:
-            self.current_user = User
+    # users(список объектов User), videos(список объектов Video), current_user (текущий пользователь User)
+    users = []
+    videos = []
+    current_user = None
+    current_user_adult_mode = False
+    
+    def __init__(self):
+        UrTube.users = []
+        UrTube.videos = []
+    
+    def register(self, nickname, pasword, age):
+        Us = User(nickname, pasword, age)       
+        if len(UrTube.users) == 0:
+            UrTube.users.append(Us)
+            UrTube.current_user = nickname
+            if age < 18:
+                UrTube.current_user_adult_mode = True
         else:
-            register()
+            for i in range(len(UrTube.users)):
+                if nickname == UrTube.users[i].nickname:
+                    if pasword != UrTube.users[i].pasword:
+                        print(f'Пользователь {nickname} уже существует')
+                        break
+                else:
+                    UrTube.current_user = UrTube.users[i].nickname
+                    UrTube.users.append(Us)
+                    UrTube.current_user = nickname
+                    if age < 18:
+                        UrTube.current_user_adult_mode = True
+                        print(ur.current_user)
+        return UrTube.current_user
 
-    def register(self, nikname, pasword, age):
-        if self.age < 18:
-            print('Вам нет 18 лет, пожалуйста покиньте страницу')
-        elif self.nikname == self.nikname:
-            print(f"Пользователь {nickname} уже существует")
-        else:
-            self.users.append(User)
-            self.current_user = User
+    def add(self,*args):
+        for i in range(len(args)):
+            if args[i].title in Video.Video:
+                pass
+            else:
+                Video.Video.append(args[i].title)
+                UrTube.videos.append(args[i])
 
+    def get_videos(self, word):
+        same_words = []
+        for i in range(len(UrTube.videos)):
+            if word.lower() in UrTube.videos[i].title.lower():
+                same_words.append(UrTube.videos[i].title)
+        return same_words
+
+    def log_in(self, nickname, pasword):
+        for i in range(len(UrTube.users)):
+            if nickname == UrTube.users[i].nickname:
+                if pasword == UrTube.users[i].pasword:
+                    UrTube.current_user = nickname
+                    return UrTube.current_user
+                else:
+                    print('Неверный пароль')
+            else:
+                print('Пользователь не найден')
+    
     def log_out(self):
-        self.current_user = None
-
-    def add(Video):
-        if self.Video not in videos:
-            self.videos.append(Video)
-
-
+        current_user = None
+        UrTube.current_user_adult_mode = False
+  
+    def watch_video(self, args):
+        if UrTube.current_user == None:
+            print(ur.current_user)
+            print('Войдите в аккаунт, чтобы смотреть видео') 
+        else:
+            for i in range(len(UrTube.videos)):
+                if args == UrTube.videos[i].title:
+                    if UrTube.videos[i].adult_mode == True and UrTube.current_user_adult_mode == True:
+                        print('Вам нет 18 лет, пожалуйста покиньте страницу')
+                        print(ur.current_user)
+                        ur.log_out()
+                        break
+                    else:
+                        print(ur.current_user)
+                        for j in range(1,UrTube.videos[i].duration + 1):
+                            print(j, end=' ')
+                            time.sleep(1)
+                        print('Конец видео')
 
 
 ur = UrTube()
@@ -71,3 +144,4 @@ print(ur.current_user)
 
 # Попытка воспроизведения несуществующего видео
 ur.watch_video('Лучший язык программирования 2024 года!')
+
