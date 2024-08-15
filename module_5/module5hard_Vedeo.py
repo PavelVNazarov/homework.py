@@ -1,43 +1,67 @@
 # Дополнительное практическое задание по модулю: "Классы и объекты."
 # Назаров ПВ
-# module5hard.py
+# module5hard_video.py
+
+import time
 
 class Video:
     # title(заголовок, строка), duration(продолжительность, секунды), time_now(секунда остановки (изначально 0)), adult_mode(ограничение по возрасту, bool (False по умолчанию))
+    Video = []
+    videos = []
 
-    def __init__(self, title, duration, time_now, adult_mode, bool):
+    def __init__(self, title, duration, time_now=0, adult_mode=False):
         self.title = title
         self.duration = duration
         self.time_now = time_now
         self.adult_mode = adult_mode
-        self.bool = bool
-        bool = False
+
+    def add(self,other):
+        Video.videos.append(self)
+        Video.videos.append(other)
+
+    def __str__(self):
+        h = '{title}, {duration}, {time_now}, {adult_mode}.'
+        return h.format(self=self,
+                        title=self.title,
+                        duration=self.duration,
+                        time_now=self.time_now,
+                        adult_mode=self.adult_mode)
+
+    def get_videos(self):
+        same_words = []
+        for i in range(len(Video.videos)):
+            if self.lower() in Video.videos[i].title.lower():
+                same_words.append(Video.videos[i].title)
+        return same_words
+
+    def watch_video(self):
+        for i in range(len(Video.videos)):
+            if self == Video.videos[i].title:
+                for j in range(Video.videos[i].duration):
+                    print(j + 1, end=' ')
+                    time.sleep(1)
+                print('Конец видео')
 
 
 
 
 
-ur = UrTube()
+
 v1 = Video('Лучший язык программирования 2024 года', 200)
 v2 = Video('Для чего девушкам парень программист?', 10, adult_mode=True)
 
 # Добавление видео
-ur.add(v1, v2)
+Video.add(v1, v2)
 
-# Проверка поиска
-print(ur.get_videos('лучший'))
-print(ur.get_videos('ПРОГ'))
+print(Video.get_videos('лучший'))
+print(Video.get_videos('ПРОГ'))
 
 # Проверка на вход пользователя и возрастное ограничение
-ur.watch_video('Для чего девушкам парень программист?')
-ur.register('vasya_pupkin', 'lolkekcheburek', 13)
-ur.watch_video('Для чего девушкам парень программист?')
-ur.register('urban_pythonist', 'iScX4vIJClb9YQavjAgF', 25)
-ur.watch_video('Для чего девушкам парень программист?')
+#Video.watch_video('Для чего девушкам парень программист?')
 
-# Проверка входа в другой аккаунт
-ur.register('vasya_pupkin', 'F8098FM8fjm9jmi', 55)
-print(ur.current_user)
+Video.watch_video('Для чего девушкам парень программист?')
+
+Video.watch_video('Для чего девушкам парень программист?')
 
 # Попытка воспроизведения несуществующего видео
-ur.watch_video('Лучший язык программирования 2024 года!')
+Video.watch_video('Лучший язык программирования 2024 года!')
