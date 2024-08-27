@@ -10,7 +10,7 @@ class Animal():
 
 class Plant():
     edible = False # съедобность
-    name = str # название
+    name : str # название
 
 
 class Mammal(Animal):
