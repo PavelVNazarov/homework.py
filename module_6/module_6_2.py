@@ -3,10 +3,7 @@
 # module_6_2.py
 
 class Vehicle():
-    owner : str
-    __model : str
-    __engine_power : int
-    __color : str
+
     __COLOR_VARIANTS = ['blue', 'red', 'green', 'black', 'white']
 
     def __init__(self, owner, model, color, engine_power):
