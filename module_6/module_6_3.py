@@ -1,4 +1,4 @@
-# Дополнительное практическое задание по модулю: "Классы и объекты."
+# Домашнее задание по теме "Множественное наследование"
 # Назаров ПВ
 # module_6_3.py
 
@@ -27,7 +27,7 @@ class Pegasus(Horse,Eagle):
         return self.x_distance, self.y_distance
         
     def voice(self):
-        print (super().sound)
+        print (Eagle.sound)
 
 
 p1 = Pegasus()
