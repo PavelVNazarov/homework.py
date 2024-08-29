@@ -3,9 +3,10 @@
 # module_6_1.py
 
 class Animal():
-    alive = True # живой 
-    fed = False # кормлен
-    name = str # название
+    def __init__(self, name):
+        self.alive = alive = True 
+        self.fed = fed = False 
+        self.name = name
 
     def eat(self, food):
         if food.edible:
@@ -15,24 +16,29 @@ class Animal():
             print(f'{self.name} не стал есть {food.name}')
             self.alive = False
 
+
 class Plant():
-    edible = False # съедобность
-    name : str # название
+    def __init__(self, name):
+        self.edible = edible = False 
+        self.name = name 
 
 
 class Mammal(Animal):
-    def __init__(self, name):
-        self.name = name
+    pass
+    # def __init__(self, name):
+    #     self.name = name
 
 
 class Predator(Animal):
-    def __init__(self, name):
-        self.name = name
+    pass
+    # def __init__(self, name):
+    #     self.name = name
 
 
 class Flower(Plant):
-    def __init__(self, name):
-        self.name = name
+    pass
+    # def __init__(self, name):
+    #     self.name = name
 
 
 class Fruit(Plant):
@@ -54,3 +60,4 @@ a1.eat(p1)
 a2.eat(p2)
 print(a1.alive)
 print(a2.fed)
+
