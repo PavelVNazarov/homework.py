@@ -79,27 +79,30 @@ class Circle(Figure):
 class Triangle(Figure):
     def __init__(self, color=[], *sides_args):
         self.sides_count = 3
+        sides = []
         if len(sides_args) == 1:
             for i in range(self.sides_count):
-                sides[i] = sides_args
+                sides[i] = sides_args[0]
         elif len(sides_args) != self.sides_count:
-            sides = [1,1,1]
+            sides = [1, 1, 1]
         else:
             for i in range(self.sides_count):
                 sides[i] = sides_args[i]
         super().__init__(self)
 
     def get_square(self):
-        p=(a+b+c)/2
-        S=sqrt (p(p-a)(p-b)(p-c)),
+        p = (a + b + c) / 2
+        S = sqrt(p(p - a)(p - b)(p - c)),
         return S
+
 
 class Cube(Figure):
     def __init__(self, color=[], *sides_args):
         self.sides_count = 12
+        sides = []
         if len(sides_args) == 1:
             for i in range(self.sides_count):
-                sides[i] = sides_args
+                sides[i] = sides_args[0]
         elif len(sides_args) != self.sides_count:
             for i in range(self.sides_count):
                 sides[i] = 1
