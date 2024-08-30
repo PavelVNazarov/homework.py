@@ -13,24 +13,21 @@ class Figure():
         filled = False
 
     def set_color(self, r, g, b):
-        if (0 <= r <= 255) and (0 <= g <= 255) and (0 <= b <= 255):
+        if self.__is_valid_color(r,g,b):
             self.__color = [r, g, b]
 
     def get_color(self):
         return self.__color
 
-
     def __len__(self):
         return sum(self.__sides)
-
 
     def set_sides(self, *new_sides):
         if len(new_sides) == 1 and new_sides[0] > 0:
             self.__sides = list(new_sides)
         elif len(new_sides) == self.sides_count:
-            #for i in range(self.sides_count):
-                if self.__is_valid_sides(new_sides):
-                    self.__sides = new_sides
+            if self.__is_valid_sides(new_sides):
+                self.__sides = new_sides
 
     def __len__(self):
         return sum(self.__sides)
@@ -45,11 +42,9 @@ class Figure():
                     return True
         return False
 
-    def __is_valid_color(self, color):
-        if len(color) == 3:
-            for element in color:
-                if 0 <= element <= 255:
-                    return True
+    def __is_valid_color(self, r, g, b):
+        if (0 <= r <= 255) and (0 <= g <= 255) and (0 <= b <= 255):
+            return True
         return False
 
 
@@ -97,7 +92,6 @@ class Cube(Figure):
     def __init__(self,  arg, *sides_args):
         self.sides_count = 12
         self.sides = list()
-        #color = [arg[0],arg[1],arg[2]]
 
         if len(sides_args) == 1:
             for i in range(self.sides_count):
@@ -131,6 +125,11 @@ print(cube1.get_sides())
 circle1.set_sides(15)  # Изменится
 print(circle1.get_sides())
 
+# Проверка периметра (круга), это и есть длина:
+print(len(circle1))
+
+# Проверка объёма (куба):
+print(cube1.get_volume())
 # Проверка периметра (круга), это и есть длина:
 print(len(circle1))
 
