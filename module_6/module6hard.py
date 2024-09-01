@@ -82,7 +82,7 @@ class Triangle(Figure):
         b = self.sides[1]
         c = self.sides[2]
         p = (a + b + c) / 2
-        S = sqrt(p*(p - a)+(p - b)+(p - c)),
+        S = sqrt(p*(p - a)*(p - b)*(p - c)),
         return S
 
 
@@ -138,6 +138,12 @@ print(circle2.get_sides())
 print(circle1.get_square())
 print(circle2.get_square())
 Triangle1 = Triangle((200, 200, 100), 10, 6)
+print(Triangle1.get_sides())
+print(Triangle1.get_square())
+cube2 = Cube((200, 200, 100), 9)
+print(cube2.get_sides())
+cube3 = Cube((200, 200, 100), 9, 12)
+print(cube3.get_sides())
 print(Triangle1.get_sides())
 print(Triangle1.get_square())
 cube2 = Cube((200, 200, 100), 9)
