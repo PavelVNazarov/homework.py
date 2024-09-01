@@ -48,7 +48,7 @@ class Circle(Figure):
 
     def __init__(self, color, *sides):
         self.color = color
-        self.sides = sides
+        #self.sides = [sides]
         self.__color = [color]
         if len(sides) != 1:
             sides = 1
@@ -56,9 +56,11 @@ class Circle(Figure):
             sides = sides[0]
         self.__sides = [sides]
         super().__init__(self)
+        self.sides = [sides]
 
     def get_square(self):
-        return math.pi * self.__radius ** 2
+        self.__radius = self.sides[0]/(2*pi)
+        return pi * self.__radius ** 2
 
 
 class Triangle(Figure):
@@ -90,7 +92,6 @@ class Triangle(Figure):
         b = self.sides[1]
         c = self.sides[2]
         p = (a + b + c) / 2
-        print(p)
         S = sqrt(p*(p - a)+(p - b)+(p - c)),
         return S
 
@@ -146,6 +147,8 @@ print(cube1.get_volume())
 
 circle2 = Circle((200, 200, 100), 10, 15, 6)
 print(circle2.get_sides())
+print(circle1.get_square())
+print(circle2.get_square())
 Triangle1 = Triangle((200, 200, 100), 10, 6)
 print(Triangle1.get_sides())
 print(Triangle1.get_square())
