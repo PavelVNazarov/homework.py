@@ -54,7 +54,7 @@ class Circle(Figure):
 
     def get_square(self):
         self.__radius = self.sides/(2*pi)
-        return pi * self.__radius ** 2
+        return pi * (self.__radius ** 2)
 
 
 class Triangle(Figure):
@@ -64,6 +64,8 @@ class Triangle(Figure):
         self.color = n_color
         if len(n_sides) == 1:
             self.sides = list(n_sides)*self.sides_count
+        elif len(n_sides) == self.sides_count:
+            self.sides =list(n_sides)
         elif len(n_sides) != self.sides_count:
             self.sides = [1]*self.sides_count
         super().__init__(self.color, self.sides)
@@ -144,9 +146,7 @@ cube2 = Cube((200, 200, 100), 9)
 print(cube2.get_sides())
 cube3 = Cube((200, 200, 100), 9, 12)
 print(cube3.get_sides())
-print(Triangle1.get_sides())
-print(Triangle1.get_square())
-cube2 = Cube((200, 200, 100), 9)
-print(cube2.get_sides())
-cube3 = Cube((200, 200, 100), 9, 12)
-print(cube3.get_sides())
+Triangle2 = Triangle((200, 200, 100), 3, 4, 5)
+print(Triangle2.get_sides())
+print(Triangle2.get_square())
+print(len(Triangle2))
