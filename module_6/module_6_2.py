@@ -33,14 +33,11 @@ class Vehicle():
 
     def set_color(self, new_color:str):
         change_color = False
-        i = 0
-        while i < len(Vehicle.__COLOR_VARIANTS):
-            if new_color.lower() == Vehicle.__COLOR_VARIANTS[i].lower():
+        for i in range(len(self.__COLOR_VARIANTS)):
+            if new_color.lower() == self.__COLOR_VARIANTS[i].lower():
                 self.__color = new_color
                 change_color = True
                 break
-            else:
-                i += 1
         if change_color == False:
                 print(f"Нельзя сменить цвет на {new_color}")
 
