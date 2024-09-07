@@ -5,7 +5,7 @@ import io
 from pprint import pprint
 
 def custom_write(file_name,string):
-    file = open(file_name, 'w')
+    file = open(file_name, 'w', encoding = 'utf-8')
     strings_positions = {}
 
     for i in range(len(string)):
