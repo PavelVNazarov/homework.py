@@ -13,17 +13,29 @@ class WordsFinder():
             with open(i, encoding = 'utf-8') as file:
                 for j in file:
                     str_word +=' '.join(j.split())
+        str_word = str_word.replace('\n',' ')
+        str_word = str_word.replace(',',' ')
+        str_word = str_word.replace('.',' ')
+        str_word = str_word.replace('=',' ')
+        str_word = str_word.replace('!',' ')
+        str_word = str_word.replace('?',' ')
+        str_word = str_word.replace(';',' ')
+        str_word = str_word.replace(':',' ')
+        str_word = str_word.replace(' - ',' ')
+        str_word = str_word.lower()
         str_word = str_word.split()
         all_words = {i: str_word }
         return all_words
 
     def find(self, word):
         all_words = []
+        str_word = ''
         for i in self.file_names:
             with open(i, encoding = 'utf-8') as file:
                 for j in file:
                     j = j.lower()
-                    index = j.index(word.lower())
+                    str_word +=' '.join(j.split())
+                    index = str_word.index(word.lower())
                     #if word.lower() in j.lower():
                     all_words = {i: index}
                     break
@@ -33,11 +45,13 @@ class WordsFinder():
     def count(self, word):
         all_words = {}
         count_word = 0
+        str_word =''
         for i in self.file_names:
             with open(i, encoding = 'utf-8') as file:
                 for j in file:
-                    if word.lower() in j.lower():
-                        count_word += 1
+                    str_word +=''.join(j.split())
+                    str_word = str_word.lower()
+                    count_word = str_word.count(word.lower())
         all_words = {i: count_word}
         return all_words
 
