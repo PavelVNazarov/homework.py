@@ -4,7 +4,8 @@
 
 def add_everything_up(a, b):
     try:
-        return round(a + b,3)
+        if type(a) != str and type(b) != str:
+            return round(a + b,3)
     except TypeError:
         return str(a)+str(b)
 
