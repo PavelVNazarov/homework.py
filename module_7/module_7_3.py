@@ -2,7 +2,7 @@
 # Назаров ПВ
 # module_7_3.py
 
-import re
+from re import sub
 
 class WordsFinder():
     def __init__(self, *name):
@@ -13,7 +13,7 @@ class WordsFinder():
         for file_name in self.file_names:
             with open(file_name, encoding='utf-8') as file:
                 str_word = file.read().lower()
-                str_word = re.sub(r"[,?!.\n=:;—]", " ", str_word)
+                str_word = sub(r"[,?!.\n=:;—]", " ", str_word)
             self.all_words[file_name] = str_word.split()
         return self.all_words
 
