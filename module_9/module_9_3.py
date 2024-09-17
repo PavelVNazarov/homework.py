@@ -5,8 +5,8 @@
 first = ['Strings', 'Student', 'Computers']
 second = ['Строка', 'Урбан', 'Компьютер']
 
-new = list(zip(first,second))
-first_result = (len(new[i][0]) - len(new[i][1]) for i in range(len(first)) if len(new[i][0]) != len(new[i][1]))
+#new = list(zip(first,second))
+first_result = (len(list(zip(first,second))[i][0]) - len(list(zip(first,second))[i][1]) for i in range(len(list(zip(first,second)))) if len(list(zip(first,second))[i][0]) != len(list(zip(first,second))[i][1]))
 
 second_result = (len(first[i])==len(second[i]) for i in range(len(first)))
 
