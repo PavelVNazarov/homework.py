@@ -8,7 +8,7 @@ from random import choice
 
 first = 'Мама мыла раму'
 second = 'Рамена мало было'
-
+print(list(map(lambda first, second: first == second, first, second)))
 
 
 # Замыкание
