@@ -14,11 +14,10 @@ print(list(map(lambda first, second: first == second, first, second)))
 # Замыкание
 def get_advanced_writer(file_name):
     def write_everything(*data_set):
-        with open(file_name, encoding='utf-8') as file:
-            file.write(data_set)
-            #return data_set
+        with open(file_name, 'w', encoding='utf-8') as file:
+            for i in range(len(data_set)):
+                file.write(str(data_set[i])+'\n')
     return write_everything
-
 
 write = get_advanced_writer('example.txt')
 write('Это строчка', ['А', 'это', 'уже', 'число', 5, 'в', 'списке'])
