@@ -22,8 +22,7 @@ class Car:
                 return True
             raise IncorrectVinNumber('Неверный диапазон для vin номера')
         raise IncorrectVinNumber('Некорректный тип vin номер')
-
-               
+    
     def __is_valid_numbers(self,numbers):
         if isinstance(numbers,str):
             if len(numbers) == 6:
