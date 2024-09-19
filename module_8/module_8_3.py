@@ -14,7 +14,7 @@ class Car:
     def __init__(self, model, vin, numbers):
         self.model = model
         self.__vin = vin if self.__is_valid_vin(vin) else Exception
-        self. __numbers = numbers if self.__is_valid_numbers(numbers) else Exception
+        self.__numbers = numbers if self.__is_valid_numbers(numbers) else Exception
     
     def  __is_valid_vin(self,vin_number):
         if isinstance(vin_number,int):
