@@ -24,6 +24,7 @@ class Figure:
         for side in sides:
             if side<=0 or not isinstance(side,int):
                 flag = False
+                break
         return flag and len(sides)==self.sides_count
 
     def get_sides(self):
