@@ -5,21 +5,18 @@
 def personal_sum(numbers):
     result = 0
     incorrect_data = 0
-    numbers_count = 0
     for num in numbers:
         try:
             result += num
-            numbers_count += 1
         except TypeError:
             incorrect_data += 1
             print(f'Некорректный тип данных для подсчёта суммы - {num}')
-    return (result, incorrect_data), numbers_count
+    return (result, incorrect_data)
 
 def calculate_average(numbers):
     try:
-        a,c = personal_sum(numbers)
-        b = a[0]
-        arithmetic_mean = b/c
+        tuple_a = personal_sum(numbers)
+        arithmetic_mean = tuple_a[0]/(len(numbers)-tuple_a[1])
         return arithmetic_mean
     except ZeroDivisionError:
         return 0
