@@ -2,14 +2,16 @@
 # Назаров ПВ
 # module_10_4.py
 
+import threading
+import random
+import time
+from queue import Queue
+
 class Table:
     def __init__(self, number):
         self.number = number
         self.guest = None
 
-import threading
-import random
-import time
 
 class Guest(threading.Thread):
     def __init__(self, name):
@@ -19,7 +21,6 @@ class Guest(threading.Thread):
     def run(self):
         time.sleep(random.uniform(3, 10))
 
-from queue import Queue
 
 class Cafe:
     def __init__(self, *tables):
