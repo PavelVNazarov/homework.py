@@ -1,6 +1,6 @@
 # Домашнее задание по теме "Интроспекция"
 # Назаров ПВ
-# module_11_3
+# module_11_3.py
 
 class Tree:
     def __init__(self, name: str, bearing = False):
