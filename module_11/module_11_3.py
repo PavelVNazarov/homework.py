@@ -19,7 +19,7 @@ class AppleTree(Tree):
 
 
 golden_apple = AppleTree('Golden', True)
-golden_apple.count = 120
+golden_apple.mass = 120
 golden_apple.count = 2500
 golden_apple.harvest()
 
