@@ -5,6 +5,7 @@
 import threading
 import time
 import random
+import queue
 
 class Table:
     def __init__(self, number):
@@ -13,27 +14,27 @@ class Table:
 
 class Cafe:
     def __init__(self, tables):
-        self.queue = []
+        self.queue = queue.Queue()
         self.tables = tables
 
     def customer_arrival(self):
-        customer_id = 1
-        while customer_id <= 20:
-            customer = Customer(customer_id)
+        customer_num = 1
+        while customer_num <= 20:
+            customer = Customer(customer_num)
             self.serve_customer(customer)
-            customer_id += 1
-            time.sleep(1)
+            customer_num += 1
+            time.sleep(4)
 
     def serve_customer(self, customer):
-        print(f"Посетитель номер {customer.id} прибыл")
+        print(f"Посетитель номер {customer.num} прибыл")
         free_table = self.find_free_table()
         if free_table:
             free_table.is_busy = True
-            print(f"Посетитель номер {customer.id} сел за стол {free_table.number}")
+            print(f"Посетитель номер {customer.num} сел за стол {free_table.number}")
             customer.start()
         else:
-            self.queue.append(customer)
-            print(f"Посетитель номер {customer.id} ожидает свободный стол")
+            self.queue.put(customer)
+            print(f"Посетитель номер {customer.num} ожидает свободный стол")
 
     def find_free_table(self):
         for table in self.tables:
@@ -45,17 +46,17 @@ class Cafe:
         for table in self.tables:
             if table.is_busy:
                 table.is_busy = False
-                print(f"Посетитель номер {customer.id} покушал и ушёл")
-                if self.queue:
-                    next_customer = self.queue.pop(0)
-                    print(f"Посетитель номер {next_customer.id} вышел из очереди и сел за стол {table.number}")
+                print(f"Посетитель номер {customer.num} покушал и ушёл")
+                if not self.queue.empty():
+                    next_customer = self.queue.get()
+                    print(f"Посетитель номер {next_customer.num} вышел из очереди и сел за стол {table.number}")
                     next_customer.start()
                 return
 
 class Customer(threading.Thread):
-    def __init__(self, id):
+    def __init__(self, num):
         super().__init__()
-        self.id = id
+        self.num = num
 
     def run(self):
         time.sleep(random.uniform(3, 10))
