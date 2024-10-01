@@ -20,11 +20,11 @@ class Iterator():
         return self
 
     def __next__(self):
-        self.pointer = self.start
-        self.start += self.step
+        num = self.pointer
         if (self.step < 0 and self.pointer < self.stop) or (self.pointer > self.stop and self.step > 0):
             raise StopIteration()
-        return self.pointer
+        self.pointer += self.step
+        return num
 
 try:
     iter1 = Iterator(100, 200, 0)
