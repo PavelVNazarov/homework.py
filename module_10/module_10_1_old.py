@@ -4,8 +4,6 @@
 
 from time import sleep
 from threading import Thread
-from datetime import datetime
-import requests
 
 def func (*new_tupl):
         for char in new_tupl:
