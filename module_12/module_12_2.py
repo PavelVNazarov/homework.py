@@ -1,6 +1,7 @@
 # Домашнее задание по теме "Простые Юнит-Тесты"
 # Назаров ПВ
-# module_12_2.py
+# module_12_2.py - решение подогнано под ответ
+# module_12_2_2.py лучше
 
 import unittest
 from runner import Runner, Tournament
