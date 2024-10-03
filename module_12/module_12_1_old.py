@@ -3,28 +3,28 @@
 # module_12_1_old.py
 
 import unittest
-from main import Student  # Предположим, что класс Student находится в файле main.py
+from main import Student
 
 
 class TestStudentMovement(unittest.TestCase):
 
     def test_walk_distance(self):
-        student = Student()
+        student = Student('Ходяев')
         for _ in range(10):
-            student.walk()  # Предполагаем, что метод walk увеличивает дистанцию
+            student.walk()
         self.assertEqual(student.distance, 500,
                          f"Дистанции не равны {student.distance} != 500")
 
     def test_run_distance(self):
-        student = Student()
+        student = Student('Проверяев')
         for _ in range(10):
-            student.run()  # Предполагаем, что метод run увеличивает дистанцию
+            student.run()
         self.assertEqual(student.distance, 1000,
                          f"Дистанции не равны {student.distance} != 1000")
 
     def test_compete(self):
-        runner = Student()
-        walker = Student()
+        runner = Student('Быстров')
+        walker = Student('Неспешнев')
 
         for _ in range(10):
             runner.run()
@@ -38,3 +38,21 @@ class TestStudentMovement(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+
+# module_main_for12_1_old.py
+# 
+# 
+# class Student:
+#     def __init__(self, name):
+#         self.name = name
+#         self.distance = 0
+# 
+#     def run(self):
+#         self.distance += 10
+# 
+#     def walk(self):
+#         self.distance += 5
+# 
+#     def __str__(self):
+#         return self.name
