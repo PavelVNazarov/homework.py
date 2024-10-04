@@ -8,26 +8,40 @@ import logging
 # Настройка логирования
 logging.basicConfig(level=logging.INFO)
 
-# Функция для проверки сайтов
-def check_sites(site_list):
-    for site in site_list:
+# Лог файлы
+success_log_file = 'success_responses.log'
+bad_log_file = 'bad_responses.log'
+blocked_log_file = 'blocked_responses.log'
+
+def log_success(url, status_code):
+    logging.info(f"'{url}', response - {status_code}")
+    with open(success_log_file, 'a') as f:
+        f.write(f"INFO: '{url}', response - {status_code}\n")
+
+def log_bad(url, status_code):
+    logging.warning(f"'{url}', response - {status_code}")
+    with open(bad_log_file, 'a') as f:
+        f.write(f"WARNING: '{url}', response - {status_code}\n")
+
+def log_blocked(url):
+    logging.error(f"{url}, NO CONNECTION")
+    with open(blocked_log_file, 'a') as f:
+        f.write(f"ERROR: '{url}', NO CONNECTION\n")
+
+def check_sites(urls):
+    for url in urls:
         try:
-            response = requests.get(site)
+            response = requests.get(url)
             if response.status_code == 200:
-                log_site('success_responses.log', site)
+                log_success(url, response.status_code)
             else:
-                log_site('bad_responses.log', site)
-        except requests.exceptions.RequestException:
-            log_site('blocked_responses.log', site)
+                log_bad(url, response.status_code)
+        except requests.ConnectionError:
+            log_blocked(url)
 
-# Функция для логирования результатов
-def log_site(filename, site):
-    with open(filename, 'a') as f:
-        f.write(f"{site}\n")
-
-# Пример использования
 if __name__ == "__main__":
-    sites_to_check = ['https://www.youtube.com/', 'https://instagram.com', 'https://wikipedia.org', 'https://yahoo.com',
-         'https://yandex.ru', 'https://whatsapp.com', 'https://twitter.com', 'https://amazon.com', 'https://tiktok.com',
-         'https://www.ozon.ru']
-    check_sites(sites_to_check)
+    websites_to_check = ["https://www.youtube.com/", "https://wikipedia.org", "https://yahoo.com",
+        "https://yandex.ru", "https://whatsapp.com", "https://amazon.com",
+        "https://www.ozon.ru", "https://instagram.com", "https://twitter.com"]
+
+    check_sites(websites_to_check)
