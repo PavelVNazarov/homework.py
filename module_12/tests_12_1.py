@@ -1,10 +1,9 @@
 # Домашнее задание по теме "Простые Юнит-Тесты"
 # Назаров ПВ
-# module_12_1.py
+# tests_12_1.py
 
 from unittest import TestCase, main
 from runner import Runner
-
 
 class RunnerTest(TestCase):
 
