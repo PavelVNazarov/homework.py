@@ -1,6 +1,6 @@
 # Домашнее задание по теме "Простые Юнит-Тесты"
 # Назаров ПВ
-# module_12_1_old.py
+# tests_12_1_old.py
 
 import unittest
 from main import Student
