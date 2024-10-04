@@ -1,6 +1,6 @@
 # Домашнее задание по теме "Систематизация и пропуск тестов".
 # Назаров ПВ
-# module_12_3.py
+# tests_12_3.py
 
 from runner import Runner, Tournament
 import unittest
