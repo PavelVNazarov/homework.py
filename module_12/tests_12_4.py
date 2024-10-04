@@ -2,30 +2,37 @@
 # Назаров ПВ
 # tests_12_4.py
 
-import unittest
-import runner
 import logging
 import unittest
-from runner import Runner  # assuming the Runner class is in a separate module
+from rt_with_exceptions import Runner
 
-logging.basicConfig(level=logging.INFO,
-                    format='%(levelname)s: %(message)s',
-                    filename='runner_tests.log',
-                    filemode='w',
-                    encoding='UTF-8')
+# Настройка логирования
+logging.basicConfig(
+    level=logging.INFO,
+    filename='runner_tests.log',
+    filemode='w',
+    encoding='utf-8',
+    format='%(asctime)s - %(levelname)s - %(message)s')
 
 
 class RunnerTest(unittest.TestCase):
+
     def test_walk(self):
         try:
-            runner = Runner('Ahil',speed=-5)  # passing a negative speed value
+            runner = Runner('Вося', -5) 
+            runner.walk()
             logging.info('"test_walk" выполнен успешно')
-        except ValueError as e:
+        except ValueError:
             logging.warning("Неверная скорость для Runner")
 
     def test_run(self):
         try:
-            runner = Runner(name=123)  # passing a non-string value for name
+            runner = Runner(123, 10)
+            runner.run()
             logging.info('"test_run" выполнен успешно')
-        except TypeError as e:
+        except TypeError:
             logging.warning("Неверный тип данных для объекта Runner")
+
+
+if __name__ == '__main__':
+    unittest.main()
