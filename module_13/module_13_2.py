@@ -6,7 +6,8 @@ import asyncio
 from aiogram import Bot, Dispatcher, types
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.utils import executor
-
+# UrUnNazBot чатбот в Телеграм
+API_TOKEN = '7528963854:AAGLegRWedP3Wg4Q9ny07GKksOo01ebDo70'  # Замени 'YOUR_API_TOKEN' на токен твоего бота
 API_TOKEN = 'YOUR_API_TOKEN'  # Замени 'YOUR_API_TOKEN' на токен твоего бота
 
 bot = Bot(token=API_TOKEN)
