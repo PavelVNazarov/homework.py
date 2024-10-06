@@ -3,13 +3,15 @@
 # suite_12_3.py
 
 import unittest
-from tests_12_3 import TournamentTest, RunnerTest
+from tests_12_3 import RunnerTest, TournamentTest
 
-# Создаем объект TestSuite и добавляем туда тесты
-test_suite = unittest.TestSuite()
-test_suite.addTests(unittest.loader.TestLoader().loadTestsFromTestCase(RunnerTest))
-test_suite.addTests(unittest.loader.TestLoader().loadTestsFromTestCase(TournamentTest))
+# Создание тестового набора
+suite = unittest.TestSuite()
+loader = unittest.TestLoader()
 
-# Создание TextTestRunner с verbosity=2
+# Добавляем тесты
+suite.addTests(loader.loadTestsFromTestCase(RunnerTest))
+suite.addTests(loader.loadTestsFromTestCase(TournamentTest))
+
 runner = unittest.TextTestRunner(verbosity=2)
-runner.run(test_suite)
+runner.run(suite)
