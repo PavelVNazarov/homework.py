@@ -1,7 +1,6 @@
-# Домашнее задание по теме "Простые Юнит-Тесты"
+# Домашнее задание по теме "Систематизация и пропуск тестов".
 # Назаров ПВ
-# module_12_2_2.py
-
+# tests_12_3.py
 
 from runner import Runner, Tournament
 import unittest
@@ -27,8 +26,8 @@ class TournamentTest(unittest.TestCase):
     def test_race_usain_and_nik(self):
         tournament = Tournament(90, self.runner1, self.runner3)
         results = tournament.start()
-        for name, result in results.items():
-            results[name] = result.name
+        for num, result in results.items():
+            results[num] = result.name
         self.all_results[len(self.all_results) + 1] = results
 
         # Проверяем, что Ник всегда последний
@@ -37,8 +36,8 @@ class TournamentTest(unittest.TestCase):
     def test_race_andrey_and_nik(self):
         tournament = Tournament(90, self.runner2, self.runner3)
         results = tournament.start()
-        for name, result in results.items():
-            results[name] = result.name
+        for num, result in results.items():
+            results[num] = result.name
         self.all_results[len(self.all_results) + 1] = results
 
         # Проверяем, что Ник всегда последний
@@ -47,8 +46,8 @@ class TournamentTest(unittest.TestCase):
     def test_race_usain_andrey_and_nik(self):
         tournament = Tournament(90, self.runner1, self.runner2, self.runner3)
         results = tournament.start()
-        for name, result in results.items():
-            results[name] = result.name
+        for num, result in results.items():
+            results[num] = result.name
         self.all_results[len(self.all_results) + 1] = results
 
         # Проверяем, что Ник всегда последний
