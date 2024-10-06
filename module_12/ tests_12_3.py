@@ -15,23 +15,37 @@ def skip_if_frozen(test_case):
     return wrapper
 
 class RunnerTest(unittest.TestCase):
-    is_frozen = False  # Меняйте на True, чтобы заморозить тесты
-
-    @skip_if_frozen
-    def test_challenge(self):
-        # Ваш код теста здесь
-        pass  # пример заполнения
-
-    @skip_if_frozen
-    def test_run(self):
-        # Ваш код теста здесь
-        pass  # пример заполнения
+    is_frozen = False  # Меняем на True, чтобы заморозить тесты
 
     @skip_if_frozen
     def test_walk(self):
-        # Ваш код теста здесь
-        pass  # пример заполнения
+        walker = Runner('Turtle')
+        for _ in range(10):
+            walker.walk()
+        self.assertEqual(walker.distance, 50,
+                         f"Дистанции не равны {walker.distance} != 50")
 
+    @skip_if_frozen
+    def test_run(self):
+        runner = Runner('Rabbit')
+        for _ in range(10):
+            runner.run()
+        self.assertEqual(runner.distance, 100,
+                         f"Дистанции не равны {runner.distance} != 100")
+
+    @skip_if_frozen
+    def test_challenge(self):
+        runner = Runner('Rabbit')
+        walker = Runner('Turtle')
+
+        for _ in range(10):
+            runner.run()
+
+        for _ in range(10):
+            walker.walk()
+
+        self.assertNotEqual(runner.distance, walker.distance,
+                            f"Дистанции равны {runner.distance} == {walker.distance}")
 
 class TournamentTest(unittest.TestCase):
     is_frozen = True  # Меняйте на False, чтобы выполнить тесты
@@ -78,7 +92,6 @@ class TournamentTest(unittest.TestCase):
             results[num] = result.name
         self.all_results[len(self.all_results) + 1] = results
         self.assertTrue(results[max(results.keys())] == "Ник")
-
 
 if __name__ == '__main__':
     unittest.main()
