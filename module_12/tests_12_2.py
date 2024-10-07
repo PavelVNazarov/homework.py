@@ -3,8 +3,9 @@
 # tests_12_2.py
 
 
-from runner import Runner, Tournament
+from runner_and_tournament import Runner, Tournament
 import unittest
+
 
 class TournamentTest(unittest.TestCase):
 
