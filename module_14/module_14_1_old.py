@@ -39,3 +39,34 @@ class SuperDate(datetime):
 # Пример работы класса
 if __name__ == "__main__":
     a = SuperDate(2024, 2, 22, 12)
+
+Для создания класса `SuperDate`, который наследуется от `datetime` и добавляет новые методы, можно использовать следующий подход. Мы создадим класс, который будет реализовывать методы `get_season` и `get_time_of_day`. Вот пример реализации:
+
+```python
+from datetime import datetime
+
+class SuperDate(datetime):
+    SEASONS = {
+        (1, 2, 3): 'Winter',  # Декабрь, Январь, Февраль
+        (3, 4, 5): 'Spring',  # Март, Апрель, Май
+        (5, 6, 7): 'Summer',  # Июнь, Июль, Август
+        (9, 10, 11): 'Autumn'  # Сентябрь, Октябрь, Ноябрь
+    }
+
+    def get_season(self):
+        month = self.month
+        for months, season in self.SEASONS.items():
+            if month in months:
+                return season
+        return 'Unknown season'
+
+    def get_time_of_day(self):
+        hour = self.hour
+        if 6 <= hour < 12:
+            return 'Morning'
+        elif 12 <= hour < 18:
+            return 'Day'
+        elif 18 <= hour < 24:
+            return 'Evening'
+        else:
+            return
