@@ -1,0 +1,58 @@
+Код по частям:
+
+Импорт необходимых библиотек:
+
+Python
+Копировать
+import asyncio
+from aiogram import Bot, Dispatcher, types
+from aiogram import MemoryStorage
+from aiogram import executor
+asyncio: Библиотека для работы с асинхронными операциями.
+aiogram: Библиотека для создания Telegram-ботов.
+Bot: Объект, представляющий бота.
+Dispatcher: Объект для обработки входящих сообщений.
+types: Модуль, содержащий классы для работы с типами сообщений.
+MemoryStorage: Класс для хранения состояния бота в памяти.
+executor: Помогает запускать бота.
+Установка токена бота:
+
+Python
+Копировать
+API_TOKEN = 'YOUR_API_TOKEN'  # Замени 'YOUR_API_TOKEN' на токен твоего бота
+Здесь нужно заменить 'YOUR_API_TOKEN' на фактический токен Вашего бота, предоставленный BotFather.
+Создание экземпляра бота и диспетчера:
+
+Python
+Копировать
+bot = Bot(token=API_TOKEN)
+dp = Dispatcher(bot, storage=MemoryStorage())
+bot: Создает объект бота с указанным токеном.
+dp: Создает диспетчер, который будет обрабатывать входящие сообщения и хранить состояние в памяти.
+Обработка команды /start:
+
+Python
+Копировать
+@dp.message_handler(commands=['start'])
+async def start(message: types.Message):
+    print('Привет! Я бот помогающий твоему здоровью.')
+    await message.reply('Привет! Я бот помогающий твоему здоровью.')
+Декоратор @dp.message_handler(commands=['start']) — указывает, что данная функция будет вызываться при вводе команды /start.
+Функция start получает объект message, выводит сообщение в консоль и отвечает пользователю приветствием.
+Обработка всех остальных сообщений:
+
+Python
+Копировать
+@dp.message_handler(lambda message: True)
+async def all_messages(message: types.Message):
+    print('Введите команду /start, чтобы начать общение.')
+    await message.reply('Введите команду /start, чтобы начать общение.')
+Декоратор @dp.message_handler(lambda message: True) обрабатывает все остальные сообщения.
+Функция all_messages выводит в консоль подсказку и отвечает пользователю.
+Запуск бота:
+
+Python
+Копировать
+if __name__ == '__main__':
+    executor.start_polling(dp, skip_updates=True)
+Проверяет, является ли данный файл основным исполняемым, и если да, запускает бота. executor.start_polling(dp, skip_updates=True) начинает получать обновления от Telegram, игнорируя старые сообщения.
