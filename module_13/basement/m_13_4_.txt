@@ -1,0 +1,117 @@
+Код по частям. Этот код создает Telegram-бота с использованием библиотеки aiogram, который помогает пользователям рассчитать норму калорий. Вот пояснения к каждому оператору:
+
+Импорт необходимых модулей:
+
+Python
+Копировать
+import asyncio
+from aiogram import Bot, Dispatcher, types
+from aiogram import MemoryStorage
+from aiogram import executor
+from aiogram.dispatcher import FSMContext
+from aiogram.dispatcher.filters.state import State, StateGroup
+Здесь мы импортируем необходимые модули для создания бота, работы с состояниями и управления событиями.
+
+Объявление токена бота:
+
+Python
+Копировать
+API_TOKEN = 'YOUR_API_TOKEN'  # Замени 'YOUR_API_TOKEN' на токен твоего бота
+Токен, который используется для авторизации бота.
+
+Создание экземпляров бота и диспетчера:
+
+Python
+Копировать
+bot = Bot(token=API_TOKEN)
+dp = Dispatcher(bot, storage=MemoryStorage())
+Создается объект бота и диспетчер для обработки входящих сообщений, используя MemoryStorage для хранения состояния.
+
+Определение состояний:
+
+Python
+Копировать
+class UserState(StateGroup):
+    age = State()
+    growth = State()
+    weight = State()
+Определяем группу состояний, которые будут использоваться для управления вводом данных от пользователя.
+
+Обработчик команды /start:
+
+Python
+Копировать
+@dp.message_handler(commands=['start'])
+async def start(message: types.Message):
+    response_text = 'Привет! Я бот, помогающий твоему здоровью.'
+    await message.reply(response_text)
+Отвечает пользователю приветственным сообщением при вводе команды /start.
+
+Обработчик команды /calories:
+
+Python
+Копировать
+@dp.message_handler(commands=['calories'])
+async def set_age(message: types.Message):
+    await message.reply('Введите свой возраст:')
+    await UserState.age.set()  # Устанавливаем состояние
+Запрашивает возраст пользователя и переводит его в состояние UserState.age.
+
+Обработчик состояния UserState.age:
+
+Python
+Копировать
+@dp.message_handler(state=UserState.age)
+async def set_growth(message: types.Message, state: FSMContext):
+    await state.update_data(age=message.text)  # Сохраняем возраст
+    await message.reply('Введите свой рост (в см):')
+    await UserState.growth.set()  # Переход к следующему состоянию
+Сохраняет введенный возраст и запрашивает рост.
+
+Обработчик состояния UserState.growth:
+
+Python
+Копировать
+@dp.message_handler(state=UserState.growth)
+async def set_weight(message: types.Message, state: FSMContext):
+    await state.update_data(growth=message.text)  # Сохраняем рост
+    await message.reply('Введите свой вес (в кг):')
+    await UserState.weight.set()  # Переход к следующему состоянию
+Сохраняет рост и запрашивает вес.
+
+Обработчик состояния UserState.weight:
+
+Python
+Копировать
+@dp.message_handler(state=UserState.weight)
+async def send_calories(message: types.Message, state: FSMContext):
+    await state.update_data(weight=message.text)  # Сохраняем вес
+
+    data = await state.get_data()  # Получаем все сохраненные данные
+    age = int(data.get('age'))
+    growth = int(data.get('growth'))
+    weight = int(data.get('weight'))
+
+    # Формула Миффлина - Сан Жеора для женщин
+    calories = 10 * weight + 6.25 * growth - 5 * age + 161  # Можно адаптировать для мужчин
+
+    await message.reply(f'Ваша норма калорий: {calories:.2f} ккал')
+    await state.finish()  # Завершаем состояние
+Сохраняет вес пользователя, рассчитывает норму калорий по формуле и отправляет результат пользователю. Завершает состояние.
+
+Обработчик для всех остальных сообщений:
+
+Python
+Копировать
+@dp.message_handler(lambda message: True)
+async def all_messages(message: types.Message):
+    await message.reply('Введите команду /start или /calories, чтобы начать общение.')
+Позволяет бот отвечать на любые другие сообщения с указанием команд, чтобы начать взаимодействие.
+
+Запуск бота:
+
+Python
+Копировать
+if __name__ == '__main__':
+    executor.start_polling(dp, skip_updates=True)
+Запускает бота и начинает прослушивать обновления.
