@@ -1,0 +1,57 @@
+Решение задачи 
+
+Сначала Вам нужно будет создать функцию write_holiday_cities, которая будет обрабатывать входные данные из файла travel_notes.csv, анализировать города, и записывать результаты в holiday.csv.
+
+Давайте предположим, что travel_notes.csv уже подключен, и Вы можете загрузить его, используя библиотеку csv.
+
+Вот пример реализации:
+
+Python
+Копировать
+import csv
+
+def write_holiday_cities(first_letter):
+    visited = []
+    want_to_visit = []
+    
+    # Читаем данные из travel_notes.csv
+    with open('travel_notes.csv', mode='r', encoding='utf-8') as file:
+        reader = csv.reader(file)
+        for row in reader:
+            name = row[0]
+            if name.startswith(first_letter):
+                visited_cities = row[1].split(';')
+                wanted_cities = row[2].split(';')
+                
+                visited.extend(visited_cities)
+                want_to_visit.extend(wanted_cities)
+                
+    # Убираем дубликаты и сортируем
+    visited = sorted(set(visited))
+    want_to_visit = sorted(set(want_to_visit))
+    
+    # Определяем города, в которых никогда не были
+    never_visited = sorted(set(want_to_visit) - set(visited))
+    
+    # Определяем первый город в алфавитном порядке
+    first_city = never_visited[0] if never_visited else None
+    
+    # Записываем результаты в holiday.csv
+    with open('holiday.csv', mode='w', encoding='utf-8') as file:
+        file.write('Посетили: ' + ', '.join(visited) + '\n')
+        file.write('Хотят посетить: ' + ', '.join(want_to_visit) + '\n')
+        file.write('Никогда не были в: ' + ', '.join(never_visited) + '\n')
+        file.write('Следующим городом будет: ' + (first_city if first_city else 'Нет доступных городов') + '\n')
+
+# Пример вызова функции
+write_holiday_cities('L')
+Объяснение кода:
+Импортируем библиотеку csv для работы с CSV-файлами.
+Функция write_holiday_cities принимает букву first_letter и читает данные из файла travel_notes.csv.
+Для каждого студента, чье имя начинается с first_letter, извлекаются города, в которых они были, и города, которые они хотят посетить.
+Используется set для удаления дубликатов, а затем сортируем списки городов.
+Определяем города, в которых никогда не были, с помощью разности множеств.
+Записываем результаты в holiday.csv, включая информацию о всех городах и какой город будет следующим.
+Убедитесь:
+Замените "travel_notes.csv" на путь к Вашему файлу, если он находится в другой папке.
+Проверьте, что у Вас есть необходимые CSV-файлы согласно Вашей структуре данных.
