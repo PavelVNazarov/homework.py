@@ -2,15 +2,15 @@
 # Назаров ПВ
 # module_13_4.py
 
-mport asyncio
 from aiogram import Bot, Dispatcher, types
-from aiogram import MemoryStorage
+#from aiogram import MemoryStorage
 from aiogram import executor
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StateGroup
-
-# UrUnNazBot чатбот в Телеграм
-API_TOKEN = 'YOUR_API_TOKEN'  # Заменить 'YOUR_API_TOKEN' на токен твоего бота
+from aiogram.contrib.fsm_storage.memory import MemoryStorage
+from aiogram.fsm.state import StatesGroup, State
+#API_TOKEN = 'YOUR_API_TOKEN'  # Заменить 'YOUR_API_TOKEN' на токен бота
+API_TOKEN = '7528963854:AAGLegRWedP3Wg4Q9ny07GKksOo01ebDo70'
 
 bot = Bot(token=API_TOKEN)
 dp = Dispatcher(bot, storage=MemoryStorage())
@@ -28,34 +28,34 @@ async def start(message: types.Message):
 @dp.message_handler(commands=['calories'])
 async def set_age(message: types.Message):
     await message.reply('Введите свой возраст:')
-    await UserState.age.set() 
+    await UserState.age.set()
 
 @dp.message_handler(state=UserState.age)
 async def set_growth(message: types.Message, state: FSMContext):
-    await state.update_data(age=message.text)  
+    await state.update_data(age=message.text)
     await message.reply('Введите свой рост (в см):')
-    await UserState.growth.set()  
+    await UserState.growth.set()
 
 @dp.message_handler(state=UserState.growth)
 async def set_weight(message: types.Message, state: FSMContext):
-    await state.update_data(growth=message.text) 
+    await state.update_data(growth=message.text)
     await message.reply('Введите свой вес (в кг):')
-    await UserState.weight.set() 
+    await UserState.weight.set()
 
 @dp.message_handler(state=UserState.weight)
 async def send_calories(message: types.Message, state: FSMContext):
-    await state.update_data(weight=message.text) 
+    await state.update_data(weight=message.text)
 
-    data = await state.get_data()  
+    data = await state.get_data()
     age = int(data.get('age'))
     growth = int(data.get('growth'))
     weight = int(data.get('weight'))
 
     # Формула Миффлина - Сан Жеора для женщин
-    calories = 10 * weight + 6.25 * growth - 5 * age + 161  
+    calories = 10 * weight + 6.25 * growth - 5 * age + 161
 
     await message.reply(f'Ваша норма калорий: {calories:.2f} ккал')
-    await state.finish()  
+    await state.finish()
 
 @dp.message_handler(lambda message: True)
 async def all_messages(message: types.Message):
