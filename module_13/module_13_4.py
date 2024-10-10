@@ -6,16 +6,15 @@ from aiogram import Bot, Dispatcher, types
 #from aiogram import MemoryStorage
 from aiogram import executor
 from aiogram.dispatcher import FSMContext
-from aiogram.dispatcher.filters.state import State, StateGroup
+from aiogram.dispatcher.filters.state import State, StatesGroup
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
-from aiogram.fsm.state import StatesGroup, State
-#API_TOKEN = 'YOUR_API_TOKEN'  # Заменить 'YOUR_API_TOKEN' на токен бота
-API_TOKEN = '7528963854:AAGLegRWedP3Wg4Q9ny07GKksOo01ebDo70'
+
+API_TOKEN = 'YOUR_API_TOKEN'  # Заменить 'YOUR_API_TOKEN' на токен бота
 
 bot = Bot(token=API_TOKEN)
 dp = Dispatcher(bot, storage=MemoryStorage())
 
-class UserState(StateGroup):
+class UserState(StatesGroup):
     age = State()
     growth = State()
     weight = State()
