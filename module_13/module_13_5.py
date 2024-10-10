@@ -1,23 +1,21 @@
-Домашнее задание по теме "Клавиатура кнопок".
-Назаров ПВ
+# Домашнее задание по теме "Клавиатура кнопок".
+# Назаров ПВ
 # module_13_5.py
 
-
-import asyncio
 from aiogram import Bot, Dispatcher, types
-from aiogram import MemoryStorage
+#from aiogram import MemoryStorage
 from aiogram import executor
 from aiogram.dispatcher import FSMContext
-from aiogram.dispatcher.filters.state import State, StateGroup
+from aiogram.dispatcher.filters.state import State, StatesGroup
+from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 
-# UrUnNazBot чатбот в Телеграм
-API_TOKEN = 'YOUR_API_TOKEN'  # Замени 'YOUR_API_TOKEN' на токен твоего бота
+API_TOKEN = 'YOUR_API_TOKEN'  # Заменить 'YOUR_API_TOKEN' на токен бота
 
 bot = Bot(token=API_TOKEN)
 dp = Dispatcher(bot, storage=MemoryStorage())
 
-class UserState(StateGroup):
+class UserState(StatesGroup):
     age = State()
     growth = State()
     weight = State()
