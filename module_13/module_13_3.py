@@ -2,12 +2,10 @@
 # Назаров ПВ
 # module_13_3.py
 
-import asyncio
 from aiogram import Bot, Dispatcher, types
 from aiogram import MemoryStorage
 from aiogram import executor
 
-# UrUnNazBot чатбот в Телеграм
 API_TOKEN = 'YOUR_API_TOKEN'  # Заменить 'YOUR_API_TOKEN' на токен бота
 
 bot = Bot(token=API_TOKEN)
