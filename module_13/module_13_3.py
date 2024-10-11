@@ -8,7 +8,7 @@ from aiogram import MemoryStorage
 from aiogram import executor
 
 # UrUnNazBot чатбот в Телеграм
-API_TOKEN = 'YOUR_API_TOKEN'  # Замени 'YOUR_API_TOKEN' на токен твоего бота
+API_TOKEN = 'YOUR_API_TOKEN'  # Заменить 'YOUR_API_TOKEN' на токен бота
 
 bot = Bot(token=API_TOKEN)
 dp = Dispatcher(bot, storage=MemoryStorage())
