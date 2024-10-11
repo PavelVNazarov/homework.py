@@ -2,7 +2,6 @@
 # Назаров ПВ
 # module_13_6.py
 
-import asyncio
 from aiogram import Bot, Dispatcher, types
 from aiogram import executor
 from aiogram.dispatcher import FSMContext
