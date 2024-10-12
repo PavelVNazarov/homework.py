@@ -1,0 +1,39 @@
+код по частям.
+
+Определение классов
+class Tree: - Определяет базовый класс Tree, который представляет дерево.
+
+def __init__(self, name: str, bearing = False): - Конструктор, который принимает имя дерева и флаг, указывающий, плодоносит ли дерево (по умолчанию False).
+self.name = name - Сохраняет имя дерева.
+self.bearing = bearing - Сохраняет информацию о том, плодоносит ли дерево.
+class AppleTree(Tree): - Определяет класс AppleTree, который наследует от Tree.
+
+def __init__(self, name, bearing): - Конструктор, который вызывает конструктор родительского класса и инициализирует дополнительные атрибуты.
+self.mass = 0 - Инициализирует массу яблок (в граммах).
+self.count = 0 - Инициализирует количество яблок.
+def harvest(self): - Метод, который вычисляет и выводит урожай яблок.
+
+harvest_amount = self.count * self.mass * 0.001 - Вычисляет общий урожай в килограммах (переводит граммы в килограммы).
+print(f'Урожай {self.name} с одной яблони {harvest_amount} кг!') - Выводит сообщение с урожаем.
+Создание объекта
+golden_apple = AppleTree('Golden', True) - Создает экземпляр AppleTree с именем "Golden" и флагом True, указывающим, что дерево плодоносит.
+
+golden_apple.mass = 120 - Устанавливает массу одного яблока в 120 граммов.
+
+golden_apple.count = 2500 - Устанавливает количество яблок на дереве в 2500.
+
+golden_apple.harvest() - Вызывает метод harvest, который вычисляет и выводит урожай.
+
+Инспекция объекта
+def introspection_info(obj): - Определяет функцию, которая собирает информацию об объекте.
+
+number_info = {} - Создает пустой словарь для хранения информации.
+number_info['type'] = type(obj) - Сохраняет тип объекта.
+number_info['methods'] = [method for method in dir(obj) if callable(getattr(obj, method))] - Сохраняет список методов объекта.
+number_info['attributes'] = [attr for attr in dir(obj) if not callable(getattr(obj, attr)) and not attr.startswith('__')] - Сохраняет список атрибутов объекта, исключая специальные методы.
+number_info['modules'] = [module for module in dir(obj) if module.startswith('__')] - Сохраняет список специальных модулей объекта.
+number_info = introspection_info(golden_apple) - Вызывает функцию introspection_info для объекта golden_apple и сохраняет результат.
+
+print(number_info) - Выводит информацию о типе, методах, атрибутах и модулях объекта golden_apple.
+
+Таким образом, код создает класс для яблонь, вычисляет урожай и собирает информацию о созданном объекте.
