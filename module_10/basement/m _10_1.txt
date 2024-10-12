@@ -4,8 +4,6 @@
 
 Импорт библиотек:
 
-Python
-Копировать
 from time import sleep
 from threading import Thread
 from datetime import datetime
@@ -14,8 +12,6 @@ Thread: позволяет создавать и управлять потока
 datetime: используется для работы с датой и временем.
 Функция write_words:
 
-Python
-Копировать
 def write_words(word_count, file_name):
     with open(file_name, 'w', encoding='utf-8') as file:
         for num in range(word_count):
@@ -28,8 +24,6 @@ def write_words(word_count, file_name):
 После завершения записи выводит сообщение о завершении.
 Запись в файлы последовательно:
 
-Python
-Копировать
 time_start = datetime.now()
 write_words(10, 'example1.txt')
 write_words(30, 'example2.txt')
@@ -40,8 +34,6 @@ write_words(100, 'example4.txt')
 После завершения всех операций фиксируется время окончания и выводится общее время выполнения.
 Запись в файлы с использованием потоков:
 
-Python
-Копировать
 time_start = datetime.now()
 
 thr_first = Thread(target=write_words, args=(10, 'example5.txt'))
