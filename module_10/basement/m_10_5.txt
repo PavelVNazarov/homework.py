@@ -1,15 +1,13 @@
 код построчно.
 
 Импорт библиотек
-Python
-Копировать
+
 import datetime
 import multiprocessing
 Импортирует модуль datetime для работы с временными метками.
 Импортирует модуль multiprocessing для создания параллельных процессов.
 Функция чтения информации из файла
-Python
-Копировать
+
 def read_info(name):
     all_data = []  # без этого можно обойтись
     with open(name, encoding='utf-8') as file:
@@ -18,35 +16,31 @@ def read_info(name):
 Создаёт пустой список all_data (он не нужен, если значение не используется).
 Открывает файл по переданному имени и читает его строки. Все строки сохраняются в all_data (но не используются далее).
 Создание списка файлов
-Python
-Копировать
+
 filenames = [f'./file {number}.txt' for number in range(1, 5)]
 Создаёт список filenames, содержащий имена файлов от file 1.txt до file 4.txt.
 Линейный вызов
-Python
-Копировать
+
 start = datetime.datetime.now()
 for file in filenames:
     read_info(file)
 Записывает текущее время в переменную start (начало выполнения).
 Проходит по каждому файлу в списке filenames и вызывает функцию read_info для чтения данных из каждого файла.
-Python
-Копировать
+
 end = datetime.datetime.now()
 print(end-start)
 Записывает текущее время в переменную end (конец выполнения).
 Выводит разницу между end и start, показывая время, затраченное на чтение файлов последовательно.
+
 Многопроцессный вызов
-Python
-Копировать
+
 if __name__ == '__main__':
     with multiprocessing.Pool(processes=6) as pool:
         start = datetime.datetime.now()
         pool.map(read_info, filenames)
 Проверяет, что код выполняется как основной модуль. Это важно для правильной работы многопроцессности на Windows.
 Создаёт пул из 6 процессов (можно изменить количество) и использует его для выполнения функции read_info для каждого имени файла в filenames параллельно с помощью pool.map.
-Python
-Копировать
+
 end = datetime.datetime.now()
 print(end-start)
 Записывает текущее время в переменную end (конец многопроцессного выполнения).
