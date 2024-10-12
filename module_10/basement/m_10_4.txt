@@ -1,0 +1,91 @@
+код по частям.
+
+Импортируемые модули
+Python
+Копировать
+import threading
+import random
+import time
+from queue import Queue
+threading: модуль для работы с потоками.
+random: модуль для генерации случайных чисел.
+time: модуль для работы со временем (например, для задержек).
+queue: модуль для работы с очередями.
+Класс Table
+Python
+Копировать
+class Table:
+    def __init__(self, number):
+        self.number = number
+        self.guest = None
+Table: класс, представляющий стол в кафе.
+__init__: инициализирует стол с номером и устанавливает его свободным (гость равен None).
+Класс Guest
+Python
+Копировать
+class Guest(threading.Thread):
+    def __init__(self, name):
+        super().__init__()
+        self.name = name
+
+    def run(self):
+        time.sleep(random.uniform(3, 10))
+Guest: класс, представляющий гостя, который является потоком.
+__init__: инициализирует гостя с именем.
+run: метод, который выполняется при запуске потока. Гость "ждет" случайное время от 3 до 10 секунд, имитируя время, проведенное за столом.
+Класс Cafe
+Python
+Копировать
+class Cafe:
+    def __init__(self, *tables):
+        self.queue = Queue()
+        self.tables = list(tables)
+Cafe: класс, представляющий кафе.
+__init__: инициализирует кафе с переданными столами и создает очередь для гостей.
+Метод guest_arrival
+Python
+Копировать
+def guest_arrival(self, *guests):
+    for guest in guests:
+        free_table = next((table for table in self.tables if table.guest is None), None)
+        if free_table:
+            free_table.guest = guest
+            guest.start()
+            print(f"{guest.name} сел(-а) за стол номер {free_table.number}")
+        else:
+            self.queue.put(guest)
+            print(f"{guest.name} в очереди")
+guest_arrival: метод, который обрабатывает прибытие гостей.
+Для каждого гостя ищется свободный стол. Если стол найден, гость садится за него и запускается в отдельном потоке. Если столов нет, гость помещается в очередь.
+Метод discuss_guests
+Python
+Копировать
+def discuss_guests(self):
+    while self.queue.qsize() > 0 or any(table.guest is not None and table.guest.is_alive() for table in self.tables):
+        for table in self.tables:
+            if table.guest is not None and not table.guest.is_alive():
+                print(f"{table.guest.name} покушал(-а) и ушёл(ушла)")
+                print(f"Стол номер {table.number} свободен")
+                table.guest = None
+                if not self.queue.empty():
+                    new_guest = self.queue.get()
+                    table.guest = new_guest
+                    new_guest.start()
+                    print(f"{new_guest.name} вышел(-ла) из очереди и сел(-а) за стол номер {table.number}")
+discuss_guests: метод, который обслуживает гостей.
+Цикл продолжается, пока есть гости в очереди или за столами.
+Если гость за столом закончил, он "уходит", и стол становится свободным. Если в очереди есть гости, они могут занять освободившийся стол.
+Основная часть кода
+Python
+Копировать
+tables = [Table(number) for number in range(1, 6)]
+guests_names = ['Maria', 'Oleg', 'Vakhtang', 'Sergey', 'Darya', 'Arman', 'Vitoria', 'Nikita', 'Galina', 'Pavel', 'Ilya', 'Alexandra']
+guests = [Guest(name) for name in guests_names]
+cafe = Cafe(*tables)
+cafe.guest_arrival(*guests)
+cafe.discuss_guests()
+Создаются 5 столов.
+Создаются гости с именами из списка.
+Создается кафе с этими столами.
+Гости прибывают в кафе.
+Обслуживаются гости, пока они находятся в кафе.
