@@ -1,10 +1,7 @@
-
-
 код по частям.
 
 Импортируемые модули
-Python
-Копировать
+
 from time import sleep
 from threading import Thread
 import requests
@@ -12,8 +9,7 @@ sleep: используется для приостановки выполнен
 Thread: класс для создания и управления потоками.
 requests: модуль для работы с HTTP-запросами (в данном коде не используется).
 Определение класса Knight
-Python
-Копировать
+
 class Knight(Thread):
     def __init__(self, name, power):
         super().__init__()
@@ -22,8 +18,7 @@ class Knight(Thread):
 class Knight(Thread): создается класс Knight, который наследует от Thread, что позволяет ему работать в отдельном потоке.
 __init__: конструктор класса, который принимает имя (name) и силу (power) рыцаря. super().__init__() инициализирует родительский класс Thread.
 Метод run
-Python
-Копировать
+
 def run(self):
     print(f'{self.name}, на нас напали!')
     solt = 100
@@ -46,8 +41,7 @@ print(...): выводит информацию о текущем состоян
 sleep(1): приостанавливает выполнение на 1 секунду.
 print(f'{self.name}, одержал победу спустя {days} дней!'): выводит сообщение о победе.
 Создание и запуск потоков
-Python
-Копировать
+
 first_knight = Knight('Sir Lancelot', 10)
 second_knight = Knight("Sir Galahad", 20)
 first_knight.start()
