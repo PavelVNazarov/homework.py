@@ -1,6 +1,6 @@
 # Домашнее задание по теме "Очереди для обмена данными между потоками."
 # Назаров ПВ
-# module_10_4_old_2.py
+# module_10_4_old_best.py
 
 import threading
 import time
