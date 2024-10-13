@@ -15,8 +15,9 @@ class Table:
 
 class Guest(threading.Thread):
     def __init__(self, name):
+        self.guest_name = name
         super().__init__()
-        self.name = name
+
 
     def run(self):
         time.sleep(random.uniform(3, 10))
@@ -33,23 +34,23 @@ class Cafe:
             if free_table:
                 free_table.guest = guest
                 guest.start()
-                print(f"{guest.name} сел(-а) за стол номер {free_table.number}")
+                print(f"{guest.guest_name} сел(-а) за стол номер {free_table.number}")
             else:
                 self.queue.put(guest)
-                print(f"{guest.name} в очереди")
+                print(f"{guest.guest_name} в очереди")
 
     def discuss_guests(self):
         while self.queue.qsize() > 0 or any(table.guest is not None and table.guest.is_alive() for table in self.tables):
             for table in self.tables:
                 if table.guest is not None and not table.guest.is_alive():
-                    print(f"{table.guest.name} покушал(-а) и ушёл(ушла)")
+                    print(f"{table.guest.guest_name} покушал(-а) и ушёл(ушла)")
                     print(f"Стол номер {table.number} свободен")
                     table.guest = None
                     if not self.queue.empty():
                         new_guest = self.queue.get()
                         table.guest = new_guest
                         new_guest.start()
-                        print(f"{new_guest.name} вышел(-ла) из очереди и сел(-а) за стол номер {table.number}")
+                        print(f"{new_guest.guest_name} вышел(-ла) из очереди и сел(-а) за стол номер {table.number}")
 
 # Создание столов
 tables = [Table(number) for number in range(1, 6)]
