@@ -1,0 +1,70 @@
+import numpy as np
+
+# Определение функции активации
+def step_function(x):
+    return 1 if x >= 0 else 0
+
+# Определение класса Perceptron
+class Perceptron:
+    def __init__(self, n_inputs):
+        # Инициализация весов и смещения случайными значениями
+        self.weights = np.random.rand(n_inputs)
+        self.bias = np.random.rand(1)
+
+    def feed_forward(self, inputs):
+        # Прямое распространение
+        weighted_sum = np.dot(inputs, self.weights) + self.bias
+        return step_function(weighted_sum)
+    
+    def train(self, training_inputs, target_output, learning_rate=0.1):
+        # Обучение
+        prediction = self.feed_forward(training_inputs)
+        error = target_output - prediction
+        
+        # Обновление весов и смещения
+        self.weights += learning_rate * error * training_inputs
+        self.bias += learning_rate * error
+
+# Главная часть кода
+if __name__ == "__main__":
+    # Создание экземпляра персептрона с 3 входами
+    p = Perceptron(3)
+    
+    # Генерация последовательности из 25 случайных двоичных чисел
+    data = np.random.randint(0, 2, size=(25,))
+    
+    # Обучение персептрона на скользящих окнах по 3 числа
+    for i in range(len(data) - 3):
+        inputs = data[i:i+3]
+        target = data[i+3]
+        p.train(inputs, target)
+
+    # Вычисление средней ошибки обучения
+    training_errors = []
+    for i in range(len(data) - 3):
+        inputs = data[i:i+3]
+        target = data[i+3]
+        prediction = p.feed_forward(inputs)
+        error = target - prediction
+        training_errors.append(error**2)
+
+    avg_training_error = np.mean(training_errors)
+    print(f'Средняя ошибка обучения: {avg_training_error}')
+
+    # Проверка обученного персептрона на оставшихся числах последовательности
+    test_errors = []
+    for i in range(len(data) - 3):
+        inputs = data[i:i+3]
+        target = data[i+3]
+        prediction = p.feed_forward(inputs)
+        error = target - prediction
+        test_errors.append(error**2)
+
+    avg_test_error = np.mean(test_errors)
+    print(f'Средняя ошибка проверки: {avg_test_error}')
+Пояснение коду:
+Функция активации: Используется ступенчатая функция.
+Класс Perceptron: Имеет методы feed_forward для прямого распространения и train для обучения.
+Генерация данных: Создается случайная последовательность двоичных чисел.
+Обучение: Персептрон обучается на "скользящих окнах" по 3 числа.
+Ошибки: Рассчитывается средняя ошибка как в процессе обучения, так и на тестовых данных.
