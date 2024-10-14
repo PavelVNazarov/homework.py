@@ -23,21 +23,18 @@ time_end = datetime.now()
 time_result = time_end - time_start
 print(f'Работа потоков {time_result}')
 
-time_start = datetime.now()
+
+def thread_function(word_count, file_name):
+    write_words(word_count, file_name)
+    
 thr_list = []
+time_start = datetime.now()
 
-thr_first = Thread(target = write_words, args = (10,'example5.txt'))
-thr_second = Thread(target = write_words, args = (30,'example6.txt'))
-thr_thrid = Thread(target = write_words, args = (200,'example7.txt'))
-thr_fourth = Thread(target = write_words, args = (100,'example8.txt'))
-thr_list.append(thr_first)
-thr_list.append(thr_second)
-thr_list.append(thr_thrid)
-thr_list.append(thr_fourth)
-
-for thread in thr_list:
+for count, name in[(10, "example5.txt"), (30,'example6.txt'), (200,'example7.txt'), (100,'example8.txt')]
+    thread = threading.Thread(target=thread_function, args=(count, name))
+    thr_list.append(thread)
     thread.start()
-
+    
 for thread in thr_list:
     thread.join()
 
@@ -45,3 +42,24 @@ for thread in thr_list:
 time_end = datetime.now()
 time_result = time_end - time_start
 print(f'Работа потоков {time_result}')
+
+
+# thr_first = Thread(target = write_words, args = (10,'example5.txt'))
+# thr_second = Thread(target = write_words, args = (30,'example6.txt'))
+# thr_thrid = Thread(target = write_words, args = (200,'example7.txt'))
+# thr_fourth = Thread(target = write_words, args = (100,'example8.txt'))
+# thr_list.append(thr_first)
+# thr_list.append(thr_second)
+# thr_list.append(thr_thrid)
+# thr_list.append(thr_fourth)
+
+# for thread in thr_list:
+#     thread.start()
+
+# for thread in thr_list:
+#     thread.join()
+
+
+# time_end = datetime.now()
+# time_result = time_end - time_start
+# print(f'Работа потоков {time_result}')
