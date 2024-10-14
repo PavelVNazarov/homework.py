@@ -1,0 +1,94 @@
+что делает каждая часть:
+
+Импорт библиотеки
+Python
+Копировать
+import torch
+Импортирует библиотеку torch, которая предназначена для работы с массивами (тензорами) и используется для реализации нейронных сетей.
+
+Функция активации
+Python
+Копировать
+def activation_function(x):
+    return torch.round(x)
+Определяет функцию активации, которая принимает значение x и округляет его до ближайшего целого числа (0 или 1). Это будет использоваться для получения бинарного выхода персептрона.
+
+Класс персептрона
+Python
+Копировать
+class Perceptron:
+    def __init__(self, num_inputs):
+        self.weights = torch.rand(num_inputs, dtype=torch.float64)
+        self.bias = torch.rand(1, dtype=torch.float64)
+__init__: Это конструктор класса, который инициализирует персептрон.
+self.weights: Инициализирует веса персептрона случайными значениями с размером, равным количеству входов.
+self.bias: Инициализирует смещение (bias) случайным значением.
+Функция прямого распространения
+Python
+Копировать
+def feed_forward(self, inputs):
+    return activation_function(torch.sum(inputs * self.weights) + self.bias)
+feed_forward: Эта функция вычисляет выход персептрона.
+inputs * self.weights: Умножает входные данные на веса.
+torch.sum(...): Суммирует полученные значения.
+... + self.bias: Добавляет смещение и передает результат в функцию активации.
+Функция обучения
+Python
+Копировать
+def train(self, inputs, target, learning_rate=0.1):
+    output = self.feed_forward(inputs)
+    error = target - output
+train: Эта функция выпускает прямое распространение и обновляет веса на основе ошибки.
+output: Выход персептрона для заданных входов.
+error: Разница между целевым значением и предсказанным выходом.
+Обновление весов и смещения
+Python
+Копировать
+self.weights += error * inputs * learning_rate
+self.bias += error * learning_rate
+Обновляет веса и смещение на основе ошибки. Чем больше ошибка, тем больше обновление.
+Основная часть кода
+Python
+Копировать
+if __name__ == "__main__":
+Этот блок гарантирует, что код будет выполнен только если этот файл запущен как основная программа.
+
+Создание экземпляра персептрона
+Python
+Копировать
+perceptron = Perceptron(3)
+Создает экземпляр персептрона с 3 входами.
+
+Генерация последовательности
+Python
+Копировать
+sequence = [torch.randint(0, 2, (1,), dtype=torch.float64) for _ in range(25)]
+Создает последовательность из 25 случайных двоичных чисел (0 или 1).
+
+Обучение персептрона
+Python
+Копировать
+for i in range(3, len(sequence)):
+    input_data = torch.tensor([sequence[i-3].item(), sequence[i-2].item(), sequence[i-1].item()])
+    target = sequence[i].item()
+    perceptron.train(input_data, target)
+Проходят по последовательности начиная с 3 (чтобы взять три предшествующих значения).
+input_data содержит три предыдущих числа, которые используются в качестве входов.
+target: Это следующее число в последовательности, которое мы хотим предсказать.
+Вычисление средней ошибки обучения
+Python
+Копировать
+average_train_error = total_error / (len(sequence) - 3)
+Вычисляет среднюю ошибку на обучающем наборе.
+
+Проверка обученного персептрона
+Python
+Копировать
+for i in range(3, len(sequence)):
+    input_data = torch.tensor([sequence[i-3].item(), sequence[i-2].item(), sequence[i-1].item()])
+    target = sequence[i].item()
+    output = perceptron.feed_forward(input_data)
+    error = abs(target - output)
+Точно так же, как и на этапе обучения, но теперь мы сравниваем предсказанные значения с истинными.
+
+Это краткий разбор каждого оператора в коде.
