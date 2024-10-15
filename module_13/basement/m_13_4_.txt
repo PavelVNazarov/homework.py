@@ -2,8 +2,6 @@
 
 Импорт необходимых модулей:
 
-Python
-Копировать
 import asyncio
 from aiogram import Bot, Dispatcher, types
 from aiogram import MemoryStorage
@@ -14,23 +12,17 @@ from aiogram.dispatcher.filters.state import State, StateGroup
 
 Объявление токена бота:
 
-Python
-Копировать
 API_TOKEN = 'YOUR_API_TOKEN'  # Замени 'YOUR_API_TOKEN' на токен твоего бота
 Токен, который используется для авторизации бота.
 
 Создание экземпляров бота и диспетчера:
 
-Python
-Копировать
 bot = Bot(token=API_TOKEN)
 dp = Dispatcher(bot, storage=MemoryStorage())
 Создается объект бота и диспетчер для обработки входящих сообщений, используя MemoryStorage для хранения состояния.
 
 Определение состояний:
 
-Python
-Копировать
 class UserState(StateGroup):
     age = State()
     growth = State()
@@ -39,8 +31,6 @@ class UserState(StateGroup):
 
 Обработчик команды /start:
 
-Python
-Копировать
 @dp.message_handler(commands=['start'])
 async def start(message: types.Message):
     response_text = 'Привет! Я бот, помогающий твоему здоровью.'
@@ -49,8 +39,6 @@ async def start(message: types.Message):
 
 Обработчик команды /calories:
 
-Python
-Копировать
 @dp.message_handler(commands=['calories'])
 async def set_age(message: types.Message):
     await message.reply('Введите свой возраст:')
@@ -59,8 +47,6 @@ async def set_age(message: types.Message):
 
 Обработчик состояния UserState.age:
 
-Python
-Копировать
 @dp.message_handler(state=UserState.age)
 async def set_growth(message: types.Message, state: FSMContext):
     await state.update_data(age=message.text)  # Сохраняем возраст
@@ -70,8 +56,6 @@ async def set_growth(message: types.Message, state: FSMContext):
 
 Обработчик состояния UserState.growth:
 
-Python
-Копировать
 @dp.message_handler(state=UserState.growth)
 async def set_weight(message: types.Message, state: FSMContext):
     await state.update_data(growth=message.text)  # Сохраняем рост
@@ -81,8 +65,6 @@ async def set_weight(message: types.Message, state: FSMContext):
 
 Обработчик состояния UserState.weight:
 
-Python
-Копировать
 @dp.message_handler(state=UserState.weight)
 async def send_calories(message: types.Message, state: FSMContext):
     await state.update_data(weight=message.text)  # Сохраняем вес
@@ -101,8 +83,6 @@ async def send_calories(message: types.Message, state: FSMContext):
 
 Обработчик для всех остальных сообщений:
 
-Python
-Копировать
 @dp.message_handler(lambda message: True)
 async def all_messages(message: types.Message):
     await message.reply('Введите команду /start или /calories, чтобы начать общение.')
@@ -110,8 +90,6 @@ async def all_messages(message: types.Message):
 
 Запуск бота:
 
-Python
-Копировать
 if __name__ == '__main__':
     executor.start_polling(dp, skip_updates=True)
 Запускает бота и начинает прослушивать обновления.
