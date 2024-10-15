@@ -1,164 +1,76 @@
-import numpy as np
+Этот код реализует простой перцептрон, который обучается решать логическую операцию "И" (AND). Рассмотрим каждый оператор и его назначение.
 
-# Определение функции активации
-def step_function(x):
-    return 1 if x >= 0 else 0
-
-# Определение класса Perceptron
-class Perceptron:
-    def __init__(self, n_inputs):
-        # Инициализация весов и смещения случайными значениями
-        self.weights = np.random.rand(n_inputs)
-        self.bias = np.random.rand(1)
-
-    def feed_forward(self, inputs):
-        # Прямое распространение
-        weighted_sum = np.dot(inputs, self.weights) + self.bias
-        return step_function(weighted_sum)
-    
-    def train(self, training_inputs, target_output, learning_rate=0.1):
-        # Обучение
-        prediction = self.feed_forward(training_inputs)
-        error = target_output - prediction
-        
-        # Обновление весов и смещения
-        self.weights += learning_rate * error * training_inputs
-        self.bias += learning_rate * error
-
-# Главная часть кода
-if __name__ == "__main__":
-    # Создание экземпляра персептрона с 3 входами
-    p = Perceptron(3)
-    
-    # Генерация последовательности из 25 случайных двоичных чисел
-    data = np.random.randint(0, 2, size=(25,))
-    
-    # Обучение персептрона на скользящих окнах по 3 числа
-    for i in range(len(data) - 3):
-        inputs = data[i:i+3]
-        target = data[i+3]
-        p.train(inputs, target)
-
-    # Вычисление средней ошибки обучения
-    training_errors = []
-    for i in range(len(data) - 3):
-        inputs = data[i:i+3]
-        target = data[i+3]
-        prediction = p.feed_forward(inputs)
-        error = target - prediction
-        training_errors.append(error**2)
-
-    avg_training_error = np.mean(training_errors)
-    print(f'Средняя ошибка обучения: {avg_training_error}')
-
-    # Проверка обученного персептрона на оставшихся числах последовательности
-    test_errors = []
-    for i in range(len(data) - 3):
-        inputs = data[i:i+3]
-        target = data[i+3]
-        prediction = p.feed_forward(inputs)
-        error = target - prediction
-        test_errors.append(error**2)
-
-    avg_test_error = np.mean(test_errors)
-    print(f'Средняя ошибка проверки: {avg_test_error}')
-Пояснение коду:
-Функция активации: Используется ступенчатая функция.
-Класс Perceptron: Имеет методы feed_forward для прямого распространения и train для обучения.
-Генерация данных: Создается случайная последовательность двоичных чисел.
-Обучение: Персептрон обучается на "скользящих окнах" по 3 числа.
-Ошибки: Рассчитывается средняя ошибка как в процессе обучения, так и на тестовых данных.
-
-
-разберем код, который реализует персептрон, решающий задачу предсказания следующего двоичного числа. Вот его минимальная версия с комментариями для каждого оператора:
-
+Импортируем библиотеки
 Python
 Копировать
 import numpy as np
+Импортирует библиотеку NumPy, которая используется для работы с массивами и матричными операциями.
 
-# Функция активации - ступенчатая функция
+Определяем функцию активации
+Python
+Копировать
 def step_function(x):
-    return 1 if x >= 0 else 0
+    return np.where(x >= 0, 1, 0)
+Функция активации (шаговая функция) возвращает 1, если входное значение больше или равно 0, и 0 в противном случае.
 
-# Класс Perceptron
+Определяем класс перцептрона
+Python
+Копировать
 class Perceptron:
-    def __init__(self, n_inputs):
-        # Инициализация весов случайными значениями
-        self.weights = np.random.rand(n_inputs)
-        # Инициализация смещения случайным значением
-        self.bias = np.random.rand(1)
+Создает класс для перцептрона.
 
-    # Функция прямого распространения
-    def feed_forward(self, inputs):
-        # Вычисляем взвешенную сумму входов и смещения
-        total = np.dot(inputs, self.weights) + self.bias
-        # Применяем функцию активации
-        return step_function(total)
+Конструктор класса
+Python
+Копировать
+def __init__(self, input_size, learning_rate=0.01, epochs=1000):
+    self.W = np.zeros(input_size + 1)
+    self.learning_rate = learning_rate
+    self.epochs = epochs
+input_size: количество входных значений (в данном случае 2).
+self.W: инициализация весов нулями (дополнительно добавляется_bias` для учета смещения).
+learning_rate: скорость обучения.
+epochs: количество итераций обучения.
+Метод предсказания
+Python
+Копировать
+def predict(self, x):
+    return step_function(np.dot(self.W, x))
+Метод, который делает предсказание, вычисляя скалярное произведение весов и входного вектора, затем передавая результат в функцию активации.
 
-    # Функция обучения
-    def train(self, training_inputs, labels, learning_rate=0.1, epochs=100):
-        for _ in range(epochs):
-            for inputs, label in zip(training_inputs, labels):
-                # Прогнозируем выход
-                prediction = self.feed_forward(inputs)
-                # Рассчитываем ошибку
-                error = label - prediction
-                # Обновляем веса и смещение
-                self.weights += learning_rate * error * inputs
-                self.bias += learning_rate * error
+Метод обучения
+Python
+Копировать
+def train(self, X, y):
+    for _ in range(self.epochs):
+        for xi, target in zip(X, y):
+            xi = np.insert(xi, 0, 1)  # Вставка смещения (bias)
+            prediction = self.predict(xi)
+            self.W += self.learning_rate * (target - prediction) * xi
+Первый цикл проходит по количеству эпох.
+Второй цикл проходит по каждому входному примеру xi и целевой метке target.
+Используется np.insert для добавления значения смещения (bias) в входной вектор.
+Обновляются веса на основе разницы между предсказанием и истинной меткой, умноженной на xi.
+Данные для обучения
+Python
+Копировать
+X = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])
+y = np.array([0, 0, 0, 1])  # Операция И (AND)
+Создание обучающего набора данных для логической операции "И".
 
-# Основная часть кода
-# Создаем экземпляр персептрона с 3 входами
-perceptron = Perceptron(n_inputs=3)
+Создание и обучение перцептрона
+Python
+Копировать
+perceptron = Perceptron(input_size=2)
+perceptron.train(X, y)
+Создание экземпляра перцептрона с 2 входами и обучение на заданных данных.
 
-# Генерация последовательности из 25 случайных двоичных чисел
-data = np.random.randint(0, 2, 25)
+Тестирование
+Python
+Копировать
+for xi in X:
+    xi_with_bias = np.insert(xi, 0, 1)  # Вставка смещения (bias) для тестирования
+    print(f"{xi} -> {perceptron.predict(xi_with_bias)}")
+Цикл проходит по всем входным данным, добавляя смещение и выводя предсказание перцептрона для каждого примера.
 
-# Подготовка данных для обучения
-training_inputs = []
-labels = []
-for i in range(len(data) - 3):
-    training_inputs.append(data[i:i+3])  # Последние 3 числа
-    labels.append(data[i + 3])           # Следующее число
-
-# Обучаем персептрон
-perceptron.train(np.array(training_inputs), np.array(labels))
-
-# Проверка обученного персептрона на оставшихся числах
-predictions = []
-for i in range(len(data) - 3):
-    prediction = perceptron.feed_forward(data[i:i+3])
-    predictions.append(prediction)
-
-# Вычисление средней ошибки
-average_error = np.mean(np.abs(np.array(labels) - np.array(predictions)))
-print("Средняя ошибка обучения:", average_error)
-
-# Печатаем прогнозы
-print("Прогнозы:", predictions)
-Пояснение операторов:
-Импорт библиотеки:
-
-import numpy as np: Импортируем библиотеку NumPy для работы с массивами и математическими операциями.
-Определение функции активации:
-
-def step_function(x): Определяем ступенчатую функцию, возвращающую 1, если x больше или равен 0, и 0 в противном случае.
-Определение класса Perceptron:
-
-class Perceptron: Создаем класс для персептрона.
-Инициализация весов и смещения:
-
-self.weights = np.random.rand(n_inputs): Инициализируем веса случайными значениями от 0 до 1.
-self.bias = np.random.rand(1): Инициализируем смещение случайным значением.
-Функция прямого распространения:
-
-def feed_forward(self, inputs): Вычисляем выходной сигнал на основе входных данных, весов и смещения.
-Функция обучения:
-
-def train(self, training_inputs, labels, learning_rate=0.1, epochs=100): Обучаем персептрон на основе входных данных и меток (фактических значений).
-Основная часть кода:
-
-Создание экземпляра персептрона на 3 входа, генерация случайной последовательности из 25 двоичных чисел, формирование данных для обучения, обучение персептрона и проверка его на тестовых данных.
-Вычисление средней ошибки:
-
-Сравниваем прогнозы с фактическими выходами и вычисляем среднюю ошибку.
+Резюме
+Этот код демонстрирует основной принцип работы перцептрона как бинарного классификатора, который может решать простые логические задачи.
