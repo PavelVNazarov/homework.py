@@ -2,8 +2,6 @@
 
 Импорт необходимых модулей:
 
-Python
-Копировать
 import asyncio
 from aiogram import Bot, Dispatcher, types
 from aiogram import MemoryStorage
@@ -12,23 +10,17 @@ from aiogram import executor
 
 Определение токена бота:
 
-Python
-Копировать
 API_TOKEN = 'YOUR_API_TOKEN'  # Замени 'YOUR_API_TOKEN' на токен твоего бота
 Здесь определяется переменная API_TOKEN, содержащая токен для доступа к API Telegram. Он должен быть заменен на истинный токен бота.
 
 Создание объекта бота и диспетчера:
 
-Python
-Копировать
 bot = Bot(token=API_TOKEN)
 dp = Dispatcher(bot, storage=MemoryStorage())
 Создается объект bot, который позволяет взаимодействовать с API Telegram. Затем создается объект Dispatcher, который управляет обработкой сообщений и событиями, а также используется MemoryStorage для временного хранения состояния.
 
 Обработка команды /start:
 
-Python
-Копировать
 @dp.message_handler(commands=['start'])
 async def start(message: types.Message):
     response_text = 'Привет! Я бот, помогающий твоему здоровью.'
@@ -37,8 +29,6 @@ async def start(message: types.Message):
 
 Обработка всех других сообщений:
 
-Python
-Копировать
 @dp.message_handler(lambda message: True)
 async def all_messages(message: types.Message):
     response_text = 'Введите команду /start, чтобы начать общение.'
@@ -47,8 +37,6 @@ async def all_messages(message: types.Message):
 
 Запуск бота:
 
-Python
-Копировать
 if __name__ == '__main__':
     executor.start_polling(dp, skip_updates=True)
 Этот блок запускает бота, передавая ему диспетчер dp. Флаг skip_updates=True означает, что бот пропустит обновления, которые были отправлены, когда он был отключен.
