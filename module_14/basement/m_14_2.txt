@@ -2,23 +2,19 @@
 
 Импорт библиотек:
 
-Python
-Копировать
 import sqlite3
 Подключает библиотеку sqlite3, которая позволяет работать с SQLite базами данных.
 
 Создание или подключение к базе данных:
 
-Python
-Копировать
+
 conn = sqlite3.connect('not_telegram.db')
 cursor = conn.cursor()
 Создает или подключается к базе данных с именем not_telegram.db и получает объект курсора для выполнения SQL-запросов.
 
 Создание таблицы Users:
 
-Python
-Копировать
+
 cursor.execute('''
 CREATE TABLE IF NOT EXISTS Users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -32,8 +28,7 @@ CREATE TABLE IF NOT EXISTS Users (
 
 Заполнение таблицы данными:
 
-Python
-Копировать
+
 users = [("User1", "example1@gmail.com", 10, 1000), ... ]
 cursor.executemany("INSERT INTO Users (username, email, age, balance) VALUES (?, ?, ?, ?)", users)
 Создает список пользователей и добавляет их в таблицу Users с помощью executemany, который позволяет выполнить один и тот же SQL-запрос для каждой записи.
@@ -47,30 +42,26 @@ cursor.execute("UPDATE Users SET balance = 500 WHERE id % 2")
 
 Удаление каждой третьей записи:
 
-Python
-Копировать
+
 cursor.execute("DELETE FROM Users WHERE id % 3 == 1")
 Удаляет каждую третью запись, начиная с первой (где id делится на 3 с остатком 1).
 
 Удаление пользователя с определенным id:
 
-Python
-Копировать
+
 cursor.execute("DELETE FROM Users WHERE id = 6")
 Удаляет запись с id равным 6.
 
 Выборка всех записей:
 
-Python
-Копировать
+
 cursor.execute("SELECT username, email, age, balance FROM Users WHERE age != 60")
 results = cursor.fetchall()
 Получает все записи, где возраст не равен 60, и сохраняет их в переменную results.
 
 Вывод результатов:
 
-Python
-Копировать
+
 for row in results:
     username, email, age, balance = row
     print(f"Имя: {username} | Почта: {email} | Возраст: {age} | Баланс: {balance}")
@@ -78,32 +69,25 @@ for row in results:
 
 Подсчёт общего количества пользователей:
 
-Python
-Копировать
+
 cursor.execute("SELECT COUNT(*) FROM Users")
 total_users = cursor.fetchone()[0]
 Выполняет SQL-запрос для подсчёта общего числа записей в таблице Users и сохраняет результат в переменную total_users.
 
 Подсчет суммы всех балансов:
 
-Python
-Копировать
 cursor.execute("SELECT SUM(balance) FROM Users")
 all_balances = cursor.fetchone()[0]
 Выполняет запрос для подсчета суммы всех значений в столбце balance и сохраняет результат в переменную all_balances.
 
 Вычисление и вывод среднего баланса:
 
-Python
-Копировать
 average_balance = all_balances / total_users if total_users else 0
 print(average_balance)
 Вычисляет средний баланс. Если пользователей нет (0), возвращается 0. Затем выводит средний баланс на экран.
 
 Сохранение изменений и закрытие соединения:
 
-Python
-Копировать
 conn.commit()
 conn.close()
 Сохраняет все изменения в базе данных и закрывает соединение.
