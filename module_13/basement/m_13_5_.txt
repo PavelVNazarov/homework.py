@@ -1,7 +1,5 @@
 Импорт библиотек:
 
-Python
-Копировать
 import asyncio
 from aiogram import Bot, Dispatcher, types
 from aiogram import MemoryStorage
@@ -12,8 +10,6 @@ from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 Импортируются необходимые модули из библиотеки aiogram, которая используется для создания ботов Telegram с поддержкой асинхронного программирования.
 Инициализация бота:
 
-Python
-Копировать
 API_TOKEN = 'YOUR_API_TOKEN'
 bot = Bot(token=API_TOKEN)
 dp = Dispatcher(bot, storage=MemoryStorage())
@@ -21,8 +17,6 @@ API_TOKEN — токен для доступа к API Telegram, подставь
 Создается объект Bot и диспетчер Dispatcher. Хранение состояния реализуется в памяти (временный вариант).
 Определение состояний пользователя:
 
-Python
-Копировать
 class UserState(StateGroup):
     age = State()
     growth = State()
@@ -30,8 +24,6 @@ class UserState(StateGroup):
 Создается класс состояний, используемый для управления состоянием пользователя во время взаимодействия с ботом (возраст, рост, вес).
 Создание клавиатуры:
 
-Python
-Копировать
 keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
 button_calculate = KeyboardButton('Рассчитать')
 button_info = KeyboardButton('Информация')
@@ -39,8 +31,6 @@ keyboard.add(button_calculate, button_info)
 Создается пользовательская клавиатура с двумя кнопками: "Рассчитать" и "Информация", которая подстраивается под размер экрана.
 Обработчик команды /start:
 
-Python
-Копировать
 @dp.message_handler(commands=['start'])
 async def start(message: types.Message):
     response_text = 'Привет! Я бот, помогающий твоему здоровью.'
@@ -48,8 +38,6 @@ async def start(message: types.Message):
 При выполнении команды /start бот отправляет приветственное сообщение и показывает клавиатуру с кнопками.
 Обработчик нажатия кнопки "Рассчитать":
 
-Python
-Копировать
 @dp.message_handler(lambda message: message.text == 'Рассчитать')
 async def set_age(message: types.Message):
     await message.reply('Введите свой возраст:')
@@ -57,8 +45,6 @@ async def set_age(message: types.Message):
 Когда пользователь нажимает кнопку "Рассчитать", бот запрашивает возраст и устанавливает состояние для дальнейших вопросов.
 Обработчик для состояния age:
 
-Python
-Копировать
 @dp.message_handler(state=UserState.age)
 async def set_growth(message: types.Message, state: FSMContext):
     await state.update_data(age=message.text)  # Сохраняем возраст
@@ -67,8 +53,6 @@ async def set_growth(message: types.Message, state: FSMContext):
 Сохраняет введенный возраст и запрашивает рост.
 Обработчик для состояния growth:
 
-Python
-Копировать
 @dp.message_handler(state=UserState.growth)
 async def set_weight(message: types.Message, state: FSMContext):
     await state.update_data(growth=message.text)  # Сохраняем рост
@@ -77,8 +61,6 @@ async def set_weight(message: types.Message, state: FSMContext):
 Сохраняет рост и запрашивает вес.
 Обработчик для состояния weight:
 
-Python
-Копировать
 @dp.message_handler(state=UserState.weight)
 async def send_calories(message: types.Message, state: FSMContext):
     await state.update_data(weight=message.text)  # Сохраняем вес
@@ -96,24 +78,18 @@ async def send_calories(message: types.Message, state: FSMContext):
 Сохраняет вес, рассчитывает количество калорий по формуле и отправляет результат. После этого завершается состояние.
 Обработчик для нажатия кнопки "Информация":
 
-Python
-Копировать
 @dp.message_handler(lambda message: message.text == 'Информация')
 async def info(message: types.Message):
     await message.reply('Информация о боте: Я предназначен для расчета калорий и улучшения Вашего здоровья.')
 Отправляет информацию о боте, когда пользователь нажимает кнопку "Информация".
 Обработчик для любых других сообщений:
 
-Python
-Копировать
 @dp.message_handler(lambda message: True)
 async def all_messages(message: types.Message):
     await message.reply('Введите команду /start или нажмите на кнопку, чтобы начать общение.')
 Обрабатывает любые сообщения, не подходящие для других хэндлеров, и предлагает пользователю воспользоваться командами.
 Запуск бота:
 
-Python
-Копировать
 if __name__ == '__main__':
     executor.start_polling(dp, skip_updates=True)
 Запускает механизм получения обновлений и обработки сообщений.
