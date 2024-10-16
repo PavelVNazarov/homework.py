@@ -10,19 +10,16 @@ from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMar
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.types import InputFile
 
-# API_TOKEN = 'YOUR_API_TOKEN'  # Заменить 'YOUR_API_TOKEN' на токен бота
-API_TOKEN = '7528963854:AAGLegRWedP3Wg4Q9ny07GKksOo01ebDo70'
+API_TOKEN = 'YOUR_API_TOKEN'  # Заменить 'YOUR_API_TOKEN' на токен бота
 
 bot = Bot(token=API_TOKEN)
 dp = Dispatcher(bot, storage=MemoryStorage())
-
 
 class UserState(StatesGroup):
     age = State()
     growth = State()
     weight = State()
     sex = State()
-
 
 keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
 button_calculate = KeyboardButton('Рассчитать')
@@ -41,17 +38,14 @@ for i in range(1, 5):  # Создаем 4 кнопки продукта
     button_product = InlineKeyboardButton(f'БАД {i}', callback_data='product_buying')
     product_inline_keyboard.add(button_product)
 
-
 @dp.message_handler(commands=['start'])
 async def start(message: types.Message):
     response_text = 'Привет! Я бот, помогающий твоему здоровью.'
     await message.reply(response_text, reply_markup=keyboard)
 
-
 @dp.message_handler(lambda message: message.text == 'Рассчитать')
 async def main_menu(message: types.Message):
     await message.reply('Выберите опцию:', reply_markup=inline_keyboard)
-
 
 @dp.message_handler(lambda message: message.text == 'Купить')  # Новый хэндлер
 async def get_buying_list(message: types.Message):
@@ -70,12 +64,10 @@ async def get_buying_list(message: types.Message):
 
     await message.reply('Выберите продукт для покупки:', reply_markup=product_inline_keyboard)
 
-
 @dp.callback_query_handler(lambda call: call.data.startswith('product_buying'))
 async def send_confirm_message(call: types.CallbackQuery):
     await bot.answer_callback_query(call.id)
     await bot.send_message(call.from_user.id, "Вы успешно приобрели продукт!")
-
 
 @dp.callback_query_handler(lambda call: call.data == 'formulas')
 async def get_formulas(call: types.CallbackQuery):
@@ -85,14 +77,11 @@ async def get_formulas(call: types.CallbackQuery):
     await bot.answer_callback_query(call.id)
     await bot.send_message(call.from_user.id, formula_info)
 
-
-
 @dp.callback_query_handler(lambda call: call.data == 'calories')
 async def set_sex(call: types.CallbackQuery):
     await bot.answer_callback_query(call.id)
     await bot.send_message(call.from_user.id, 'Введите свой пол (м/ж):')
     await UserState.sex.set()  # Устанавливаем состояние для пола
-
 
 @dp.message_handler(state=UserState.age)
 async def set_growth(message: types.Message, state: FSMContext):
@@ -106,7 +95,6 @@ async def set_growth(message: types.Message, state: FSMContext):
     except ValueError:
         await message.reply('Пожалуйста, введите корректный возраст!')
 
-
 @dp.message_handler(state=UserState.sex)
 async def set_age(message: types.Message, state: FSMContext):
     if message.text.lower() not in ['м', 'ж']:
@@ -115,7 +103,6 @@ async def set_age(message: types.Message, state: FSMContext):
     await state.update_data(sex=message.text.lower())
     await message.reply('Введите свой возраст:')
     await UserState.age.set()
-
 
 @dp.message_handler(state=UserState.growth)
 async def set_weight(message: types.Message, state: FSMContext):
@@ -128,7 +115,6 @@ async def set_weight(message: types.Message, state: FSMContext):
         await UserState.weight.set()
     except ValueError:
         await message.reply('Пожалуйста, введите корректный рост в сантиметрах!')
-
 
 @dp.message_handler(state=UserState.weight)
 async def send_calories(message: types.Message, state: FSMContext):
