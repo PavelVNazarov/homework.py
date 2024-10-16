@@ -38,7 +38,7 @@ inline_keyboard.add(button_calories, button_formulas)
 # Новое Inline меню для покупки
 product_inline_keyboard = InlineKeyboardMarkup()
 for i in range(1, 5):  # Создаем 4 кнопки продукта
-    button_product = InlineKeyboardButton(f'Product{i}', callback_data='product_buying')
+    button_product = InlineKeyboardButton(f'БАД {i}', callback_data='product_buying')
     product_inline_keyboard.add(button_product)
 
 
@@ -55,18 +55,18 @@ async def main_menu(message: types.Message):
 
 @dp.message_handler(lambda message: message.text == 'Купить')  # Новый хэндлер
 async def get_buying_list(message: types.Message):
-    products_info = ["Название: California Gold Nutrition Baby Vitamin D3 Liquid | Описание: Вариант для самых маленьких. Также в составе есть ДГК (докозагексаеновая кислота) — омега-3 жирная кислота, необходимая для формирования мозга, нервной системы и зрения у ребенка. | Цена: 100",
-                     "Название: California Gold Nutrition Omega-3 Premium Fish Oil | Описание: Капсулы с рыбьим жиром омега-3 премиального качества. Они содержат ключевые омега-3 жирные кислоты, такие как ДГК и ЭПК.| Цена: 100",
-                     "Название: Магний хелат Эвалар | Описание: Биологически активная добавка в таблетках. Этот магний в хелатной форме также хорошо усваивается организмом. | Цена: 100",
-                     "Название: GLS Коллаген 1000 | Описание: Биологически активная добавка (БАД) к пище с гидролизатом рыбного коллагена. | Цена: 100",]
+    products_info = [["Название: California Gold Nutrition Baby Vitamin D3 Liquid | Описание: Вариант для самых маленьких. Также в составе есть ДГК (докозагексаеновая кислота) — омега-3 жирная кислота, необходимая для формирования мозга, нервной системы и зрения у ребенка. | Цена: 100","babyd3.png"],
+                    ["Название: California Gold Nutrition Omega-3 Premium Fish Oil | Описание: Капсулы с рыбьим жиром омега-3 премиального качества. Они содержат ключевые омега-3 жирные кислоты, такие как ДГК и ЭПК.| Цена: 100","omega3.png"],
+                    ["Название: Магний хелат Эвалар | Описание: Биологически активная добавка в таблетках. Этот магний в хелатной форме также хорошо усваивается организмом. | Цена: 100","magni.png"],
+                    ["Название: GLS Коллаген 1000 | Описание: Биологически активная добавка (БАД) к пище с гидролизатом рыбного коллагена. | Цена: 100","collagen.png"],]
 
     for product in products_info:
-        await message.reply(product)  # Отправляем информацию
+        await message.reply(product(0))  # Отправляем информацию
         #await bot.send_photo()
         #bot.send_photo(chat_id=chat_id, photo='https://telegram.org/img/t_logo.png')
         #photo = InputFile("https://github.com/PavelVNazarov/homework.py/blob/main/module_14/babyd3.png")
         #await bot.send_photo(photo)
-        #await bot.send_photo(message.chat.id, photo='https://github.com/PavelVNazarov/homework.py/blob/main/module_14/babyd3.png')
+        await bot.send_photo(message.chat.id, photo=product(1))
 
     await message.reply('Выберите продукт для покупки:', reply_markup=product_inline_keyboard)
 
