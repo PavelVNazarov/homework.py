@@ -11,7 +11,8 @@ from aiogram.contrib.fsm_storage.memory import MemoryStorage
 import aiohttp
 from crud_functions import initiate_db, get_all_products
 
-API_TOKEN = 'YOUR_API_TOKEN'  # Заменить 'YOUR_API_TOKEN' на токен бота
+# API_TOKEN = 'YOUR_API_TOKEN'  # Заменить 'YOUR_API_TOKEN' на токен бота
+API_TOKEN = '7528963854:AAGLegRWedP3Wg4Q9ny07GKksOo01ebDo70'
 
 bot = Bot(token=API_TOKEN)
 dp = Dispatcher(bot, storage=MemoryStorage())
@@ -36,6 +37,15 @@ button_calories = InlineKeyboardButton(text='Рассчитать норму к�
 button_formulas = InlineKeyboardButton(text='Формулы расчёта', callback_data='formulas')
 inline_keyboard.add(button_calories, button_formulas)
 
+# Создание инлайн-клавиатуры для покупки
+def create_product_inline_keyboard():
+    product_inline_keyboard = InlineKeyboardMarkup()
+    products_info = get_all_products()
+    for index, product in enumerate(products_info):
+        button_product = InlineKeyboardButton(text=product[4], callback_data=f'product_buying_{index}')
+        product_inline_keyboard.add(button_product)
+    return product_inline_keyboard
+
 @dp.message_handler(commands=['start'])
 async def start(message: types.Message):
     response_text = 'Привет! Я бот, помогающий твоему здоровью.'
@@ -48,9 +58,7 @@ async def main_menu(message: types.Message):
 @dp.message_handler(lambda message: message.text == 'Купить')
 async def get_buying_list(message: types.Message):
     products_inf = get_all_products()  # Получаем все продукты из базы данных
-    product_inline_keyboard = InlineKeyboardMarkup()  # Создаем клавиатуру здесь
-
-    for index, product in enumerate(products_inf):
+    for product in products_inf:
         title, description, price, url, short_name = product
         await message.reply(f'Название: {title} | Описание: {description} | Цена: {price}')
 
@@ -62,10 +70,7 @@ async def get_buying_list(message: types.Message):
                 else:
                     await message.reply("Изображение недоступно.")
 
-        # Создаем кнопки для каждого продукта
-        button_product = InlineKeyboardButton(text=short_name, callback_data=f'product_buying_{index}')
-        product_inline_keyboard.add(button_product)
-
+    product_inline_keyboard = create_product_inline_keyboard()  # Создаем клавиатуру один раз
     await message.reply('Выберите продукт для покупки:', reply_markup=product_inline_keyboard)
 
 @dp.callback_query_handler(lambda call: call.data.startswith('product_buying'))
