@@ -11,8 +11,7 @@ from aiogram.contrib.fsm_storage.memory import MemoryStorage
 import aiohttp
 from crud_functions import initiate_db, get_all_products
 
-# API_TOKEN = 'YOUR_API_TOKEN'  # Заменить 'YOUR_API_TOKEN' на токен бота
-API_TOKEN = '7528963854:AAGLegRWedP3Wg4Q9ny07GKksOo01ebDo70'
+API_TOKEN = 'YOUR_API_TOKEN'  # Заменить 'YOUR_API_TOKEN' на токен бота
 
 bot = Bot(token=API_TOKEN)
 dp = Dispatcher(bot, storage=MemoryStorage())
@@ -37,18 +36,6 @@ button_calories = InlineKeyboardButton(text='Рассчитать норму к�
 button_formulas = InlineKeyboardButton(text='Формулы расчёта', callback_data='formulas')
 inline_keyboard.add(button_calories, button_formulas)
 
-products_info = [
-    ["California Gold Nutrition Baby Vitamin D3 Liquid","Вариант для самых маленьких. Также в составе есть ДГК (докозагексаеновая кислота) — омега-3 жирная кислота, необходимая для формирования мозга, нервной системы и зрения у ребенка.","100","https://ltdfoto.ru/images/2024/10/17/babyd34c24ca37eabfb2b4.png","BabyD3"],
-    ["California Gold Nutrition Omega-3 Premium Fish Oil","Капсулы с рыбьим жиром омега-3 премиального качества. Они содержат ключевые омега-3 жирные кислоты, такие как ДГК и ЭПК.","100","https://ltdfoto.ru/images/2024/10/17/omega324684226cd955fae.png","Omega-3"],
-    ["Магний хелат Эвалар","Биологически активная добавка в таблетках. Этот магний в хелатной форме также хорошо усваивается организмом.","100","https://ltdfoto.ru/images/2024/10/17/magnibed42d251ce0a26b.png","Magni"],
-    ["GLS Коллаген 1000","Биологически активная добавка (БАД) к пище с гидролизатом рыбного коллагена.","100","https://ltdfoto.ru/images/2024/10/17/collagen5263a67645df4975.png","Collagen"],]
-
-# Inline меню для покупки
-product_inline_keyboard = InlineKeyboardMarkup()
-for product in products_info:  # Создаем 4 кнопки продукта
-    button_product = InlineKeyboardButton(product[4], callback_data=product[4])  # Передаем название продукта
-    product_inline_keyboard.add(button_product)
-
 @dp.message_handler(commands=['start'])
 async def start(message: types.Message):
     response_text = 'Привет! Я бот, помогающий твоему здоровью.'
@@ -60,10 +47,13 @@ async def main_menu(message: types.Message):
 
 @dp.message_handler(lambda message: message.text == 'Купить')
 async def get_buying_list(message: types.Message):
-    products_info = get_all_products()  # Получаем все продукты из базы данных
-    for product in products_info:
-        title, description, price, url = product
+    products_inf = get_all_products()  # Получаем все продукты из базы данных
+    product_inline_keyboard = InlineKeyboardMarkup()  # Создаем клавиатуру здесь
+
+    for index, product in enumerate(products_inf):
+        title, description, price, url, short_name = product
         await message.reply(f'Название: {title} | Описание: {description} | Цена: {price}')
+
         async with aiohttp.ClientSession() as session:
             async with session.get(url) as resp:
                 if resp.status == 200:
@@ -71,11 +61,16 @@ async def get_buying_list(message: types.Message):
                     await bot.send_photo(message.chat.id, photo=photo)
                 else:
                     await message.reply("Изображение недоступно.")
+
+        # Создаем кнопки для каждого продукта
+        button_product = InlineKeyboardButton(text=short_name, callback_data=f'product_buying_{index}')
+        product_inline_keyboard.add(button_product)
+
     await message.reply('Выберите продукт для покупки:', reply_markup=product_inline_keyboard)
 
 @dp.callback_query_handler(lambda call: call.data.startswith('product_buying'))
 async def send_confirm_message(call: types.CallbackQuery):
-    product_index = int(call.data.split('_')[-1])  # Получаем индекс продукта из callback_data
+    product_index = int(call.data.split('_')[2])  # Получаем индекс продукта из callback_data
     products_info = get_all_products()
     product_title = products_info[product_index][0]  # Получаем название продукта
     await bot.answer_callback_query(call.id)
