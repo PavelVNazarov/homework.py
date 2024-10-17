@@ -8,7 +8,7 @@ from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
-from aiogram.types import InputFile
+import aiohttp
 
 API_TOKEN = 'YOUR_API_TOKEN'  # Заменить 'YOUR_API_TOKEN' на токен бота
 
@@ -50,17 +50,20 @@ async def main_menu(message: types.Message):
 @dp.message_handler(lambda message: message.text == 'Купить')  # Новый хэндлер
 async def get_buying_list(message: types.Message):
     products_info = [
-        ["Название: California Gold Nutrition Baby Vitamin D3 Liquid | Описание: Вариант для самых маленьких. Также в составе есть ДГК (докозагексаеновая кислота) — омега-3 жирная кислота, необходимая для формирования мозга, нервной системы и зрения у ребенка. | Цена: 100", "babyd3.png"],
-        ["Название: California Gold Nutrition Omega-3 Premium Fish Oil | Описание: Капсулы с рыбьим жиром омега-3 премиального качества. Они содержат ключевые омега-3 жирные кислоты, такие как ДГК и ЭПК.| Цена: 100", "omega3.png"],
-        ["Название: Магний хелат Эвалар | Описание: Биологически активная добавка в таблетках. Этот магний в хелатной форме также хорошо усваивается организмом. | Цена: 100", "magni.png"],
-        ["Название: GLS Коллаген 1000 | Описание: Биологически активная добавка (БАД) к пище с гидролизатом рыбного коллагена. | Цена: 100", "collagen.png"],
-    ]
+        ["California Gold Nutrition Baby Vitamin D3 Liquid","Вариант для самых маленьких. Также в составе есть ДГК (докозагексаеновая кислота) — омега-3 жирная кислота, необходимая для формирования мозга, нервной системы и зрения у ребенка.","100","https://ltdfoto.ru/images/2024/10/17/babyd34c24ca37eabfb2b4.png"],
+        ["California Gold Nutrition Omega-3 Premium Fish Oil","Капсулы с рыбьим жиром омега-3 премиального качества. Они содержат ключевые омега-3 жирные кислоты, такие как ДГК и ЭПК.","100","https://ltdfoto.ru/images/2024/10/17/omega324684226cd955fae.png"],
+        ["Магний хелат Эвалар","Биологически активная добавка в таблетках. Этот магний в хелатной форме также хорошо усваивается организмом.","100","https://ltdfoto.ru/images/2024/10/17/magnibed42d251ce0a26b.png"],
+        ["GLS Коллаген 1000","Биологически активная добавка (БАД) к пище с гидролизатом рыбного коллагена.","100","https://ltdfoto.ru/images/2024/10/17/collagen5263a67645df4975.png"],]
 
     for product in products_info:
-        await message.reply(product[0])  # Отправляем информацию
-        # Загружаем изображение из файла
-        with open(product[1], 'rb') as photo:
-            await bot.send_photo(message.chat.id, photo=photo)
+        #await message.reply(product[0])  # Отправляем информацию
+        await message.reply(f'Развание: {product[0]} | Описание: {product[1]} | Цена: {product[2]}')
+        # Загружаем изображение из URL
+        async with aiohttp.ClientSession() as session:
+            async with session.get(product[3]) as resp:
+                if resp.status == 200:
+                    photo = await resp.read()
+                    await bot.send_photo(message.chat.id, photo=photo)
 
     await message.reply('Выберите продукт для покупки:', reply_markup=product_inline_keyboard)
 
@@ -94,6 +97,7 @@ async def set_growth(message: types.Message, state: FSMContext):
         await UserState.growth.set()
     except ValueError:
         await message.reply('Пожалуйста, введите корректный возраст!')
+
 
 @dp.message_handler(state=UserState.sex)
 async def set_age(message: types.Message, state: FSMContext):
