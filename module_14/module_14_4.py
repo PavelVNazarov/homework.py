@@ -17,19 +17,20 @@ API_TOKEN = '7528963854:AAGLegRWedP3Wg4Q9ny07GKksOo01ebDo70'
 bot = Bot(token=API_TOKEN)
 dp = Dispatcher(bot, storage=MemoryStorage())
 
-
 class UserState(StatesGroup):
     age = State()
     growth = State()
     weight = State()
     sex = State()
 
+# Инициализация базы данных
+initiate_db()
 
 keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
 button_calculate = KeyboardButton('Рассчитать')
 button_info = KeyboardButton('Информация')
-button_buy = KeyboardButton('Купить')  # Новая кнопка
-keyboard.add(button_calculate, button_info, button_buy)  # Добавляем кнопку в клавиатуру
+button_buy = KeyboardButton('Купить')
+keyboard.add(button_calculate, button_info, button_buy)
 
 inline_keyboard = InlineKeyboardMarkup()
 button_calories = InlineKeyboardButton(text='Рассчитать норму калорий', callback_data='calories')
@@ -42,31 +43,29 @@ products_info = [
     ["Магний хелат Эвалар","Биологически активная добавка в таблетках. Этот магний в хелатной форме также хорошо усваивается организмом.","100","https://ltdfoto.ru/images/2024/10/17/magnibed42d251ce0a26b.png","Magni"],
     ["GLS Коллаген 1000","Биологически активная добавка (БАД) к пище с гидролизатом рыбного коллагена.","100","https://ltdfoto.ru/images/2024/10/17/collagen5263a67645df4975.png","Collagen"],]
 
-
-# Новое Inline меню для покупки
+# Inline меню для покупки
 product_inline_keyboard = InlineKeyboardMarkup()
 for product in products_info:  # Создаем 4 кнопки продукта
     button_product = InlineKeyboardButton(product[4], callback_data=product[4])  # Передаем название продукта
     product_inline_keyboard.add(button_product)
-
 
 @dp.message_handler(commands=['start'])
 async def start(message: types.Message):
     response_text = 'Привет! Я бот, помогающий твоему здоровью.'
     await message.reply(response_text, reply_markup=keyboard)
 
-
 @dp.message_handler(lambda message: message.text == 'Рассчитать')
 async def main_menu(message: types.Message):
     await message.reply('Выберите опцию:', reply_markup=inline_keyboard)
 
-
 @dp.message_handler(lambda message: message.text == 'Купить')
 async def get_buying_list(message: types.Message):
+    products_info = get_all_products()  # Получаем все продукты из базы данных
     for product in products_info:
-        await message.reply(f'Название: {product[0]} | Описание: {product[1]} | Цена: {product[2]}')
+        title, description, price, url = product
+        await message.reply(f'Название: {title} | Описание: {description} | Цена: {price}')
         async with aiohttp.ClientSession() as session:
-            async with session.get(product[3]) as resp:
+            async with session.get(url) as resp:
                 if resp.status == 200:
                     photo = await resp.read()
                     await bot.send_photo(message.chat.id, photo=photo)
@@ -74,13 +73,13 @@ async def get_buying_list(message: types.Message):
                     await message.reply("Изображение недоступно.")
     await message.reply('Выберите продукт для покупки:', reply_markup=product_inline_keyboard)
 
-
-@dp.callback_query_handler(lambda call: call.data in [product[4] for product in products_info])  # Обработка нажатий на кнопки
+@dp.callback_query_handler(lambda call: call.data.startswith('product_buying'))
 async def send_confirm_message(call: types.CallbackQuery):
+    product_index = int(call.data.split('_')[-1])  # Получаем индекс продукта из callback_data
+    products_info = get_all_products()
+    product_title = products_info[product_index][0]  # Получаем название продукта
     await bot.answer_callback_query(call.id)
-    product_name = call.data  # Получаем название продукта из callback_data
-    await bot.send_message(call.from_user.id, f"Вы успешно приобрели продукт: {product_name}!")
-
+    await bot.send_message(call.from_user.id, f"Вы успешно приобрели продукт: {product_title}!")
 
 @dp.callback_query_handler(lambda call: call.data == 'formulas')
 async def get_formulas(call: types.CallbackQuery):
@@ -90,14 +89,11 @@ async def get_formulas(call: types.CallbackQuery):
     await bot.answer_callback_query(call.id)
     await bot.send_message(call.from_user.id, formula_info)
 
-
-
 @dp.callback_query_handler(lambda call: call.data == 'calories')
 async def set_sex(call: types.CallbackQuery):
     await bot.answer_callback_query(call.id)
     await bot.send_message(call.from_user.id, 'Введите свой пол (м/ж):')
     await UserState.sex.set()  # Устанавливаем состояние для пола
-
 
 @dp.message_handler(state=UserState.age)
 async def set_growth(message: types.Message, state: FSMContext):
@@ -111,7 +107,6 @@ async def set_growth(message: types.Message, state: FSMContext):
     except ValueError:
         await message.reply('Пожалуйста, введите корректный возраст!')
 
-
 @dp.message_handler(state=UserState.sex)
 async def set_age(message: types.Message, state: FSMContext):
     if message.text.lower() not in ['м', 'ж']:
@@ -120,7 +115,6 @@ async def set_age(message: types.Message, state: FSMContext):
     await state.update_data(sex=message.text.lower())
     await message.reply('Введите свой возраст:')
     await UserState.age.set()
-
 
 @dp.message_handler(state=UserState.growth)
 async def set_weight(message: types.Message, state: FSMContext):
@@ -133,7 +127,6 @@ async def set_weight(message: types.Message, state: FSMContext):
         await UserState.weight.set()
     except ValueError:
         await message.reply('Пожалуйста, введите корректный рост в сантиметрах!')
-
 
 @dp.message_handler(state=UserState.weight)
 async def send_calories(message: types.Message, state: FSMContext):
