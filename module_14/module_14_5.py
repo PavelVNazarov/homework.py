@@ -12,7 +12,6 @@ import aiohttp
 from crud_functions import initiate_db, get_all_products, add_user, is_included
 
 # API_TOKEN = 'YOUR_API_TOKEN'  # Заменить 'YOUR_API_TOKEN' на токен бота
-API_TOKEN = '7528963854:AAGLegRWedP3Wg4Q9ny07GKksOo01ebDo70'
 
 bot = Bot(token=API_TOKEN)
 dp = Dispatcher(bot, storage=MemoryStorage())
@@ -43,10 +42,6 @@ button_calories = InlineKeyboardButton(text='Рассчитать норму к�
 button_formulas = InlineKeyboardButton(text='Формулы расчёта', callback_data='formulas')
 inline_keyboard.add(button_calories, button_formulas)
 
-@dp.message_handler(lambda message: True)
-async def all_messages(message: types.Message):
-    await message.reply('Введите команду /start или нажмите на кнопку, чтобы начать общение.')
-    
 @dp.message_handler(commands=['start'])
 async def start(message: types.Message):
     response_text = 'Привет! Я бот, помогающий твоему здоровью.'
@@ -84,7 +79,7 @@ async def set_age(message: types.Message, state: FSMContext):
     add_user(username, email, age)  # Добавляем пользователя в БД
     await message.reply("Вы успешно зарегистрированы!")
     await state.finish()  # Завершаем состояние
-    
+
 # Создание инлайн-клавиатуры для покупки
 def create_product_inline_keyboard():
     product_inline_keyboard = InlineKeyboardMarkup()
@@ -197,5 +192,9 @@ async def send_calories(message: types.Message, state: FSMContext):
 async def info(message: types.Message):
     await message.reply('Информация о боте: Я предназначен для расчета калорий и улучшения Вашего здоровья.')
 
+@dp.message_handler(lambda message: True)
+async def all_messages(message: types.Message):
+    await message.reply('Введите команду /start или нажмите на кнопку, чтобы начать общение.')
+    
 if __name__ == '__main__':
     executor.start_polling(dp, skip_updates=True)
