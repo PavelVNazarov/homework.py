@@ -2,13 +2,9 @@
 # Назаров ПВ
 # module_14_4.py
 
-
-
 Изменения в Telegram-боте
 Далее, тебе нужно внести изменения в код твоего Telegram-бота. Предположим, что у тебя уже есть функция get_buying_list, и добавим туда вызов get_all_products().
 
-Python
-Копировать
 from crud_functions import initiate_db, get_all_products
 
 # Запускаем инициализацию базы данных
