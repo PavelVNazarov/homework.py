@@ -1,0 +1,91 @@
+урок 3 модуля 16 валидацияданных
+
+# запуск - в терминале, локально, пишем python -m uvicorn main:app
+from fastapi import FastAPI, Path
+from typing import Annotated
+
+
+app = FastAPI()
+
+@app.get("/")
+async def welcome() -> dict:
+    return {"message":"Hello World!"}
+
+@app.get("/user/A/B")
+async def news() -> dict:
+    return {"message": f"Hello, Tester"}
+
+@app.get("/user/{username}/{id}")
+async def news(username: Annotated [str, Path(min_length=3,max_length=15,description="Enter your username",example="montes")]
+               , id: int) -> dict:
+    return {"message": f"Hello, {username}: {id}"}
+
+# @app.get("/id")
+# async def id_paginator(username: str = "Alex", age: int = 24) -> dict:
+#     return {"User": {username}, "Age": {age}}
+
+# @app.get("/user/{username}/{id}")
+# async def news(username: str = Path(min_length=3,max_length=15,description="Enter your username",example="montes"),
+#                id: int = Path(ge=0, le=100, description="Enter your id", example="75"))-> dict:
+#     return {"message": f"Hello, {username}: {id}"}
+
+# Get - адрес в строке ?переменная=значение
+# Past - формы - оформить заказ в магазине
+# Put
+# Delete
+
+разберем код построчно и объясним, что делает каждый оператор.
+
+# запуск - в терминале, локально, пишем python -m uvicorn main:app
+Эта строка является комментарием, который информирует Вас о том, как запустить приложение. Вы используете команду uvicorn, которая является ASGI-сервером для запуска ASGI-приложений, таких как FastAPI.
+
+from fastapi import FastAPI, Path
+from typing import Annotated
+Эти строки импортируют необходимые классы и функции:
+
+FastAPI: класс, который используется для создания приложения.
+Path: класс для работы с параметрами пути.
+Annotated: позволяет использовать дополнительные метаданные для аннотаций типов.
+
+app = FastAPI()
+Создается объект app класса FastAPI, который представляет Ваше веб-приложение.
+
+Ройд маршрутов
+
+@app.get("/")
+async def welcome() -> dict:
+    return {"message":"Hello World!"}
+Здесь мы создаем маршрут (endpoint) для главной страницы (/). При GET-запросе к этому маршруту вызывается функция welcome, которая возвращает JSON-ответ с сообщением "Hello World!".
+
+@app.get("/user/A/B")
+async def news() -> dict:
+    return {"message": f"Hello, Tester"}
+Создается маршрут /user/A/B, который возвращает сообщение "Hello, Tester". Это статический маршрут.
+
+@app.get("/user/{username}/{id}")
+async def news(username: Annotated [str, Path(min_length=3, max_length=15, description="Enter your username", example="montes")], id: int) -> dict:
+    return {"message": f"Hello, {username}: {id}"}
+Создается динамический маршрут, который принимает два параметра: username и id, которые передаются через URL.
+
+username: должен быть строкой длиной от 3 до 15 символов, содержит описание и пример.
+id: целое число.
+Функция возвращает сообщение вида "Hello, {username}: {id}".
+
+# Остальные строки закомментированы, но они также представляют собой маршруты, которые были модифицированы или изменены. 
+
+# Например, строка 
+# @app.get("/id")
+# async def id_paginator(username: str = "Alex", age: int = 24) -> dict:
+#     return {"User": {username}, "Age": {age}}
+# создает маршрут, который возвращает информацию о пользователе с заданным именем и возрастом с использованием параметров запроса.
+
+# Get - адрес в строке ?переменная=значение
+# Post - формы - оформить заказ в магазине
+# Put
+# Delete
+Эти строки являются комментариями, которые объясняют различные методы HTTP:
+
+GET: используется для получения данных. Параметры могут быть переданы в URL после знака ?.
+POST: используется для отправки данных на сервер, чаще всего для создания новых записей.
+PUT: используется для обновления существующих записей.
+DELETE: используется для удаления записей на сервере.
