@@ -1,0 +1,65 @@
+лекции 1-2 из 16 модуля
+
+# запуск - в терминале, локально, пишем python -m uvicorn main:app
+from fastapi import FastAPI
+
+app = FastAPI()
+
+@app.get("/")
+async def welcome() -> dict:
+    return {"message":"Hello World!"}
+
+@app.get("/user/A/B")
+async def news() -> dict:
+    return {"message": f"Hello, Tester"}
+
+@app.get("/id")
+async def id_paginator(username: str = "Alex", age: int = 24) -> dict:
+    return {"User": {username}, "Age": {age}}
+
+async def news(first_name: str, last_name: str) -> dict:
+    return {"message": f"Hello, {first_name} {last_name}"}
+
+код шаг за шагом:
+
+Импорт модуля FastAPI:
+
+from fastapi import FastAPI
+Этот оператор импортирует класс FastAPI из библиотеки fastapi, который используется для создания веб-приложения.
+
+Создание экземпляра приложения:
+
+app = FastAPI()
+Здесь создается экземпляр приложения app, который будет использоваться для определения маршрутов и обработки запросов.
+
+Определение маршрута "/":
+
+@app.get("/")
+async def welcome() -> dict:
+    return {"message": "Hello World!"}
+@app.get("/"): Декоратор, который создает маршрут для HTTP GET-запросов по корневому URL ("/").
+async def welcome() -> dict: Асинхронная функция, которая обрабатывает запросы на этот маршрут.
+return {"message": "Hello World!"}: Возвращает JSON-ответ с сообщением "Hello World!".
+Определение маршрута "/user/A/B":
+
+@app.get("/user/A/B")
+async def news() -> dict:
+    return {"message": f"Hello, Tester"}
+@app.get("/user/A/B"): Декоратор для маршрута "/user/A/B".
+async def news() -> dict: Асинхронная функция, которая обрабатывает запросы на этот маршрут.
+Возвращает JSON-ответ с сообщением "Hello, Tester".
+Определение маршрута "/id" с параметрами:
+
+@app.get("/id")
+async def id_paginator(username: str = "Alex", age: int = 24) -> dict:
+    return {"User": {username}, "Age": {age}}
+@app.get("/id"): Декоратор для маршрута "/id".
+async def id_paginator(username: str = "Alex", age: int = 24) -> dict: Асинхронная функция с параметрами username (по умолчанию "Alex") и age (по умолчанию 24).
+return {"User": {username}, "Age": {age}}: Возвращает JSON-ответ с именем пользователя и возрастом.
+Определение функции news с параметрами:
+
+async def news(first_name: str, last_name: str) -> dict:
+    return {"message": f"Hello, {first_name} {last_name}"}
+Эта функция определяет асинхронный обработчик, который принимает два параметра: first_name и last_name.
+Однако эта функция не связана ни с одним маршрутом приложения и не может быть вызвана через HTTP-запрос, так как она не использует декоратор @app.get или что-то подобное.
+Так что в результате, приложение предоставляет три маршрута: корневой маршрут ("/"), маршрут "/user/A/B", и маршрут "/id" с параметрами по умолчанию. Все функции возвращают JSON-ответы.
