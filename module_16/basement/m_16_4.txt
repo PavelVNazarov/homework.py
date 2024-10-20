@@ -1,0 +1,59 @@
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
+from typing import List
+
+app = FastAPI()
+
+# Пустой список пользователей
+users = []
+
+# Модель User
+class User(BaseModel):
+    id: int
+    username: str
+    age: int
+
+@app.get("/users", response_model=List[User])
+async def get_users() -> List[User]:
+    return users
+
+@app.post("/user/{username}/{age}", response_model=User)
+async def create_user(username: str, age: int) -> User:
+    new_id = 1 if not users else users[-1].id + 1  # Новый ID, если список пустой, то 1
+    new_user = User(id=new_id, username=username, age=age)
+    users.append(new_user)
+    return new_user
+
+@app.put("/user/{user_id}/{username}/{age}", response_model=User)
+async def update_user(user_id: int, username: str, age: int) -> User:
+    for user in users:
+        if user.id == user_id:
+            user.username = username
+            user.age = age
+            return user
+    raise HTTPException(status_code=404, detail="User was not found")
+
+@app.delete("/user/{user_id}", response_model=User)
+async def delete_user(user_id: int) -> User:
+    for user in users:
+        if user.id == user_id:
+            users.remove(user)
+            return user
+    raise HTTPException(status_code=404, detail="User was not found")
+
+# Тестовые данные должны быть добавлены вручную в следующий последовательности:
+# 1. GET '/users' -> []
+# 2. POST '/user/{username}/{age}' # username - UrbanUser, age - 24
+# 3. POST '/user/{username}/{age}' # username - UrbanTest, age - 36
+# 4. POST '/user/{username}/{age}' # username - Admin, age - 42
+# 5. PUT '/user/{user_id}/{username}/{age}' # user_id - 1, username - UrbanProfi, age - 28
+# 6. DELETE '/user/{user_id}' # user_id - 2
+# 7. GET '/users'
+# 8. DELETE '/user/{user_id}' # user_id - 2
+Объяснение изменений:
+Список пользователей: Создан пустой список users.
+Класс User: Создан класс User, который наследуется от BaseModel и содержит поля id, username, age.
+GET /users: Теперь этот роут возвращает список пользователей.
+POST /user/{username}/{age}: Создаёт нового пользователя, добавляя его в список users.
+PUT /user/{user_id}/{username}/{age}: Обновляет информацию о пользователе и возвращает обновлённого пользователя.
+DELETE /user/{user_id}: Удаляет пользователя по ID и возвращает его.
