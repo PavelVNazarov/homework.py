@@ -56,3 +56,88 @@ def kill_message_all() -> str:
     messages_db.clear()
     return "All messages deleted!"
 
+ код FastAPI приложения построчно:
+
+Импорт библиотек:
+
+from fastapi import FastAPI, status, Body, HTTPException
+from pydantic import BaseModel
+from typing import List
+FastAPI: основной класс для создания приложения.
+status: удобный доступ к стандартным HTTP статусам.
+Body: позволяет извлекать данные из тела запроса.
+HTTPException: для генерации исключений с указанием кода статуса и сообщений.
+BaseModel: базовый класс для Pydantic моделей.
+List: тип из стандартной библиотеки для создания списков.
+Создание экземпляра FastAPI:
+
+app = FastAPI()
+Создает экземпляр приложения FastAPI.
+Создание списка для хранения сообщений:
+
+messages_db = []
+Инициализирует пустой список для хранения сообщений.
+Определение класса Message:
+
+class Message(BaseModel):
+    id: int = None
+    text: str
+Создает модель данных Message, которая содержит id (целое число) и text (строка). id изначально имеет значение None.
+GET запрос для получения всех сообщений:
+
+@app.get("/")
+def get_all_messages() -> List[Message]:
+    return messages_db
+Определяет эндпоинт для получения всех сообщений. Возвращает список всех сообщений из messages_db.
+GET запрос для получения конкретного сообщения по ID:
+
+@app.get(path="/message/{message_id}")
+def get_message(message_id: int) -> Message:
+    try:
+        return messages_db[message_id]
+    except IndexError:
+        raise HTTPException(status_code=404, detail="Message not found")
+Обрабатывает запрос для получения сообщения с указанным ID. Если сообщение не найдено, возникает ошибка 404.
+POST запрос для создания нового сообщения:
+
+@app.post("/message")
+def create_message(message: Message) -> str:
+    message.id = len(messages_db)
+    messages_db.append(message)
+    return f"Message created!"
+Принимает данные сообщения и добавляет их в messages_db. Присваивает id на основании текущей длины списка.
+PUT запрос для обновления существующего сообщения:
+
+@app.put("/message/{message_id}")
+def update_message(message_id: int, message: str = Body()) -> str:
+    try:
+        edit_message = messages_db[message_id]
+        edit_message.text = message
+        return f"Message updated!"
+    except IndexError:
+        raise HTTPException(status_code=404, detail="Message not found")
+Позволяет обновить текст сообщения по указанному ID. Если сообщение с таким ID не найдено, тоже выбрасывается ошибка 404.
+DELETE запрос для удаления сообщения:
+
+@app.delete("/message/{message_id}")
+def delete_message(message_id: int) -> str:
+    try:
+        messages_db.pop(message_id)
+        return f"Message ID={message_id} deleted!"
+    except IndexError:
+        raise HTTPException(status_code=404, detail="Message not found")
+Удаляет сообщение с указанным ID из списка. Если сообщение не найдено, возникает ошибка 404.
+DELETE запрос для удаления всех сообщений:
+
+@app.delete("/")
+def kill_message_all() -> str:
+    messages_db.clear()
+    return "All messages deleted!"
+Очищает весь список messages_db, удаляя все сообщения.
+Комментарии по улучшению:
+message_id в методах get_message, update_message, и delete_message принят как индекс. В случае пустого списка это создаст ошибки. Лучше использовать словарь для хранения сообщений, где ключом будет id.
+
+В функции create_message следует улучшить обработку уникальности id, чтобы не полагаться только на длину списка.
+
+Метод kill_message_all должен использовать правильный метод clear() для удаления элементов в списке.
+
