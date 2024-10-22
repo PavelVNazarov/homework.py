@@ -1,0 +1,112 @@
+код по частям:
+
+Импорт библиотек:
+
+from runner_and_tournament import Runner, Tournament
+import unittest
+import itertools
+Импортирует классы Runner и Tournament из модуля runner_and_tournament.
+Импортирует модуль unittest для написания тестов.
+Импортирует модуль itertools для работы с итераторами, в данном случае для генерации комбинаций.
+Определение класса тестов:
+
+class TournamentTest(unittest.TestCase):
+Создает класс TournamentTest, который наследует от unittest.TestCase. Это позволяет использовать методы для тестирования.
+Класс-атрибут для хранения результатов:
+
+all_results = {}
+Методы для настройки тестов:
+
+@classmethod
+def setUpClass(cls):
+    cls.all_results = {}
+setUpClass выполняется один раз перед запуском всех тестов. Здесь инициализируется словарь для хранения результатов.
+Метод для настройки каждого теста:
+
+def setUp(self):
+    self.runners = [
+        Runner("Усэйн", speed=10),
+        Runner("Андрей", speed=9),
+        Runner("Ник", speed=3),
+    ]
+setUp выполняется перед каждым тестом. Здесь создается список бегунов с их именами и скоростями.
+Метод для завершения тестов:
+
+@classmethod
+def tearDownClass(cls):
+    for result in cls.all_results.values():
+        print(result)
+tearDownClass выполняется один раз после всех тестов. Здесь выводятся все результаты.
+Основной тест:
+
+def test_all_races(self):
+Определяет метод тестирования, который будет проверять все гонки.
+Цикл по дистанциям:
+
+for distance in range(10, 130, 10):
+Генерирует дистанции от 10 до 120 с шагом 10.
+Цикл по группам бегунов:
+
+for group in range(2, len(self.runners) + 1):
+Генерирует группы бегунов, начиная с 2 до общего количества бегунов.
+Комбинации бегунов:
+
+for runners_combination in itertools.combinations(self.runners, group):
+Генерирует все возможные комбинации бегунов для текущей группы.
+Запуск турнира:
+
+tournament = Tournament(distance, *runners_combination)
+results = tournament.start()
+Создает экземпляр турнира с заданной дистанцией и комбинацией бегунов, затем запускает его.
+Создание словаря результатов:
+
+results_dict = {place: runner.name for place, runner in results.items()}
+Создает словарь, где ключами являются номера мест, а значениями – имена бегунов.
+Сортировка результатов:
+
+sorted_results = sorted(runners_combination, key=lambda x: x.speed, reverse=True)
+result_names = [runner.name for runner in sorted_results]
+Сортирует бегунов по скорости в порядке убывания и создает список их имен.
+Определение быстрейшего и медленнейшего бегуна:
+
+fastest_runner = result_names[0]
+slowest_runner = result_names[-1]
+Вывод информации о гонке:
+
+print(f"Дистанция: {distance}м, Участники: {[runner.name for runner in runners_combination]}")
+print(f'Результаты: {results_dict}')
+Проверка результатов:
+
+try:
+    self.assertTrue(fastest_runner == results_dict[1],
+                    f"Ошибка: {fastest_runner} не на первом месте на {distance}м")
+except AssertionError as e:
+    print(f"Тест не прошел: {e}")
+Проверяет, что самый быстрый бегун находится на первом месте. Если нет, выводит сообщение об ошибке.
+Проверка медленнейшего бегуна:
+
+try:
+    self.assertTrue(slowest_runner == results_dict[len(sorted_results)],
+                    f"Ошибка: {slowest_runner} не на последнем месте на {distance}м")
+except AssertionError as e:
+    print(f"Тест не прошел: {e}")
+Запуск тестов:
+
+if __name__ == '__main__':
+    unittest.main()
+Запускает все тесты, если файл выполняется как основной.
+
+
+Оператор for runners_combination in itertools.combinations(self.runners, group): создает все возможные сочетания бегунов из списка self.runners, выбирая по group бегунов на каждой итерации.
+
+Вот как это работает:
+
+itertools.combinations: Эта функция из модуля itertools генерирует все возможные комбинации заданной длины из входной последовательности. В данном случае входной последовательностью является список self.runners, а длина – значение переменной group.
+
+self.runners: Это список объектов Runner, который был создан в методе setUp. В данном примере он содержит три бегуна: "Усэйн", "Андрей" и "Ник".
+
+group: Это переменная, которая определяется в цикле for group in range(2, len(self.runners) + 1):. Значение group будет изменяться от 2 до 3 (включительно), так как в нашем случае в self.runners 3 бегуна. Это означает, что будут созданы комбинации с 2 и 3 бегунами.
+
+runners_combination: На каждой итерации цикла эта переменная будет принимать текущее сочетание бегунов, представленное в виде кортежа. Например, для group = 2 будут получены комбинации ('Усэйн', 'Андрей'), ('Усэйн', 'Ник') и ('Андрей', 'Ник').
+
+Таким образом, этот оператор помогает рассмотреть все возможные группы бегунов для участия в турнире на заданной дистанции.
