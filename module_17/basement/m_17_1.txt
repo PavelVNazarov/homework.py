@@ -1,0 +1,126 @@
+Создание структуры проекта и необходимых файлов для API с использованием FastAPI.
+
+Шаг 1: Установи FastAPI и Uvicorn
+Для начала убедиться, что установлен FastAPI и Uvicorn. Иначе выполнить команду:
+
+pip install fastapi uvicorn
+
+
+Шаг 2: Создание структуры проекта
+
+Создадим следующую структуру каталога:
+
+task_manager/
+│
+├── main.py
+├── schemas.py
+├── task.py
+└── user.py
+
+
+Шаг 3: Написание кода
+
+1. main.py
+
+from fastapi import FastAPI
+from task import router as task_router
+from user import router as user_router
+
+app = FastAPI()
+
+@app.get('/')
+def welcome():
+    return {"message": "Welcome to Taskmanager"}
+
+app.include_router(task_router)
+app.include_router(user_router)
+
+
+2. schemas.py
+
+from pydantic import BaseModel
+
+class CreateUser(BaseModel):
+    username: str
+    firstname: str
+    lastname: str
+    age: int
+
+class UpdateUser(BaseModel):
+    firstname: str
+    lastname: str
+    age: int
+
+class CreateTask(BaseModel):
+    title: str
+    content: str
+    priority: int
+
+class UpdateTask(BaseModel):
+    title: str
+    content: str
+    priority: int
+
+
+3. task.py
+
+from fastapi import APIRouter
+
+router = APIRouter(prefix='/task', tags=['task'])
+
+@router.get("/")
+async def all_tasks():
+    pass
+
+@router.get("/task_id")
+async def task_by_id(task_id: int):
+    pass
+
+@router.post("/create")
+async def create_task():
+    pass
+
+@router.put("/update")
+async def update_task(task_id: int):
+    pass
+
+@router.delete("/delete")
+async def delete_task(task_id: int):
+    pass
+
+
+4. user.py
+
+from fastapi import APIRouter
+
+router = APIRouter(prefix='/user', tags=['user'])
+
+@router.get("/")
+async def all_users():
+    pass
+
+@router.get("/user_id")
+async def user_by_id(user_id: int):
+    pass
+
+@router.post("/create")
+async def create_user():
+    pass
+
+@router.put("/update")
+async def update_user(user_id: int):
+    pass
+
+@router.delete("/delete")
+async def delete_user(user_id: int):
+    pass
+
+Шаг 4: Запуск сервера
+Чтобы запустить сервер, перейти в директорию, где находится файл main.py, и выполнить в терминале команду:
+
+python -m uvicorn main:app --reload
+
+Шаг 5: Проверка Swagger
+После запуска, открыть браузер и перейти по адресу http://127.0.0.1:8000/docs. Там автоматически сгенерированная документация Swagger для API.
+
+Теперь есть подготовленная структура для работы с API задач и пользователей!
