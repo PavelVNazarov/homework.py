@@ -1,0 +1,151 @@
+
+структура проекта
+app/
+    router/
+       category.py
+       products.py
+    __init__.py
+    main.py
+    schemas.py
+
+
+module main.py
+#  запуск в терминале python -m uvicorn main:app
+
+from fastapi import FastAPI
+from routers import category
+
+app = FastAPI()
+
+@app.get("/")
+async def welcome():
+    return {"message": "My shop"}
+
+app.include_router(category.router)
+
+module schemas.py
+class CreatProduct(BaseModel):
+    name: str
+    description: str
+    price: int
+    image_url: str
+    stock: int
+    category: int
+
+class CreatCategory(BaseModel):
+    name: str
+    parent_id: int
+
+module category.py
+from fastapi import APIRouter
+
+router = APIRouter(prefix="/category", tags=["category"])
+
+@router.get("/all_categories")
+async def get_all_categories():
+    pass
+
+@router.post("/creats")
+async def creaty_category():
+    pass
+
+@router.put("/update_category")
+async def update_category():
+    pass
+
+@router.delete("/delete")
+async def delete_category():
+    pass
+
+module products.py
+    пока пусто
+module __init__.py
+    пока пусто
+
+что делает каждый модуль и его элементы.
+
+Структура проекта
+
+app/
+    router/
+       category.py
+       products.py
+    __init__.py
+    main.py
+    schemas.py
+
+app/ - Основная директория проекта. Содержит все файлы, необходимые для работы приложения.
+router/ - Поддиректория, в которой находятся маршруты (или контроллеры) для API.
+init.py - Файл, который позволяет Python распознавать директорию как пакет. Этот файл может быть пустым.
+main.py - Основной файл, в котором инициализируется приложение FastAPI. Здесь запускается сервер.
+schemas.py - Файл, содержащий схемы данных в формате Pydantic, которые помогают валидации данных.
+
+Модуль main.py
+
+from fastapi import FastAPI
+from routers import category
+
+app = FastAPI()
+
+@app.get("/")
+async def welcome():
+    return {"message": "My shop"}
+
+app.include_router(category.router)
+from fastapi import FastAPI - Импортируем класс FastAPI для создания приложения.
+from routers import category - Импортируем маршруты из модуля category.
+app = FastAPI() - Создаем экземпляр приложения FastAPI.
+@app.get("/") - Декоратор для определения HTTP GET маршрута на корневой URL ("/").
+async def welcome(): - Асинхронная функция-обработчик запроса для корневого маршрута. Возвращает сообщение "My shop" в формате JSON.
+app.include_router(category.router) - Включаем маршруты из модуля category в основное приложение.
+
+Модуль schemas.py
+
+from pydantic import BaseModel
+
+class CreatProduct(BaseModel):
+    name: str
+    description: str
+    price: int
+    image_url: str
+    stock: int
+    category: int
+
+class CreatCategory(BaseModel):
+    name: str
+    parent_id: int
+from pydantic import BaseModel - Импортируем базовый класс для создания моделей Pydantic.
+class CreatProduct(BaseModel): - Определяем модель для создания продукта. Атрибуты включают название, описание, цену, URL изображения, количество на складе и идентификатор категории.
+class CreatCategory(BaseModel): - Определяем модель для создания категории. Включает название категории и идентификатор родительской категории.
+
+Модуль category.py
+
+from fastapi import APIRouter
+
+router = APIRouter(prefix="/category", tags=["category"])
+
+@router.get("/all_categories")
+async def get_all_categories():
+    pass
+
+@router.post("/creats")
+async def creaty_category():
+    pass
+
+@router.put("/update_category")
+async def update_category():
+    pass
+
+@router.delete("/delete")
+async def delete_category():
+    pass
+from fastapi import APIRouter - Импортируем класс APIRouter для создания маршрутов.
+router = APIRouter(prefix="/category", tags=["category"]) - Создаем экземпляр маршрутизатора с префиксом "/category" и тегом "category" для группировки связанных маршрутов.
+@router.get("/all_categories") - Определяем маршрут для получения всех категорий.
+@router.post("/creats") - Определяем маршрут для создания категории.
+@router.put("/update_category") - Определяем маршрут для обновления категории.
+@router.delete("/delete") - Определяем маршрут для удаления категории.
+Модуль products.py
+В данном коде он пока пустой, но здесь можно добавлять маршруты, связанные с продуктами.
+Модуль __init__.py
+Также пустой. Можно добавить инициализацию пакета или другие функции, если это необходимо.
