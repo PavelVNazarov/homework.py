@@ -1,3 +1,106 @@
 alembic init migrations
 alembic revision --autogenerate -m "initial migration"
 
+env.py
+21 from app.backend.db import Base
+22 from app.models.category import Category
+23 from app.models.products import Product
+24 target_metadata = Base.metadate
+
+alembic.ini
+64 sqlalchemy.url = sqlite:///ecommerce.db
+
+Alembic
+alembic init migrations:
+
+Инициализирует директорию для миграций Alembic. Создает папку migrations с необходимыми файлами конфигурации.
+alembic revision --autogenerate -m "initial migration":
+
+Создает новую миграцию, автоматически генерируя изменения на основе текущих моделей и состояния базы данных. Сообщение initial migration описывает миграцию.
+Эти команды позволяют управлять изменениями в структуре базы данных, обеспечивая возможность отката и применения миграций.
+
+
+что делает каждый оператор в Вашем коде и как они связаны с Alembic для управления миграциями базы данных.
+
+Структура проекта
+app/: Корневая директория Вашего приложения.
+    backend/: Содержит файлы, связанные с базой данных.
+        db.py: Настройки подключения к базе данных и базовый класс для моделей.
+    models/: Содержит определения моделей базы данных.
+        category.py: Определение модели категории.
+        products.py: Определение модели продукта.
+    router/: Содержит маршруты для API.
+        category.py: Маршруты для работы с категориями.
+        products.py: Маршруты для работы с продуктами.
+    init.py: Инициализация пакета.
+    main.py: Главный файл приложения, где создается экземпляр FastAPI.
+    schemas.py: Определения схем для валидации данных.
+
+
+Модуль models/category.py
+
+from app.backend.db import Base
+from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
+from sqlalchemy.orm import relationship
+Импортирует необходимые классы и функции из SQLAlchemy и базового класса Base.
+
+class Category(Base):
+    __tablename__ = "categories"
+    __table_args__ = {'extend_existing': True}
+Определяет модель Category, которая будет соответствовать таблице categories в базе данных.
+
+id = Column(Integer, primary_key=True, index=True)
+Определяет поле id как первичный ключ и индекс.
+
+name = Column(String)
+slug = Column(String, unique=True, index=True)
+is_active = Column(Boolean, default=True)
+parent_id = Column(Integer, ForeignKey("categories.id"), nullable=True)
+Определяет другие поля модели, включая name, slug, is_active и parent_id, который ссылается на другую категорию.
+
+products = relationship("Product", back_populates="category")
+Устанавливает связь с моделью Product, позволяя получить все продукты, относящиеся к данной категории.
+
+from sqlalchemy.schema import CreateTable
+print(CreateTable(Category.__table__))
+Печатает SQL-команду для создания таблицы categories.
+
+
+Модуль models/products.py
+
+from app.backend.db import Base
+from sqlalchemy import Column, ForeignKey, Integer, String, Boolean, Float
+from sqlalchemy.orm import relationship
+Импортирует необходимые классы и функции из SQLAlchemy и базового класса Base.
+
+class Products(Base):
+    __tablename__ = "products"
+    __table_args__ = {'keep_existing': True}
+Определяет модель Products, которая будет соответствовать таблице products в базе данных.
+
+id = Column(Integer, primary_key=True, index=True)
+name = Column(String)
+slug = Column(String, unique=True, index=True)
+description = Column(String)
+price = Column(Integer)
+image_url = Column(String)
+stock = Column(Integer)
+category_id = Column(Integer, ForeignKey('categories.id'))
+rating = Column(Float)
+is_active = Column(Boolean, default=True)
+Определяет поля модели, включая id, name, slug, description, price, image_url, stock, category_id, rating и is_active.
+
+Модуль backend/db.py
+
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker, DeclarativeBase
+Импортирует необходимые классы и функции для работы с SQLAlchemy.
+
+engine = create_engine("sqlite:///ecommerce.db", echo=True)
+Создает движок базы данных SQLite с именем ecommerce.db. Параметр echo=True позволяет выводить SQL-запросы в консоль.
+
+SessionLocal = sessionmaker(bind=engine)
+Создает фабрику сессий для работы с базой данных.
+class Base(DeclarativeBase):
+    pass
+Определяет базовый класс для всех моделей, который будет использоваться для создания таблиц.
