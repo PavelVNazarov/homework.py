@@ -1,5 +1,6 @@
-
-
+# Домашнее задание по теме "Структура проекта. Маршруты и модели Pydantic."
+# ННазаров ПВ
+# module_17_1.py
 
 from pydantic import BaseModel
 
