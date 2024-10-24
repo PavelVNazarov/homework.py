@@ -1,16 +1,16 @@
-
-
-
+# Домашнее задание по теме "Структура проекта. Маршруты и модели Pydantic."
+# ННазаров ПВ
+# module_17_1.py
 
 from fastapi import APIRouter
 
-router = APIRouter(prefix='/task', tags=['task'])
+router = APIRouter(prefix="/task", tags=["task"])
 
 @router.get("/")
 async def all_tasks():
     pass
 
-@router.get("/task_id")
+@router.get("/{task_id}")
 async def task_by_id(task_id: int):
     pass
 
@@ -19,9 +19,9 @@ async def create_task():
     pass
 
 @router.put("/update")
-async def update_task(task_id: int):
+async def update_task():
     pass
 
 @router.delete("/delete")
-async def delete_task(task_id: int):
+async def delete_task():
     pass
