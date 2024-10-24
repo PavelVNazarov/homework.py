@@ -1,0 +1,42 @@
+1. Установка Alembic
+Откройте терминал и выполните команду:
+pip install alembic
+
+2. Инициализация Alembic
+В корне Вашего проекта выполните команду:
+
+alembic init migrations
+
+Это создаст директорию migrations с необходимыми файлами. Должна появиться структура, аналогичная вашей.
+
+3. Настройка адреса базы данных
+Откройте файл alembic.ini, который был создан, и измените sqlalchemy.url на:
+
+TOML, also INI
+
+sqlalchemy.url = sqlite:///taskmanager.db
+
+4. Импорт моделей в env.py
+В файле env.py, который находится в директории migrations, нужно добавить импорт Ваших моделей. Например:
+
+from your_project.models.user import User
+from your_project.models.task import Task
+from your_project.models import Base
+
+После этого укажите target_metadata:
+
+target_metadata = Base.metadata
+
+5. Генерация первой миграции
+Теперь выполните команду для создания первой миграции:
+alembic revision --autogenerate -m "Initial migration"
+
+После выполнения команды в папке migrations/versions должна появиться новая миграция.
+
+6. Открытие базы данных
+Используйте DB Browser для SQLite и откройте файл taskmanager.db. Вы увидите таблицу для версий миграций.
+
+7. Применение миграций
+Теперь выполните команду для применения миграций и создания таблиц:
+
+alembic upgrade head
