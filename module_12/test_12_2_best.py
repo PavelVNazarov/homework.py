@@ -15,11 +15,23 @@ class TournamentTest(unittest.TestCase):
         cls.all_results = {}
 
     def setUp(self):
-        self.runners = [
-            Runner("Усэйн", speed=10),
+        self.runners = [Runner("Усэйн", speed=10),
             Runner("Андрей", speed=9),
-            Runner("Ник", speed=3),
-        ]
+            Runner("Ник", speed=3),]
+
+        self.runners_group = ((self.runners[0], self.runners[1]),
+                             (self.runners[0], self.runners[2]),
+                             (self.runners[1], self.runners[2]),
+                             (self.runners[1], self.runners[0]),
+                             (self.runners[2], self.runners[1]),
+                             (self.runners[2], self.runners[0]),
+                             (self.runners[0], self.runners[1], self.runners[2]),
+                             (self.runners[1], self.runners[2], self.runners[0]),
+                             (self.runners[2], self.runners[0], self.runners[1]),
+                             (self.runners[0], self.runners[2], self.runners[1]),
+                             (self.runners[1], self.runners[0], self.runners[2]),
+                             (self.runners[2], self.runners[1], self.runners[0]),)
+
 
     @classmethod
     def tearDownClass(cls):
@@ -28,8 +40,9 @@ class TournamentTest(unittest.TestCase):
 
     def test_all_races(self):
         for distance in range(10, 130, 10):
-            for group in range(2, len(self.runners) + 1):
-                for runners_combination in itertools.combinations(self.runners, group):
+            #for group in range(2, len(self.runners) + 1):
+                #for runners_combination in itertools.combinations(self.runners, group):
+                for runners_combination in self.runners_group:
                     tournament = Tournament(distance, *runners_combination)
                     results = tournament.start()
 
