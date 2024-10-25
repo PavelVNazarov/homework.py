@@ -1,0 +1,45 @@
+import json
+
+def employees_rewrite(sort_type):
+    # Открываем файл и загружаем данные
+    with open('employees.json', 'r') as file:
+        data = json.load(file)
+
+    # Проверяем, что ключ для сортировки существует
+    if sort_type.lower() not in ['firstname', 'lastname', 'department', 'salary']:
+        raise ValueError('Bad key for sorting')
+
+    # Сортируем данные
+    if sort_type.lower() in ['firstname', 'lastname', 'department']:
+        # Сортировка по строковым значениям (алфавитный порядок)
+        sorted_employees = sorted(data['employees'], key=lambda x: x[sort_type.lower()])
+    else:
+        # Сортировка по числовым значениям (по убыванию)
+        sorted_employees = sorted(data['employees'], key=lambda x: x[sort_type.lower()], reverse=True)
+
+    # Записываем отсортированные данные в новый файл
+    sorted_data = {"employees": sorted_employees}
+    output_filename = f'employees_{sort_type}_sorted.json'
+    
+    with open(output_filename, 'w') as outfile:
+        json.dump(sorted_data, outfile, indent=2)
+
+# Пример вызова функции
+# employees_rewrite('lastname')
+Объяснение кода:
+Импортируем библиотеку: Мы используем json для работы с JSON-файлами.
+
+Чтение файла: Открываем файл employees.json и загружаем данные в переменную data.
+
+Проверка ключа: Проверяем, что переданный ключ для сортировки существует. Если нет, выбрасываем исключение ValueError.
+
+Сортировка:
+
+Если ключ строковый (firstname, lastname, department), используем sorted() с обычным порядком.
+Если ключ числовой (salary), используем sorted() с параметром reverse=True для убывающего порядка.
+Запись в файл: Создаем новый файл с отсортированными данными и записываем в него результат.
+
+Как использовать:
+Сохрани этот код в файл main.py.
+Убедись, что файл employees.json находится в той же директории.
+Вызывай функцию с нужным ключом, например, employees_rewrite('lastname').
