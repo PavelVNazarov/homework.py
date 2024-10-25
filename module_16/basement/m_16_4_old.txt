@@ -1,0 +1,49 @@
+советы по парсингу данных с сайта CoinMarketCap и записи их в CSV файл, могу помочь с написанием структуры функции write_cmc_top. Вот упрощенный пример того, как это можно сделать с использованием библиотеки requests и BeautifulSoup:
+
+Python
+Копировать
+import requests
+from bs4 import BeautifulSoup
+import csv
+from datetime import datetime
+
+def write_cmc_top():
+    url = 'https://coinmarketcap.com/'
+    response = requests.get(url)
+    soup = BeautifulSoup(response.text, 'html.parser')
+    
+    # Найдем таблицу с криптовалютами
+    table = soup.find('table', {'class': 'h9y8y9'})  # Найдите правильный класс
+    rows = table.find('tbody').find_all('tr')
+    
+    # Тут будут данные для записи
+    data = []
+    total_market_cap = 0
+    
+    # Собираем данные о топ-100 криптовалют
+    for row in rows[:100]:  # берём только первые 100 строк
+        name = row.find('p', {'class': 'coin-item-symbol'}).text
+        market_cap = float(row.find('div', {'class': 'market-cap'}).text.strip('$').replace(',', ''))
+        data.append({'name': name, 'market_cap': market_cap})
+        total_market_cap += market_cap
+    
+    # Добавляем процент от общей капитализации
+    for entry in data:
+        entry['market_percentage'] = (entry['market_cap'] / total_market_cap) * 100
+    
+    # Формируем имя файла
+    filename = datetime.now().strftime("%H.%M %d.%m.%Y") + '.csv'
+    
+    # Записываем в CSV
+    with open(filename, mode='w', newline='') as csv_file:
+        writer = csv.writer(csv_file, delimiter=' ')
+        writer.writerow(['Name', 'MC', 'MP'])
+        for entry in data:
+            writer.writerow([entry['name'], entry['market_cap'], entry['market_percentage']])
+
+# Вызов функции
+write_cmc_top()
+Примечания:
+Проверь правильные классы для поиска элементов на странице CoinMarketCap, так как структура может изменяться.
+Обязательно обработай возможные исключения (такие как сетевые ошибки).
+Убедись, что библиотека beautifulsoup4 и requests установлены (pip install beautifulsoup4 requests).
