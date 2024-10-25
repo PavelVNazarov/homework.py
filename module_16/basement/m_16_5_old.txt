@@ -1,0 +1,85 @@
+начнем с основной структуры кода для создания базы данных студентов и оценок с использованием ООП в Python пример реализации класса University:
+
+Python
+Копировать
+import sqlite3
+
+class University:
+    def __init__(self, name):
+        self.name = name
+        self.conn = sqlite3.connect('students.db')
+        self.create_tables()
+
+    def create_tables(self):
+        cursor = self.conn.cursor()
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS students (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT NOT NULL,
+                age INTEGER NOT NULL
+            )
+        ''')
+        
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS grades (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                student_id INTEGER NOT NULL,
+                subject TEXT NOT NULL,
+                grade REAL NOT NULL,
+                FOREIGN KEY (student_id) REFERENCES students(id)
+            )
+        ''')
+        self.conn.commit()
+
+    def add_student(self, name, age):
+        cursor = self.conn.cursor()
+        cursor.execute('INSERT INTO students (name, age) VALUES (?, ?)', (name, age))
+        self.conn.commit()
+
+    def add_grade(self, student_id, subject, grade):
+        cursor = self.conn.cursor()
+        cursor.execute('INSERT INTO grades (student_id, subject, grade) VALUES (?, ?, ?)', (student_id, subject, grade))
+        self.conn.commit()
+
+    def get_students(self, subject=None):
+        cursor = self.conn.cursor()
+        if subject:
+            cursor.execute('''
+                SELECT s.name, s.age, g.subject, g.grade 
+                FROM students s
+                JOIN grades g ON s.id = g.student_id
+                WHERE g.subject = ?
+            ''', (subject,))
+        else:
+            cursor.execute('''
+                SELECT s.name, s.age, g.subject, g.grade 
+                FROM students s
+                JOIN grades g ON s.id = g.student_id
+            ''')
+        
+        return cursor.fetchall()
+
+    def __del__(self):
+        self.conn.close()
+
+# Пример использования
+if __name__ == '__main__':
+    u1 = University('Urban')
+    u1.add_student('Ivan', 26)
+    u1.add_student('Ilya', 24)
+    u1.add_student('Anna', 22)
+    u1.add_student('Maria', 23)
+    
+    u1.add_grade(1, 'Python', 4.8)
+    u1.add_grade(2, 'PHP', 4.3)
+    u1.add_grade(1, 'Math', 3.9)
+    u1.add_grade(3, 'Python', 4.7)
+    u1.add_grade(4, 'PHP', 4.2)
+    
+    print(u1.get_students())
+    print(u1.get_students('Python'))
+Краткое описание:
+Мы создаем базу данных students.db и две таблицы: students и grades с соответствующими полями.
+Метод add_student добавляет студента в базу.
+Метод add_grade добавляет оценку для студента.
+Метод get_students возвращает список студентов, с возможностью фильтрации по предмету.
