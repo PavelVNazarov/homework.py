@@ -1,0 +1,61 @@
+1. Создание проекта в PyCharm
+Откройте PyCharm и создайте новый проект, назвав его по своему усмотрению (например, MyDjangoProject).
+
+2. Установка Django в виртуальное окружение
+Откройте терминал в PyCharm.
+Перейдите в директорию Вашего проекта.
+Создайте виртуальное окружение:
+
+python -m venv venv
+Активируйте виртуальное окружение:
+На Windows:
+venv\Scripts\activate
+
+На macOS и Linux:
+source venv/bin/activate
+
+Установите Django:
+pip install django
+
+3. Создание проекта Django
+Создайте проект Django с именем UrbanDjango:
+django-admin startproject UrbanDjango
+
+4. Создание приложений
+Перейдите в директорию проекта:
+cd UrbanDjango
+
+Создайте приложения example1, example2, example3:
+django-admin startapp example1
+django-admin startapp example2
+django-admin startapp example3
+
+5. Создание файла зависимостей requirements.txt
+Создайте файл requirements.txt и добавьте в него зависимости:
+pip freeze > requirements.txt
+
+6. Запуск сервера
+Запустите сервер:
+python manage.py runserver
+Проверьте работоспособность, перейдя в браузере по адресу http://127.0.0.1:8000/.
+
+7. Создание репозитория на GitHub
+Создайте новый репозиторий на GitHub.
+В терминале выполните следующие команды, чтобы инициализировать Git, добавить файлы и сделать коммит:
+git init
+git add .
+git commit -m "Initial commit"
+git branch -M main
+git remote add origin <URL Вашего репозитория>
+git push -u origin main
+
+Примечания
+Убедитесь, что папка виртуального окружения (например, venv) не добавлена в репозиторий, добавив её в файл .gitignore. Пример содержимого .gitignore:
+
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.db
+*.sqlite3
