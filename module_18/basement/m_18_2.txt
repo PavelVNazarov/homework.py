@@ -1,0 +1,131 @@
+Пошаговая инструкция для создания приложения task2 в Вашем проекте Django:
+
+1. Создание приложения task2
+Откроть терминал в PyCharm и убедиться, что Вы находитесь в директории своего проекта UrbanDjango.
+
+Создать новое приложение:
+django-admin startapp task2
+
+2. Создание папки для шаблонов
+Внутри папки проекта UrbanDjango создать папку для шаблонов, если её ещё нет:
+mkdir templates
+
+Создать подкаталог second_task:
+mkdir templates/second_task
+
+3. Создание HTML-шаблонов
+В каталоге templates/second_task создать два HTML-файла:
+
+class_template.html:
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Классовое представление</title>
+</head>
+<body>
+    <h1>Это шаблон для классового представления</h1>
+</body>
+</html>
+function_template.html:
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Функциональное представление</title>
+</head>
+<body>
+    <h1>Это шаблон для функционального представления</h1>
+</body>
+</html>
+
+4. Настройка приложения и представлений
+Открыть settings.py проекта UrbanDjango и добавить приложение task2 в секцию INSTALLED_APPS:
+
+INSTALLED_APPS = [
+    # ...
+    'task2',
+]
+
+
+Определить базовую директорию для шаблонов, добавив следующий код в settings.py:
+import os
+
+TEMPLATES = [
+    {
+        # ...
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        # ...
+    },
+]
+
+
+В файле views.py приложения task2 создать функции для отображения шаблонов:
+from django.shortcuts import render
+
+def class_view(request):
+    return render(request, 'second_task/class_template.html')
+
+def function_view(request):
+    return render(request, 'second_task/function_template.html')
+    
+5. Настройка маршрутов
+Создать файл urls.py в директории приложения task2:
+
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('class/', views.class_view, name='class_view'),
+    path('function/', views.function_view, name='function_view'),
+]
+
+Подключить маршруты приложения task2 в главном файле urls.py проекта UrbanDjango:
+
+from django.contrib import admin
+from django.urls import path, include  # Импортируйте include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('task2/', include('task2.urls')),  # Подключите маршруты task2
+]
+
+
+6. Запуск сервера
+Теперь можно запустить сервер:
+
+python manage.py runserver
+
+Перейти по следующим адресам для проверки работоспособности:
+
+http://127.0.0.1:8000/task2/class/ — должно отображаться сообщение для классового представления.
+http://127.0.0.1:8000/task2/function/ — должно отображаться сообщение для функционального представления.
+
+7. Проверка и завершение
+Убедиться, что всё работает корректно. Если возникнут проблемы с путями, убедиться, что правильно указаны пути в шаблонах и представлениях. Теперь иерархия директорий должна выглядеть следующим образом:
+
+UrbanDjango/
+├── manage.py
+├── requirements.txt
+├── UrbanDjango/
+│   ├── __init__.py
+│   ├── settings.py
+│   ├── urls.py
+│   └── wsgi.py
+└── task2/
+    ├── migrations/
+    ├── __init__.py
+    ├── admin.py
+    ├── apps.py
+    ├── models.py
+    ├── tests.py
+    ├── views.py
+    └── urls.py
+templates/
+└── second_task/
+    ├── class_template.html
+    └── function_template.html
