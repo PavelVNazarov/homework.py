@@ -65,6 +65,7 @@ git init
 git add .
 git commit -m "Initial commit"
 git branch -M main
-git remote add origin https://github.com/PavelVNazarov/DjangoProjects.git
+git remote add origin https://user@github.com/PavelVNazarov/DjangoProjects.git
+git remote add origin https://PavelVNazarov@github.com/PavelVNazarov/homework.py/tree/main/module_18.git
 git branch -M main
 git push -u origin main
