@@ -1,0 +1,106 @@
+Шаг 1: Создание нового приложения
+Сначала создайте новое приложение task4:
+python manage.py startapp task4
+
+Шаг 2: Перенос представлений
+Перенесите представления из task3/views.py в task4/views.py. Измените их, чтобы они передавали данные в нужном формате.
+# task4/views.py
+from django.shortcuts import render
+
+def main_page(request):
+    return render(request, 'fourth_task/platform.html', {'pagename': 'Главная страница'})
+
+def shop_page(request):
+    games = ['Atomic Heart', 'Cyberpunk 2077', 'Doom Eternal']
+    return render(request, 'fourth_task/games.html', {'games': games, 'pagename': 'Магазин'})
+
+def cart_page(request):
+    return render(request, 'fourth_task/cart.html', {'pagename': 'Корзина'})
+    
+Шаг 3: Создание шаблона menu.html
+Создайте файл menu.html в папке templates/fourth_task/:
+<!-- templates/fourth_task/menu.html -->
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block pagename %}Сайт{% endblock %}</title>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="/">Главная</a></li>
+            <li><a href="/shop/">Магазин</a></li>
+            <li><a href="/cart/">Корзина</a></li>
+        </ul>
+    </nav>
+
+    <h1>{% block pagename %}Заголовок{% endblock %}</h1>
+
+    <div>
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>
+
+Шаг 4: Обновление остальных шаблонов
+Создайте platform.html, games.html, и cart.html в директории fourth_task. В каждом из них используйте наследование шаблона.
+
+Пример для platform.html:
+<!-- templates/fourth_task/platform.html -->
+{% extends 'fourth_task/menu.html' %}
+
+{% block content %}
+<p>Добро пожаловать на игровую платформу!</p>
+{% endblock %}
+
+Пример для games.html:
+
+<!-- templates/fourth_task/games.html -->
+{% extends 'fourth_task/menu.html' %}
+
+{% block content %}
+<ul>
+    {% for game in games %}
+        <li>
+            {{ game }} <button>Купить</button>
+        </li>
+    {% endfor %}
+</ul>
+<a href="/">Назад на главную</a>
+{% endblock %}
+
+Пример для cart.html:
+
+<!-- templates/fourth_task/cart.html -->
+{% extends 'fourth_task/menu.html' %}
+
+{% block content %}
+<p>Ваша корзина пуста. Добавьте товары в корзину.</p>
+<a href="/">Назад на главную</a>
+{% endblock %}
+
+Шаг 5: Обновление urls.py
+Обновите urls.py Вашего проекта, чтобы подключить новое приложение task4.
+# urls.py
+from django.urls import path
+from task4.views import main_page, shop_page, cart_page
+
+urlpatterns = [
+    path('', main_page, name='main_page'),
+    path('shop/', shop_page, name='shop_page'),
+    path('cart/', cart_page, name='cart_page'),
+]
+
+Шаг 6: Подключение приложения к проекту
+Не забудьте добавить task4 в Ваш settings.py:
+INSTALLED_APPS = [
+    ...,
+    'task4',
+]
+
+Шаг 7: Запуск сервера
+Запустите сервер с помощью команды:
+python manage.py runserver
+Теперь, посетив соответствующие URL, Вы сможете увидеть свои страницы с использованием DTL.
+Каждая страница будет наследоваться от menu.html, и будет использовать общие элементы меню.
