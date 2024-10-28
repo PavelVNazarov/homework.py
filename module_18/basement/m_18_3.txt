@@ -1,0 +1,138 @@
+Шаг 1: Установка и создание проекта
+Убедись, что у тебя установлен Django. Если нет, то установи его с помощью:
+pip install django
+
+Создай новый проект:
+django-admin startproject myproject
+cd myproject
+
+Создай приложение task3:
+python manage.py startapp task3
+
+Шаг 2: Настройка директорий и шаблонов
+В проекте создай необходимую структуру директорий для шаблонов:
+
+myproject/
+├── templates/
+│   └── third_task/
+│       ├── index.html
+│       ├── shop.html
+│       └── cart.html
+├── task3/
+│   ├── views.py
+│   └── urls.py
+
+В settings.py добавь task3 в INSTALLED_APPS и укажи путь к шаблонам:
+INSTALLED_APPS = [
+    ...,
+    'task3',
+]
+
+TEMPLATES = [
+    {
+        ...,
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        ...,
+    },
+]
+
+Шаг 3: Создание представлений
+В task3/views.py добавь представления для всех трёх страниц:
+from django.shortcuts import render, redirect
+
+def index(request):
+    return render(request, 'third_task/index.html')
+
+def shop(request):
+    items = {
+        'item1': 'Игра A - 1000 руб.',
+        'item2': 'Игра B - 1500 руб.',
+        'item3': 'Игра C - 2000 руб.',
+    }
+    return render(request, 'third_task/shop.html', {'items': items})
+
+def cart(request):
+    return render(request, 'third_task/cart.html')
+
+Шаг 4: Настройка маршрутов
+В task3/urls.py пропиши маршруты:
+
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.index, name='index'),
+    path('shop/', views.shop, name='shop'),
+    path('cart/', views.cart, name='cart'),
+]
+
+А в myproject/urls.py подключи маршруты приложения:
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', include('task3.urls')),
+]
+
+Шаг 5: Создание шаблонов
+index.html
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Игровая платформа</title>
+</head>
+<body>
+    <h1>Главная страница</h1>
+    <nav>
+        <a href="/">Главная</a>
+        <a href="/shop/">Магазин</a>
+        <a href="/cart/">Корзина</a>
+    </nav>
+</body>
+</html>
+
+shop.html
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Магазин</title>
+</head>
+<body>
+    <h1>Магазин</h1>
+    <ul>
+        {% for key, value in items.items %}
+            <li>{{ value }} <button>Добавить в корзину</button></li>
+        {% endfor %}
+    </ul>
+    <a href="/">Назад на главную</a>
+</body>
+</html>
+
+cart.html
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Корзина</title>
+</head>
+<body>
+    <h1>Корзина</h1>
+    <p>Здесь можно будет увидеть Ваши выбранные товары.</p>
+    <a href="/">Назад на главную</a>
+</body>
+</html>
+
+Шаг 6: Запуск приложения
+Примените миграции:
+python manage.py migrate
+
+Запускай сервер разработки:
+python manage.py runserver
+
+Теперь открой в браузере http://127.0.0.1:8000/, и ты увидишь свою игровую платформу с тремя страницами.
