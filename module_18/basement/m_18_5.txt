@@ -1,0 +1,124 @@
+Задача включает создание веб-приложения на Django с формой регистрации пользователей.Начнем поэтапно.
+
+Шаг 1: Создание приложения
+Создать новое приложение с именем task5:
+python manage.py startapp task5
+
+Шаг 2: Создание шаблона
+Создать файл registration_page.html в директории templates/fifth_task/ с содержимым:
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация</title>
+</head>
+<body>
+    <h1>Форма регистрации</h1>
+
+    {% if error %}
+        <p style="color:red;">{{ error }}</p>
+    {% endif %}
+
+    <form method="POST">
+        {% csrf_token %}
+        <div>
+            <label for="username">Введите логин:</label>
+            <input type="text" id="username" name="username" maxlength="30" required>
+        </div>
+        <div>
+            <label for="password">Введите пароль:</label>
+            <input type="password" id="password" name="password" minlength="8" required>
+        </div>
+        <div>
+            <label for="repeat_password">Повторите пароль:</label>
+            <input type="password" id="repeat_password" name="repeat_password" minlength="8" required>
+        </div>
+        <div>
+            <label for="age">Введите свой возраст:</label>
+            <input type="number" id="age" name="age" maxlength="3" required>
+        </div>
+        <button type="submit">Зарегистрироваться</button>
+    </form>
+</body>
+</html>
+
+Шаг 3: Создание формы
+В файле task5/forms.py создать форму UserRegister:
+
+from django import forms
+
+class UserRegister(forms.Form):
+    username = forms.CharField(max_length=30, label="Введите логин")
+    password = forms.CharField(min_length=8, widget=forms.PasswordInput, label="Введите пароль")
+    repeat_password = forms.CharField(min_length=8, widget=forms.PasswordInput, label="Повторите пароль")
+    age = forms.IntegerField(max_value=999, label="Введите свой возраст")
+
+    
+Шаг 4: Создание представлений
+В файле task5/views.py создать представления:
+
+from django.shortcuts import render
+from .forms import UserRegister
+
+def sign_up_by_django(request):
+    return sign_up(request, "sign_up_by_django")
+
+def sign_up_by_html(request):
+    return sign_up(request, "sign_up_by_html")
+
+def sign_up(request, method_name):
+    users = ["user1", "user2", "user3"]
+    info = {}
+
+    if request.method == "POST":
+        form = UserRegister(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            repeat_password = form.cleaned_data['repeat_password']
+            age = form.cleaned_data['age']
+
+            if username in users:
+                info['error'] = 'Пользователь уже существует'
+            elif age < 18:
+                info['error'] = 'Вы должны быть старше 18'
+            elif password != repeat_password:
+                info['error'] = 'Пароли не совпадают'
+            else:
+                info['message'] = f'Приветствуем, {username}!'
+        else:
+            info['form'] = form
+    else:
+        info['form'] = UserRegister()
+
+    return render(request, 'fifth_task/registration_page.html', info)
+    
+Шаг 5: Настройка URL маршрутов
+В файле urls.py проекта добавить маршруты:
+
+from django.urls import path
+from task5.views import sign_up_by_django, sign_up_by_html
+
+urlpatterns = [
+    path('', sign_up_by_django, name='sign_up_by_django'),
+    path('django_sign_up/', sign_up_by_html, name='sign_up_by_html'),
+]
+
+
+Шаг 6: Подключение приложения
+Добавить task5 в Ваш INSTALLED_APPS в файле settings.py проекта:
+
+INSTALLED_APPS = [
+    # ...
+    'task5',
+]
+
+
+Шаг 7: Запуск сервера
+Запустить сервер и проверить работу рендеринга формы регистрации:
+
+python manage.py runserver
+Перейти по адресу http://127.0.0.1:8000/, чтобы увидеть форму регистрации.
+Вводиье данные и проверять работу логики обработки.
