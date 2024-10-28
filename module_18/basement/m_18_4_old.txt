@@ -1,0 +1,183 @@
+Урок 1: Работа с шаблонами и кастомными тегами
+Шаг 1: Создание простого шаблона для отображения списка переменных
+Создание приложения:
+
+python manage.py startapp template_example
+
+Модель представления (views.py):
+
+from django.shortcuts import render
+
+def display_variables(request):
+    variable_list = ['Переменная 1', 'Переменная 2', 'Переменная 3']
+    return render(request, 'template_example/list.html', {'variables': variable_list})
+
+    
+Шаблон (list.html):
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Список переменных</title>
+</head>
+<body>
+    <h1>Список переменных</h1>
+    <ul>
+        {% for var in variables %}
+            <li>{{ var }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
+
+
+URLs (urls.py):
+
+from django.urls import path
+from .views import display_variables
+
+urlpatterns = [
+    path('variables/', display_variables, name='display_variables'),
+]
+
+
+Шаг 2: Шаблон для отображения даты и времени
+Модель представления (views.py):
+
+from django.shortcuts import render
+from django.utils import timezone
+
+def datetime_display(request):
+    current_time = timezone.now()
+    return render(request, 'template_example/datetime.html', {'current_time': current_time})
+
+    
+Шаблон (datetime.html):
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Текущая дата и время</title>
+</head>
+<body>
+    <h1>Текущая дата и время</h1>
+    <p>Дата: {{ current_time|date:"d F Y" }}</p>
+    <p>Время: {{ current_time|date:"h:i A" }}</p>
+    <p>Формат: {{ current_time|date:"d.m.Y" }}</p>
+</body>
+</html>
+
+
+URLs (urls.py):
+
+path('datetime/', datetime_display, name='datetime_display'),
+
+Шаг 3: Система управления страницами
+Модель (models.py):
+
+from django.db import models
+from django.urls import reverse
+
+class Page(models.Model):
+    title = models.CharField(max_length=100)
+    content = models.TextField()
+    slug = models.SlugField(unique=True)
+
+    def get_absolute_url(self):
+        return reverse('page_detail', args=[self.slug])
+        
+Представления (views.py):
+
+from django.shortcuts import get_object_or_404, redirect, render
+from .models import Page
+
+def page_list(request):
+    pages = Page.objects.all()
+    return render(request, 'template_example/page_list.html', {'pages': pages})
+
+def page_detail(request, slug):
+    page = get_object_or_404(Page, slug=slug)
+    return render(request, 'template_example/page_detail.html', {'page': page})
+
+# Здесь могут быть функции для создания, редактирования и удаления страниц.
+
+Шаблоны (page_list.html и page_detail.html):
+
+<!-- page_list.html -->
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Список страниц</title>
+</head>
+<body>
+    <h1>Список страниц</h1>
+    <ul>
+        {% for page in pages %}
+            <li><a href="{{ page.get_absolute_url }}">{{ page.title }}</a></li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
+
+
+<!-- page_detail.html -->
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ page.title }}</title>
+</head>
+<body>
+    <h1>{{ page.title }}</h1>
+    <p>{{ page.content }}</p>
+</body>
+</html>
+
+
+URLs (urls.py):
+
+path('pages/', page_list, name='page_list'),
+path('pages/<slug:slug>/', page_detail, name='page_detail'),
+
+Шаг 4: Кастомный тег для отображения случайного цвета
+Кастомный тег (custom_tags.py):
+
+from django import template
+import random
+
+register = template.Library()
+
+@register.simple_tag
+def random_color():
+    r = random.randint(0, 255)
+    g = random.randint(0, 255)
+    b = random.randint(0, 255)
+    return f"rgb({r},{g},{b})"
+    
+Шаблон (random_color_template.html):
+
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Случайный цвет</title>
+</head>
+<body>
+    <h1>Случайный цвет</h1>
+    <div style="width: 100px; height: 100px; background-color: {% random_color %};"></div>
+</body>
+</html>
+
+Представление для кастомного тега (views.py):
+
+def random_color_view(request):
+    return render(request, 'template_example/random_color_template.html')
+URLs (urls.py):
+
+path('random_color/', random_color_view, name='random_color_view'),
+Итоги
+создали несколько страниц и применили DTL для отображения переменных, даты и времени, а также реализовали систему управления контентом. Также был создан кастомный тег для отображения случайного цвета. Не забудьте применить миграции для модели Page и протестировать Ваше приложение.
