@@ -1,0 +1,69 @@
+1. Создание моделей
+Создай файл models.py и добавь следующие модели:
+
+from django.db import models
+
+class Author(models.Model):
+    name = models.CharField(max_length=100)
+    birthdate = models.DateField()
+    email = models.EmailField()
+
+    def __str__(self):
+        return self.name
+
+class Book(models.Model):
+    title = models.CharField(max_length=100)
+    pub_date = models.DateField()
+    genre = models.CharField(max_length=50)
+    author = models.ForeignKey(Author, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.title
+
+class Publisher(models.Model):
+    name = models.CharField(max_length=100)
+    address = models.CharField(max_length=100)
+    phone = models.CharField(max_length=15)
+
+    def __str__(self):
+        return self.name
+
+2. Связь между моделями
+В Book добавляется поле author, которое связывает каждую книгу с автором. Параметр on_delete=models.CASCADE обеспечивает удаление всех книг, связанных с автором, если он будет удален.
+
+3. Связь многие ко многим
+В связующей модели можно будет добавить дополнительные поля позже, но на текущем этапе мы объявляем связь без промежуточной таблицы:
+
+class BookPublisher(models.Model):
+    book = models.ForeignKey(Book, on_delete=models.CASCADE)
+    publisher = models.ForeignKey(Publisher, on_delete=models.CASCADE)
+
+4. Регистрация моделей в админ-панели
+В файле admin.py зарегистрируй все три модели:
+
+from django.contrib import admin
+from .models import Author, Book, Publisher
+
+class BookAdmin(admin.ModelAdmin):
+    list_display = ('title', 'author', 'pub_date', 'genre')
+    search_fields = ('title', 'author__name', 'genre')
+
+class PublisherAdmin(admin.ModelAdmin):
+    list_display = ('name', 'address', 'phone')
+    search_fields = ('name',)
+
+admin.site.register(Author)
+admin.site.register(Book, BookAdmin)
+admin.site.register(Publisher, PublisherAdmin)
+
+5. Создание ER модели и выполнение миграций
+Для создания ER модели воспользуйся любым удобным инструментом (например, Lucidchart или Draw.io). Постарайся отобразить все 7 сущностей.
+
+После того как модели будут определены, выполни миграции:
+
+python manage.py makemigrations
+python manage.py migrate
+Теперь модели связаны с базой данных.
+
+6. Настройка прав доступа
+В админ-панели Django создай нового пользователя через интерфейс и назначь ему соответствующие права доступа к нужным таблицам.
