@@ -1,0 +1,107 @@
+Шаг 1: Создание обработчиков в views.py
+Откройте файл views.py Вашего приложения и добавьте следующие обработчики:
+
+from django.shortcuts import render
+
+def post_list(request):
+    return render(request, 'post_list.html')
+
+def hello_urban(request):
+    return render(request, 'hello_urban.html')
+
+def custom_page(request):
+    return render(request, 'custom_page.html')
+    
+Шаг 2: Добавление URL в urls.py
+Теперь откройте файл urls.py Вашего приложения и добавьте URL для созданных обработчиков:
+
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.post_list, name='post_list'),
+    path('hello/', views.hello_urban, name='hello_urban'),
+    path('custom/', views.custom_page, name='custom_page'),
+]
+
+Шаг 3: Создание HTML-шаблонов
+Создайте папку templates в Вашем приложении, если её ещё нет, и добавьте следующие HTML-файлы.
+
+post_list.html
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <title>Post List</title>
+</head>
+<body>
+    <h1>Post List</h1>
+</body>
+</html>
+
+
+hello_urban.html
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <title>Hello Urban</title>
+</head>
+<body>
+    <h1>Hello Urban</h1>
+</body>
+</html>
+
+
+custom_page.html
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <title>Custom Page</title>
+</head>
+<body>
+    <h1>Welcome to the Custom Page</h1>
+    <p>This is a custom page with some styles.</p>
+</body>
+</html>
+
+Шаг 4: Создание CSS-файла
+Создайте папку static в Вашем приложении и добавьте файл styles.css:
+
+styles.css
+
+body {
+    background-color: #f0f0f0;
+    font-family: Arial, sans-serif;
+}
+
+h1 {
+    color: #333;
+    text-align: center;
+}
+
+p {
+    color: #666;
+    text-align: center;
+}
+
+Шаг 5: Проверка страницы
+Теперь запустите сервер Django:
+
+python manage.py runserver
+
+Перейдите по следующим URL, чтобы проверить Ваши страницы:
+
+http://127.0.0.1:8000/ — для post_list
+http://127.0.0.1:8000/hello/ — для hello_urban
+http://127.0.0.1:8000/custom/ — для custom_page
