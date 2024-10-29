@@ -1,0 +1,93 @@
+Часть 1: Подготовка
+Перемещение представлений и шаблонов
+Перенесите представления и шаблоны из предыдущих заданий (Главная страница, Список товаров, Корзина, Регистрация) в приложение task1.
+
+Представления (например, views.py):
+
+from django.shortcuts import render
+from .models import Game, Buyer
+
+def home(request):
+    return render(request, 'task1/home.html')
+
+def product_list(request):
+    games = Game.objects.all()
+    return render(request, 'task1/product_list.html', {'games': games})
+
+def cart(request):
+    return render(request, 'task1/cart.html')
+
+def register(request):
+    if request.method == 'POST':
+        name = request.POST['name']
+        if not Buyer.objects.filter(name=name).exists():
+            buyer = Buyer.objects.create(name=name, balance=0, age=18)  # Возраст можно изменить
+            buyer.save()
+    return render(request, 'task1/register.html')
+    
+Шаблоны: Создайте папку templates/task1 и добавьте файлы home.html, product_list.html, cart.html и register.html.
+Изменение файла urls.py
+В urls.py приложения task1 добавьте новые маршруты:
+
+from django.urls import path
+from .views import home, product_list, cart, register
+
+urlpatterns = [
+    path('', home, name='home'),
+    path('products/', product_list, name='product_list'),
+    path('cart/', cart, name='cart'),
+    path('register/', register, name='register'),
+]
+
+Настройка settings.py
+Убедитесь, что в Вашем settings.py указаны пути к папкам шаблонов. Например:
+
+TEMPLATES = [
+    {
+        ...
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        ...
+    },
+]
+
+Проверка работы сервера
+Запустите сервер:
+
+python manage.py runserver
+Проверьте, что все страницы работают корректно.
+
+Часть 2: Дополнение QuerySet запросами
+Представление регистрации
+Измените представление register, чтобы оно проверяло наличие Buyer в базе данных:
+
+def register(request):
+    if request.method == 'POST':
+        name = request.POST['name']
+        if not Buyer.objects.filter(name=name).exists():
+            age = int(request.POST['age'])  # Предполагается, что возраст передается в форме
+            balance = 0  # Или любое другое значение
+            Buyer.objects.create(name=name, balance=balance, age=age)
+    return render(request, 'task1/register.html')
+    
+Представление списка товаров
+Передайте список всех игр в контекст шаблона:
+
+def product_list(request):
+    games = Game.objects.all()
+    return render(request, 'task1/product_list.html', {'games': games})
+    
+В шаблоне product_list.html измените вывод на:
+
+{% for game in games %}
+    <p>{{ game.title }} | {{ game.description }}. Стоимость: {{ game.cost }}<button>Купить</button></p>
+{% endfor %}
+
+Проверка
+Убедитесь, что Вы добавляете записи в базу данных через форму регистрации.
+Используйте DB Browser для проверки добавленных записей.
+Коммиты и Push на GitHub
+Не забудьте сделать коммиты после каждого значимого изменения и запушить их в Ваш удалённый репозиторий на GitHub:
+
+git add .
+git commit -m "Добавил представления и шаблоны в task1"
+git push origin main
