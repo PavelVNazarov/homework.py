@@ -1,0 +1,86 @@
+Шаг 1: Создание проекта
+Создай новый проект Django:
+
+django-admin startproject my_project
+cd my_project
+
+Создай новое приложение:
+
+python manage.py startapp task1
+
+Подключи приложение в settings.py:
+
+INSTALLED_APPS = [
+    # ...
+    'task1',
+]
+
+Шаг 2: Создание моделей
+Теперь давай добавим модели в файл models.py приложения task1.
+
+from django.db import models
+
+class Buyer(models.Model):
+    name = models.CharField(max_length=100)
+    balance = models.DecimalField(max_digits=10, decimal_places=2)
+    age = models.IntegerField()
+
+    def __str__(self):
+        return self.name
+
+class Game(models.Model):
+    title = models.CharField(max_length=100)
+    cost = models.DecimalField(max_digits=10, decimal_places=2)
+    size = models.DecimalField(max_digits=10, decimal_places=2)
+    description = models.TextField()
+    age_limited = models.BooleanField(default=False)
+    buyers = models.ManyToManyField(Buyer, related_name='games')
+
+    def __str__(self):
+        return self.title
+
+Шаг 3: Создание миграций и выполнение миграций
+Создай миграции:
+
+python manage.py makemigrations task1
+
+Выполни миграцию:
+
+
+python manage.py migrate
+Шаг 4: Проверка в базе данных
+Теперь используй DB Browser для проверки структуры базы данных. Ты должен увидеть три таблицы:
+
+task1_buyer
+task1_game
+task1_game_buyers (это таблица промежуточной модели для связи многие ко многим)
+
+Шаг 5: Регистрация моделей в админ-панели
+Добавь следующий код в admin.py приложения task1:
+
+from django.contrib import admin
+from .models import Buyer, Game
+
+class BuyerAdmin(admin.ModelAdmin):
+    list_display = ('name', 'balance', 'age')
+    search_fields = ('name',)
+
+class GameAdmin(admin.ModelAdmin):
+    list_display = ('title', 'cost', 'size', 'age_limited')
+    search_fields = ('title',)
+
+admin.site.register(Buyer, BuyerAdmin)
+admin.site.register(Game, GameAdmin)
+После этих шагов ты сможешь управлять моделями через веб-интерфейс админ-панели.
+
+Шаг 6: Создание суперпользователя
+Создай суперпользователя, чтобы получить доступ к админ-панели:
+
+python manage.py createsuperuser
+Следуй инструкциям на экране.
+
+Шаг 7: Запуск сервера
+Запусти сервер Django, чтобы зайти в админ панель:
+
+python manage.py runserver
+Перейди по адресу http://127.0.0.1:8000/admin и войди, используя созданные учетные данные.
