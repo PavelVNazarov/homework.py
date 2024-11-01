@@ -27,9 +27,10 @@ class RunnerTest(TestCase):
 
         for _ in range(10):
             runner.run()
-
-        for _ in range(10):
             walker.walk()
+            
+       # for _ in range(10):
+       #     walker.walk()
 
         self.assertNotEqual(runner.distance, walker.distance,
                            runner.distance == walker.distance)
