@@ -2,10 +2,10 @@
 # Назаров ПВ
 # module_17_2.py
 
-from routers.task import router as task_router
-from routers.user import router as user_router
+from .routers.task import router as task_router
+from .routers.user import router as user_router
 from fastapi import FastAPI
-from backend.db import engine, Base
+from .backend.db import engine, Base
 import logging
 
 logging.basicConfig()
