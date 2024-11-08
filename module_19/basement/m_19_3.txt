@@ -91,3 +91,97 @@ def product_list(request):
 git add .
 git commit -m "Добавил представления и шаблоны в task1"
 git push origin main
+
+
+Часть 1: Объединение представлений и шаблонов из предыдущих заданий.
+
+Копирование файлов: Перенесите все файлы представлений (.py) и шаблонов (.html) из Ваших предыдущих задач (task4 и task5) в папку task1 Вашего текущего проекта.  Убедитесь, что структура папок сохраняется (например, представления могут быть в task1/views.py, а шаблоны в task1/templates/task1/).
+
+Изменение путей в urls.py:  Откройте task1/urls.py. Вам нужно добавить маршруты для всех Ваших представлений.  Пример:
+
+Python
+Копировать
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.main_page, name='main_page'),  # Главная страница
+    path('goods/', views.goods_list, name='goods_list'), # Список товаров
+    path('cart/', views.cart, name='cart'), # Корзина
+    path('register/', views.register, name='register'), # Регистрация
+    # ... другие маршруты ...
+]
+Замените views.main_page, views.goods_list и т.д. на  имена Ваших функций-представлений.  Убедитесь, что имена маршрутов (name) уникальны.
+
+Настройка settings.py: В Вашем файле settings.py убедитесь, что путь к шаблонам указан корректно. Он должен указывать на директорию, содержащую все Ваши шаблоны:
+Python
+Копировать
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': ['путь/к/вашей/папке/templates'], # Замените на Ваш путь
+        'APP_DIRS': True,
+        'OPTIONS': {
+            # ...
+        },
+    },
+]
+Изменение путей в представлениях: Откройте Ваши файлы представлений (.py). В функциях render убедитесь, что пути к шаблонам корректны относительно директории templates, указанной в settings.py. Пример:
+Python
+Копировать
+from django.shortcuts import render
+# ...
+def main_page(request):
+    return render(request, 'task1/main.html') # Пример пути к шаблону
+Изменение путей в шаблонах:  В Ваших HTML-шаблонах, особенно тех, что наследуют от menu.html, убедитесь, что все пути к статическим файлам (CSS, JS) и другим шаблонам корректны.  Используйте абсолютные пути, если это необходимо для избежания проблем.
+
+Проверка: Запустите сервер Django (python manage.py runserver).  Проверьте, что все Ваши представления работают корректно и отображаются страницы из заданий DTL и Формы.
+
+Часть 2: Добавление QuerySet запросов
+
+Представление регистрации (register):
+
+Получение данных из Buyer:  Замените Ваш псевдо-список пользователей на запрос к базе данных:
+
+Python
+Копировать
+from .models import Buyer
+# ...
+def register(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        age = request.POST.get('age')
+        # ... другие поля ...
+
+        try:
+            existing_buyer = Buyer.objects.get(name=username)  # Проверяем существование
+            # сообщение об ошибке, например, через messages.error()
+        except Buyer.DoesNotExist:
+            new_buyer = Buyer.objects.create(name=username, age=age, # ... другие поля ...)
+            # сообщение об успешном добавлении, например, через messages.success()
+
+    # ... остальной код ...
+Проверка на существование:  try...except блок обрабатывает ситуацию, когда пользователь уже существует.
+
+Представление списка товаров (goods_list):
+
+Получение игр из Game: Замените Ваш псевдо-список игр на запрос:
+
+Python
+Копировать
+from .models import Game
+# ...
+def goods_list(request):
+    games = Game.objects.all()
+    return render(request, 'task1/goods_list.html', {'games': games})
+Изменение шаблона (goods_list.html):  Измените шаблон, чтобы отобразить информацию об играх в нужном формате:
+
+HTML, XML
+Копировать
+<h1>Список игр</h1>
+{% for game in games %}
+    <p>{{ game.name }} | {{ game.description }}. Стоимость: {{ game.price }}</p>
+    <button>Купить</button>  <!--  Добавьте функционал кнопки позже -->
+{% endfor %}
+Не забудьте сделать git commit и git push после каждого значимого изменения.
+
