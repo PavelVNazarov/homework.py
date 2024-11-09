@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block pagename %}My Site{% endblock %}</title>
+</head>
+<body>
+    <nav>
+        {% block menu %}
+        <ul>
+            <li><a href="{% url 'view1' %}">View 1</a></li>
+            <li><a href="{% url 'view2' %}">View 2</a></li>
+        </ul>
+        {% endblock %}
+    </nav>
+    <div>
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>
