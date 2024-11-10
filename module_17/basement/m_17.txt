@@ -1,0 +1,148 @@
+Шаг 1: Установка необходимых библиотек
+Убедитесь, что у Вас установлен Python (рекомендуется версия 3.7 и выше).
+Создайте виртуальное окружение (опционально, но рекомендуется):
+
+python -m venv venv
+source venv/bin/activate  # на Linux/Mac
+venv\Scripts\activate  # на Windows
+
+Установите FastAPI и Uvicorn:
+
+pip install fastapi uvicorn
+
+Шаг 2: Создание структуры каталогов и файлов
+Создайте папку для Вашего проекта и перейдите в нее:
+
+mkdir app
+cd app
+
+Создайте подкаталог routers:
+
+mkdir routers
+
+Создайте файлы в соответствующих каталогах:
+
+touch routers/__init__.py
+touch routers/task.py
+touch routers/users.py
+touch __init__.py
+touch main.py
+touch schemas.py
+
+Шаг 3: Реализация маршрутов в task.py и users.py
+Файл: routers/task.py
+
+from fastapi import APIRouter
+
+router = APIRouter(prefix="/task", tags=["task"])
+
+@router.get("/")
+async def all_tasks():
+    pass
+
+@router.get("/{task_id}")
+async def task_by_id(task_id: int):
+    pass
+
+@router.post("/create")
+async def create_task():
+    pass
+
+@router.put("/update")
+async def update_task():
+    pass
+
+@router.delete("/delete")
+async def delete_task():
+    pass
+    
+Файл: routers/users.py
+
+from fastapi import APIRouter
+
+router = APIRouter(prefix="/user", tags=["user"])
+
+@router.get("/")
+async def all_users():
+    pass
+
+@router.get("/{user_id}")
+async def user_by_id(user_id: int):
+    pass
+
+@router.post("/create")
+async def create_user():
+    pass
+
+@router.put("/update")
+async def update_user():
+    pass
+
+@router.delete("/delete")
+async def delete_user():
+    pass
+    
+Шаг 4: Реализация основного приложения в main.py
+Файл: main.py
+
+from fastapi import FastAPI
+from routers import task, users
+
+app = FastAPI()
+
+app.include_router(task.router)
+app.include_router(users.router)
+
+@app.get("/")
+async def root():
+    return {"message": "Welcome to Taskmanager"}
+    
+Шаг 5: Создание схем в schemas.py
+Файл: schemas.py
+
+from pydantic import BaseModel
+
+class CreateUser(BaseModel):
+    username: str
+    firstname: str
+    lastname: str
+    age: int
+
+class UpdateUser(BaseModel):
+    firstname: str
+    lastname: str
+    age: int
+
+class CreateTask(BaseModel):
+    title: str
+    content: str
+    priority: int
+
+class UpdateTask(BaseModel):
+    title: str
+    content: str
+    priority: int
+    
+Шаг 6: Запуск приложения
+Теперь Ваше приложение готово к запуску. Выполните следующую команду в корневом каталоге приложения:
+
+
+uvicorn main:app --reload
+
+Шаг 7: Доступ к Swagger UI
+После запуска сервера, откройте в браузере адрес: http://127.0.0.1:8000/docs для доступа к Swagger UI, где Вы сможете увидеть автоматически сгенерированную документацию для Вашего API.
+
+Шаг 8: Загрузка на GitHub
+Создайте новый репозиторий на GitHub.
+Вставьте все файлы Вашего проекта в этот репозиторий.
+Добавьте и закоммитьте с изменениями:
+
+git add .
+git commit -m "Initial commit"
+git push origin main
+
+Поделитесь ссылкой на Ваш репозиторий.
+
+
+
+
