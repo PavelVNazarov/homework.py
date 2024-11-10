@@ -259,3 +259,87 @@ python -m uvicorn app.main:app --reload
 Теперь у Вас должны быть две модели, связанные один (User) к многим (Task), и у Вас должен быть дополнительно настроенный файл базы данных. Обязательно проверьте, что Ваше приложение работает, и таблицы создаются корректно.
 
 
+Задание 17_3
+Шаг 1: Установка Alembic
+Убедитесь, что Alembic установлен. Выполните команду:
+
+pip install alembic
+
+Шаг 2: Инициализация Alembic
+Инициализируйте Alembic. В корневой папке Вашего проекта выполните команду:
+
+alembic init migrations
+
+После этого будет создана структура папок:
+
+app/
+    backend/
+    migrations/
+        versions/
+        env.py
+        README
+        script.py.mako
+    models/
+        __init__.py
+        task.py
+        users.py
+    routers/
+        __init__.py
+        task.py
+        users.py
+    __init__.py
+    main.py
+    schemas.py
+alembic.ini
+
+
+Шаг 3: Настройка alembic.ini
+Откройте файл alembic.ini и измените строку sqlalchemy.url, указав путь к Вашей базе данных:
+
+TOML, also INI
+
+sqlalchemy.url = sqlite:///taskmanager.db
+
+Шаг 4: Настройка env.py
+Откройте файл migrations/env.py и внесите следующие изменения:
+
+Импортируйте модели и базовый класс:
+
+from app.models import User, Task  # Добавьте эту строку
+from app.backend.db import Base    # Импортируйте Ваш базовый класс
+
+После target_metadata = добавьте:
+
+target_metadata = Base.metadata
+
+Шаг 5: Генерация первой миграции
+Сгенерируйте первую миграцию, выполнив команду в корне проекта:
+
+alembic revision --autogenerate -m "Initial migration"
+Это создаст в папке migrations/versions файл с версией миграции.
+
+Шаг 6: Просмотр базы данных
+Используя инструмент для работы с SQLite, откройте базу данных taskmanager.db. Ваша база данных должна содержать одну таблицу для версий миграций.
+
+Шаг 7: Применение миграции
+Теперь выполните команду, чтобы применить последнюю миграцию:
+
+alembic upgrade head
+После выполнения этой команды в базе данных должны быть созданы таблицы User и Task, а также запись текущей версии миграции.
+
+Шаг 8: Загрузка проекта на GitHub
+Проверьте, что все изменения сохранены.
+Создайте новый репозиторий на GitHub, если он ещё не создан.
+Добавьте все файлы проекта в git и сделайте коммит:
+
+git add .
+git commit -m "Setup FastAPI project with Alembic migrations"
+
+Опубликуйте изменения:
+
+git push origin main
+Теперь Ваш проект должен быть готов, и Вы можете отправить ссылку на Ваш репозиторий GitHub. 
+
+
+
+
