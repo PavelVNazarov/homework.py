@@ -296,7 +296,7 @@ alembic.ini
 Шаг 3: Настройка alembic.ini
 Откройте файл alembic.ini и измените строку sqlalchemy.url, указав путь к Вашей базе данных:
 
-TOML, also INI
+TOML, also INI - здесь может быть вариант этой строки взятой в комментарии
 
 sqlalchemy.url = sqlite:///taskmanager.db
 
@@ -307,6 +307,12 @@ sqlalchemy.url = sqlite:///taskmanager.db
 
 from app.models import User, Task  # Добавьте эту строку
 from app.backend.db import Base    # Импортируйте Ваш базовый класс
+здесь может сработать другой вариант
+from alembic import context
+#from app.models.users import User
+#from app.models.task import Task
+from backend.db import Base
+
 
 После target_metadata = добавьте:
 
