@@ -22,12 +22,12 @@ mkdir routers
 
 Создайте файлы в соответствующих каталогах:
 
-touch routers/__init__.py
-touch routers/task.py
-touch routers/users.py
-touch __init__.py
-touch main.py
-touch schemas.py
+echo. > routers\__init__.py
+echo. > routers\task.py
+echo. > routers\users.py
+echo. > __init__.py
+echo. > main.py
+echo. > schemas.py
 
 Шаг 3: Реализация маршрутов в task.py и users.py
 Файл: routers/task.py
