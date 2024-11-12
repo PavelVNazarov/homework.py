@@ -3,9 +3,9 @@
 # module_17_3.py
 
 from fastapi import FastAPI
-from backend.db import engine
-from models import Base
-
+from .backend.db import engine
+#from .models import Base
+from .backend.db import Base
 app = FastAPI()
 
 # Создание таблиц
