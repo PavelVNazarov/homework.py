@@ -1,0 +1,487 @@
+задание 18_1
+Шаг 1: Создание проекта в PyCharm
+Открой PyCharm.
+Выбери "Create New Project".
+В поле Project Name введи название проекта (например, FirstDjangoProject).
+Убедись, что выбран "New environment using" и укажи "Virtualenv".
+Нажми "Create".
+Шаг 2: Установить Django в виртуальное окружение
+Открой встроенный терминал в PyCharm (View -> Tool Windows -> Terminal).
+Убедись, что находишься в директории проекта.
+Выполни команду:
+
+pip install django
+
+Шаг 3: Создание проекта Django
+В терминале, находясь в директории проекта, выполни команду:
+
+django-admin startproject UrbanDjango
+
+Шаг 4: Создание приложений
+Перейди в директорию проекта:
+
+cd UrbanDjango
+
+Создай приложения, выполнив следующие команды:
+
+python manage.py startapp example1
+python manage.py startapp example2
+python manage.py startapp example3
+
+Шаг 5: Создать файл зависимостей requirements.txt
+В корне проекта (где находится файл manage.py) создай файл с именем requirements.txt.
+Добавь в этот файл следующее содержимое:
+
+Django>=3.0,<4.0
+
+Шаг 6: Запустить сервер
+Убедись, что ты по-прежнему в директории, где находится manage.py.
+Выполни команду для запуска сервера:
+
+python manage.py runserver
+
+Открой браузер и перейди по адресу http://127.0.0.1:8000/. Ты должен увидеть страницу приветствия Django.
+
+Шаг 7: Создать репозиторий на GitHub
+Зайди на GitHub и создай новый репозиторий.
+Вернись в PyCharm и открой терминал.
+Инициализируй git в директории проекта:
+
+git init
+
+Добавь .gitignore файл, чтобы исключить виртуальное окружение. Создай файл .gitignore в корне проекта и добавь следующее:
+
+.venv/
+__pycache__/
+db.sqlite3
+*.pyc
+
+Добавь все файлы в git и сделай первый коммит:
+
+git add .
+git commit -m "Initial commit"
+
+Подключи свой репозиторий на GitHub:
+
+git remote add origin https://github.com/USERNAME/REPOSITORY_NAME.git
+
+Не забудь заменить USERNAME и REPOSITORY_NAME на свои.
+Отправь изменения на GitHub:
+
+git push -u origin master
+
+
+
+задание 18_2
+
+Шаг 1: Создание приложения task2
+Перейдите в директорию Вашего проекта UrbanDjango:
+
+cd path_to_your_project/UrbanDjango
+
+Создайте приложение task2:
+
+python manage.py startapp task2
+
+Шаг 2: Создание папки для шаблонов
+Создайте папку templates:
+
+mkdir templates
+
+Создайте папку second_task внутри templates:
+
+mkdir templates/second_task
+
+Шаг 3: Создание HTML шаблонов
+Создайте файл class_template.html в templates/second_task/ и добавьте в него:
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class Based View</title>
+</head>
+<body>
+    <h1>Это шаблон для классового представления</h1>
+</body>
+</html>
+
+Создайте файл func_template.html в templates/second_task/ и добавьте в него:
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Function Based View</title>
+</head>
+<body>
+    <h1>Это шаблон для функционального представления</h1>
+</body>
+</html>
+
+Шаг 4: Создание представлений в views.py
+В файле task2/views.py добавьте следующие представления:
+
+from django.shortcuts import render
+from django.views import View
+
+class ClassBasedView(View):
+    def get(self, request):
+        return render(request, 'second_task/class_template.html')
+
+def func_based_view(request):
+    return render(request, 'second_task/func_template.html')
+
+Шаг 5: Создание маршрутов
+Создайте файл task2/urls.py и добавьте в него:
+
+from django.urls import path
+from .views import ClassBasedView, func_based_view
+
+urlpatterns = [
+    path('class_view/', ClassBasedView.as_view(), name='class_view'),
+    path('func_view/', func_based_view, name='func_view'),
+]
+
+Подключите маршруты task2 в главный файл маршрутов проекта UrbanDjango/urls.py:
+
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('task2/', include('task2.urls')),  # Подключаем маршруты task2
+]
+
+Шаг 6: Проверка работоспособности и запуск сервера
+Запустите сервер:
+
+python manage.py runserver
+Откройте браузер и перейдите по адресам:
+
+http://127.0.0.1:8000/task2/class_view/ для классового представления
+http://127.0.0.1:8000/task2/func_view/ для функционального представления
+
+Шаг 7: Добавление изменений в Git и загрузка на GitHub
+Добавьте изменения в Git:
+
+git add .
+Сделайте коммит:
+
+git commit -m "Добавил приложение task2 с классами и функциональными представлениями"
+
+Выполните push на GitHub:
+
+git push origin main  # Замените main на Вашу ветку, если необходимо
+
+
+задание 18_3
+Шаг 1: Создание приложения task3
+Откройте терминал в PyCharm и убедитесь, что находитесь в каталоге Вашего проекта UrbanDjango.
+
+Выполните следующую команду для создания приложения:
+
+python manage.py startapp task3
+
+Шаг 2: Настройка шаблонов
+В директории templates Вашего проекта создайте новую папку third_task.
+
+mkdir templates/third_task
+
+Внутри папки third_task создайте три HTML файла:
+
+platform.html (Главная страница)
+games.html (Страница Магазина)
+cart.html (Страница Корзина)
+
+Шаг 3: Создание представлений в views.py
+Перейдите в файл views.py приложения task3 и создайте представления:
+
+from django.shortcuts import render
+
+def main_page(request):
+    return render(request, 'third_task/platform.html')
+
+def shop_page(request):
+    items = {
+        "item1": "Игра 1",
+        "item2": "Игра 2",
+        "item3": "Игра 3"
+    }
+    return render(request, 'third_task/games.html', {'items': items})
+
+def cart_page(request):
+    return render(request, 'third_task/cart.html')
+
+Шаг 4: Настройка маршрутов
+Создайте файл urls.py внутри приложения task3 и добавьте маршруты:
+
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.main_page, name='main_page'),
+    path('shop/', views.shop_page, name='shop_page'),
+    path('cart/', views.cart_page, name='cart_page'),
+]
+
+Обновите файл urls.py в корневом каталоге проекта UrbanDjango, чтобы включить маршруты Вашего приложения:
+
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('task3/', include('task3.urls')),
+]
+
+Шаг 5: Создание HTML шаблонов
+Добавьте содержимое в platform.html:
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Главная страница</title>
+</head>
+<body>
+    <h1>Главная страница</h1>
+    <nav>
+        <a href="{% url 'main_page' %}">Главная</a>
+        <a href="{% url 'shop_page' %}">Магазин</a>
+        <a href="{% url 'cart_page' %}">Корзина</a>
+    </nav>
+</body>
+</html>
+
+В файле games.html добавьте следующее:
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Магазин</title>
+</head>
+<body>
+    <h1>Магазин</h1>
+    <ul>
+        {% for key, value in items.items %}
+            <li>{{ value }} <button>Купить</button></li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'main_page' %}">Вернуться на главную</a>
+</body>
+</html>
+
+В файле cart.html создайте содержимое:
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Корзина</title>
+</head>
+<body>
+    <h1>Корзина</h1>
+    <p>Здесь Вы можете управлять своими играми.</p>
+    <a href="{% url 'main_page' %}">Вернуться на главную</a>
+</body>
+</html>
+
+Шаг 6: Проверка и запуск сервера
+Запустите сервер командой:
+
+python manage.py runserver
+
+Перейдите в браузере на http://127.0.0.1:8000/task3/ и проверьте работоспособность Вашего сайта.
+
+Шаг 7: Commit и Push изменений на GitHub
+Добавьте все изменения в коммит:
+
+git add .
+git commit -m "Добавлено приложение task3 и страницы сайта"
+
+Отправьте изменения на GitHub:
+
+git push origin main
+
+
+задание 4
+Шаг 1: Создание приложения task4
+Открой терминал.
+Перейди в директорию проекта UrbanDjango:
+
+cd UrbanDjango
+Создай новое приложение task4:
+
+python manage.py startapp task4
+
+Шаг 2: Копирование шаблонов
+Скопируй все шаблоны из templates/third_task в новую директорию templates/fourth_task.
+Создай новый шаблон menu.html в templates/fourth_task.
+
+Шаг 3: Изменение представлений
+Перенеси код представлений из task3/views.py в task4/views.py.
+Измени словарь для передачи контекста в представлении, где он сейчас:
+
+# Прежний код
+context = {'first': 'Atomic Heart', 'second': 'Cyberpunk 2077'}
+
+# Новый код
+context = {'games': ['Atomic Heart', 'Cyberpunk 2077']}
+
+Шаг 4: Изменение шаблонов
+В шаблоне menu.html создай блоки:
+
+{% block pagename %}{% endblock %}
+{% block menu %}
+<a href="/">Главная</a>
+<a href="/games/">Магазин</a>
+<a href="/cart/">Корзина</a>
+{% endblock %}
+{% block content %}{% endblock %}
+
+В остальных шаблонах (cart.html, games.html, platform.html) добавь наследование от menu.html:
+
+{% extends "fourth_task/menu.html" %}
+В этих шаблонах используй блоки:
+pagename для заголовка страницы
+content для основного содержимого страницы
+
+Шаг 5: Обновление маршрутов
+В urls.py проекта убери импорты из task3 и добавь импорты из task4:
+
+from task4.views import HomeView, StoreView, CartView
+
+Шаг 6: Подключение приложения
+Открой файл settings.py и добавь task4 в INSTALLED_APPS:
+
+INSTALLED_APPS = [
+    ...
+    'task4',
+]
+
+Шаг 7: Проверка работоспособности
+Запусти сервер:
+
+python manage.py runserver
+
+Открой браузер и проверь работу страниц. Убедись, что все ссылки ведут на нужные страницы.
+
+Шаг 8: Коммиты и push
+Не забывай делать коммиты после каждого значительного изменения:
+
+git add .
+git commit -m "Создано приложение task4 и выполнены изменения"
+git push origin main
+
+
+задание 5
+Шаг 1: Создание приложения и шаблона
+Перейди в директорию своего проекта Django.
+Создай новое приложение, выполнив команду:
+
+python manage.py startapp task5
+
+Создай папку для шаблонов в директории task5:
+
+mkdir templates/fifth_task
+
+Создай шаблон registration_page.html в папке templates/fifth_task.
+
+Шаг 2: Создание HTML формы
+Открой registration_page.html и добавь следующий код:
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация</title>
+</head>
+<body>
+    <h1>Форма регистрации</h1>
+    <form method="POST">
+        {% csrf_token %}
+        <label for="username">Введите логин:</label>
+        <input type="text" id="username" name="username" maxlength="30" required><br>
+
+        <label for="password">Введите пароль:</label>
+        <input type="password" id="password" name="password" minlength="8" required><br>
+
+        <label for="repeat_password">Повторите пароль:</label>
+        <input type="password" id="repeat_password" name="repeat_password" minlength="8" required><br>
+
+        <label for="age">Введите свой возраст:</label>
+        <input type="number" id="age" name="age" maxlength="3" required><br>
+
+        <button type="submit">Зарегистрироваться</button>
+    </form>
+
+    {% if error %}
+        <p style="color:red;">{{ error }}</p>
+    {% endif %}
+</body>
+</html>
+
+Шаг 3: Создание формы и представлений
+В task5/views.py создай класс UserRegister и два представления sign_up_by_django и sign_up_by_html.
+
+from django.shortcuts import render
+from django import forms
+
+class UserRegister(forms.Form):
+    username = forms.CharField(max_length=30)
+    password = forms.CharField(min_length=8, widget=forms.PasswordInput)
+    repeat_password = forms.CharField(min_length=8, widget=forms.PasswordInput)
+    age = forms.IntegerField(max_value=120, min_value=0)
+
+def sign_up_by_django(request):
+    users = ['user1', 'user2', 'user3']  # списком существующих пользователей
+    info = {}
+    
+    if request.method == 'POST':
+        form = UserRegister(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            repeat_password = form.cleaned_data['repeat_password']
+            age = form.cleaned_data['age']
+            
+            if password != repeat_password:
+                info['error'] = 'Пароли не совпадают'
+            elif age < 18:
+                info['error'] = 'Вы должны быть старше 18'
+            elif username in users:
+                info['error'] = 'Пользователь уже существует'
+            else:
+                return render(request, 'fifth_task/success.html', {'username': username})
+
+    else:
+        form = UserRegister()
+    
+    info['form'] = form
+    return render(request, 'fifth_task/registration_page.html', info)
+
+def sign_up_by_html(request):
+    # Логика аналогична sign_up_by_django
+    return sign_up_by_django(request)
+
+Шаг 4: Настройка маршрутов
+В urls.py подключи представления:
+
+from django.urls import path
+from task5.views import sign_up_by_django, sign_up_by_html
+
+urlpatterns = [
+    path('', sign_up_by_django, name='sign_up'),
+    path('django_sign_up/', sign_up_by_html, name='sign_up_django'),
+]
+
+Шаг 5: Завершение
+Добавь шаблон success.html для отображения успешного сообщения после регистрации.
+Не забудь сделать commit'ы и выполнить push на GitHub.
