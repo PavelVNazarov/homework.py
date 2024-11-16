@@ -1,93 +1,124 @@
 Вот пошаговая инструкция для выполнения Вашей задачи "Сила DTL":
 
-Шаг 1: Подготовка нового приложения
-Создать новое приложение:
+1. Подготовка
+1.1. Скопируйте шаблоны:
 
-Откройте терминал и перейдите в корневую директорию Вашего проекта (где находится manage.py).
-Выполните команду:
+Скопируйте все шаблоны из предыдущего задания в новую директорию templates/fourth_task/.
 
-python manage.py startapp task4
+2. Создайте новый шаблон menu.html
+2.1. Создание menu.html:
 
-Создайте директорию для шаблонов:
+Создайте новый файл menu.html в директории templates/fourth_task/.
 
-В папке task4 создайте папку templates и внутри нее еще одну папку fourth_task:
-
-pythonProject1/myproject/task4/templates/fourth_task/
-
-Шаг 2: Копирование шаблонов
-Копируйте шаблоны из task3:
-Скопируйте все файлы из myproject/task3/templates/third_task/ в myproject/task4/templates/fourth_task/.
-
-Шаг 3: Создание шаблона menu.html
-Создайте новый шаблон:
-В директории fourth_task создайте файл menu.html и добавьте в него следующий код:
-
+<!-- templates/fourth_task/menu.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{% block pagename %}My Site{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block pagename %}Page Title{% endblock %}</title>
 </head>
 <body>
-    <nav>
+    <div class="menu">
         {% block menu %}
         <ul>
-            <li><a href="{% url 'view1' %}">View 1</a></li>
-            <li><a href="{% url 'view2' %}">View 2</a></li>
+            <li><a href="{% url 'index' %}">Home</a></li>
+            <li><a href="{% url 'games' %}">Games</a></li>
+            <li><a href="{% url 'cart' %}">Cart</a></li>
+            <li><a href="{% url 'shop' %}">Shop</a></li>
+            <li><a href="{% url 'platform' %}">Platform</a></li>
         </ul>
         {% endblock %}
-    </nav>
-    <div>
-        {% block content %}{% endblock %}
+    </div>
+    <div class="content">
+        {% block content %}
+        <!-- Default content goes here -->
+        {% endblock %}
     </div>
 </body>
 </html>
 
-Шаг 4: Перенос представлений
-Перенесите представления из task3 в task4:
-Скопируйте содержимое файлов views.py из task3 в файл views.py в task4.
-Измените данные в представлениях следующим образом:
-Замените код, где использовался context, на следующий:
+3. Создание приложения task4
+3.1. Создайте приложение:
 
-context = {'games': ['Atomic Heart', 'Cyberpunk 2077']}
+Создайте новое приложение task4 с помощью команды:
 
-Проверьте все представления и внесите изменения, если необходимо.
+python manage.py startapp task4
+3.2. Перенос представлений:
 
-Шаг 5: Изменение маршрутов
-Измените urls.py:
-В myproject/task3/urls.py создайте новый файл urls.py для task4 или используйте существующий:
-Импортируйте представления из task4.views и оставьте маршруты прежними, но уберите импорты из task3:
+Скопируйте представления из task3/views.py в task4/views.py. Измените в них контексты, чтобы использовать список games.
 
-from task4.views import view1, view2
+Пример изменения в views.py:
+
+# task4/views.py
+from django.shortcuts import render
+
+def games_view(request):
+    games = ['Atomic Heart', 'Cyberpunk 2077']
+    return render(request, 'fourth_task/games.html', {'games': games})
+
+3.3. Обновите шаблоны:
+
+Во всех шаблонах в fourth_task/ добавьте наследование от menu.html. Пример для games.html:
+
+<!-- templates/fourth_task/games.html -->
+{% extends 'fourth_task/menu.html' %}
+
+{% block pagename %}Games{% endblock %}
+
+{% block content %}
+<h1>Games List</h1>
+<ul>
+    {% for game in games %}
+    <li>{{ game }}</li>
+    {% endfor %}
+</ul>
+{% endblock %}
+
+4. Обновите urls.py
+4.1. Импортируйте представления:
+
+В UrbanDjango/urls.py замените импорты представлений из task3 на импорты из task4.
+
+Пример:
+
+# UrbanDjango/urls.py
+from django.urls import path
+from task4.views import games_view, cart_view, index_view
 
 urlpatterns = [
-    path('view1/', view1, name='view1'),
-    path('view2/', view2, name='view2'),
+    path('', index_view, name='index'),
+    path('games/', games_view, name='games'),
+    path('cart/', cart_view, name='cart'),
+    # ...
 ]
 
-Шаг 6: Подключение приложения task4
-Подключите Ваше новое приложение в проект:
-В файле settings.py Вашего проекта добавьте task4 в список INSTALLED_APPS:
+5. Подключите приложение task4 к проекту
+5.1. Измените settings.py:
 
+В файле settings.py убедитесь, что task4 добавлено в INSTALLED_APPS.
+
+# UrbanDjango/settings.py
 INSTALLED_APPS = [
-    # другие приложения
+    # ...
     'task4',
 ]
 
-Шаг 7: Запуск сервера
-Запустите сервер:
-Выполните в терминале команду:
+6. Запустите сервер
+6.1. Запустите сервер:
 
 python manage.py runserver
-Перейдите в браузере по адресу http://127.0.0.1:8000/view1/ и http://127.0.0.1:8000/view2/ для проверки изменений.
 
-Шаг 8: Проверка и исправление ошибок
-Проверьте все страницы:
-Убедитесь, что все страницы отображаются так же, как и ранее. Если что-то не работает, проверьте детали в каждом из шагов.
+6.2. Проверьте приложение:
 
-Шаг 9: Использование циклов в шаблонах
-Используйте цикл for в Ваших шаблонах:
-В шаблонах, где Вы хотите отобразить список игр, используйте следующий код:
+Перейдите по соответствующим URL (например, /, /games/, /cart/, и т.д.) и убедитесь, что страницы отображаются корректно.
+
+7. Проверка на ошибки
+7.1. Если страницы не отображаются как ожидалось, проверьте:
+
+Правильность передачи контекстов в представлениях.
+Наличие и правильность ссылок в шаблонах.
+Корректность путей к шаблонам.
 
 <ul>
     {% for game in games %}
