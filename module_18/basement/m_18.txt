@@ -485,3 +485,106 @@ urlpatterns = [
 Шаг 5: Завершение
 Добавь шаблон success.html для отображения успешного сообщения после регистрации.
 Не забудь сделать commit'ы и выполнить push на GitHub.
+
+
+структура проекта
+
+UrbanDjango/
+|    example1/
+|    |----migrations/
+|    |    |----__init__.py
+|    |----__init__.py
+|    |----admin.py
+|    |----apps.py
+|    |----models.py
+|    |----tests.py
+|    |----views.py
+|    example2/
+|    |----migrations/
+|    |    |----__init__.py
+|    |----__init__.py
+|    |----admin.py
+|    |----apps.py
+|    |----models.py
+|    |----tests.py
+|    |----views.py
+|    example3/
+|    |    migrations/
+|    |    |    __init__.py
+|    |    __init__.py
+|    |    admin.py
+|    |    apps.py
+|    |    models.py
+|    |    tests.py
+|    |    views.py
+|    task2/
+|    |    migrations/
+|    |    |    __init__.py
+|    |    __init__.py
+|    |    admin.py
+|    |    apps.py
+|    |    models.py
+|    |    tests.py
+|    |    urls.py
+|    |    views.py
+|    task3/
+|    |    migrations/
+|    |    |    __init__.py
+|    |    __init__.py
+|    |    admin.py
+|    |    apps.py
+|    |    models.py
+|    |    tests.py
+|    |    urls.py
+|    |    views.py
+|    task4/
+|    |    migrations/
+|    |    |    __init__.py
+|    |    __init__.py
+|    |    admin.py
+|    |    apps.py
+|    |    models.py
+|    |    tests.py
+|    |    urls.py
+|    |    views.py
+|    task5/
+|    |    migrations/
+|    |    |   __init__.py
+|    |    __init__.py
+|    |    admin.py
+|    |    apps.py
+|    |    models.py
+|    |    tests.py
+|    |    urls.py
+|    |    views.py
+|    templates/
+|    |    fifth_task/
+|    |    |   <>registration_page.html
+|    |    fourth_task/
+|    |    |    <>cart.html
+|    |    |    <>games.html
+|    |    |    <>index.html
+|    |    |    <>menu.html
+|    |    |    <>platform.html
+|    |    |    <>shop.html
+|    |    second_task/
+|    |    |   <>class_template.html
+|    |    |    <>func_template.html
+|    |    third_task/
+|    |    |    <>cart.html
+|    |    |    <>games.html
+|    |    |    <>index.html
+|    |    |    <>platform.html
+|    |    |    <>shop.html
+|    UrbanDjango/
+|    |    __init__.py
+|    |    asgi.py
+|    |    settings.py
+|    |    urls.py
+|    |    wsgi.py
+|    __init__.py
+|    db.sqlite3
+|    manage.py
+|    README.md
+|    requirements.txt
+|    urls.py
