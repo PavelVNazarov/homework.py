@@ -1,15 +1,12 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <title>Главная страница</title>
-</head>
-<body>
+{% extends "fourth_task/menu.html" %}
+
+{% block pagename %}Главная страница{% endblock %}
+
+{% block content %}
     <h1>Главная страница</h1>
-    <nav>
-        <a href="{% url 'main_page' %}">Главная</a>
-        <a href="{% url 'shop_page' %}">Магазин</a>
-        <a href="{% url 'cart_page' %}">Корзина</a>
-    </nav>
-</body>
-</html>
+    <ul>
+        <a href="/">Главная</a>
+        <a href="/games/">Магазин</a>
+        <a href="/cart/">Корзина</a>
+    </ul>
+{% endblock %}

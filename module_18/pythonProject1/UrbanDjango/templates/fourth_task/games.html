@@ -1,17 +1,13 @@
+{% extends "fourth_task/menu.html" %}
 
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <title>Магазин</title>
-</head>
-<body>
+{% block pagename %}Магазин{% endblock %}
+
+{% block content %}
     <h1>Магазин</h1>
     <ul>
-        {% for key, value in items.items %}
-            <li>{{ value }} <button>Купить</button></li>
+        {% for game in games %}
+            <li>{{ game }} <button>Купить</button></li>
         {% endfor %}
     </ul>
-    <a href="{% url 'main_page' %}">Вернуться на главную</a>
-</body>
-</html>
+    <a href="/">Вернуться на главную</a>
+{% endblock %}
