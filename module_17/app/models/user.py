@@ -1,10 +1,10 @@
-# Домашнее задание по теме "Модели SQLALchemy. Отношения между таблицами."
+#
 # Назаров ПВ
-# module_17_2.py
+# module_17_4.py
 
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
-from backend.db import Base  # Импортируем базовый класс
+from .backend.db import Base  # Импортируем базовый класс
 
 
 class User(Base):

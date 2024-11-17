@@ -1,11 +1,11 @@
-# Домашнее задание по теме "Миграции. Библиотека alembic."
+# pip install python-slugify
 # Назаров ПВ
-# module_17_3.py
+# module_17_4.py
 
 from fastapi import FastAPI
-from .backend.db import engine
+from backend.db import engine
 #from .models import Base
-from .backend.db import Base
+from backend.db import Base
 app = FastAPI()
 
 # Создание таблиц
