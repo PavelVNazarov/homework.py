@@ -1,104 +1,39 @@
-Разберём структуру проекта и то, что будет в каждом файле.
+Задание 1: Основные маршруты
+Создайте файловую структуру:
 
-Файловая структура
-app/ — основной каталог приложения.
+app/
+    backend/
+        db.py
+    models/
+        __init__.py
+        task.py
+        user.py
+    routers/
+        __init__.py
+        task.py
+        user.py
+    __init__.py
+    main.py
+    schemas.py
 
-routers/ — каталог для маршрутов (APIRouter).
 
-__init__.py — делает каталог "routers" пакетом Python.
-task.py — содержит маршруты для управления задачами.
-user.py — содержит маршруты для управления пользователями.
-__init__.py — делает каталог "app" пакетом Python.
-
-main.py — основной файл, где создаётся экземпляр FastAPI и подключаются маршруты.
-
-schemas.py — содержит Pydantic модели для валидации данных.
-
-Что делает каждый оператор в основных файлах
-main.py
+main.py:
 
 from fastapi import FastAPI
-from routers.task import router as task_router
-from routers.user import router as user_router
+from routers import task, user
+
 
 app = FastAPI()
 
 @app.get("/")
-async def read_root():
+async def root():
     return {"message": "Welcome to Taskmanager"}
 
-app.include_router(task_router, prefix="/task", tags=["task"])
-app.include_router(user_router, prefix="/user", tags=["user"])
-Импортирует FastAPI и маршруты из файлов task.py и user.py.
-Создаёт экземпляр FastAPI.
-Определяет маршрут для корневого URL (/), который возвращает приветственное сообщение.
-Подключает маршруты для задач и пользователей, добавляя соответствующие префиксы и теги.
-task.py
+app.include_router(task.router, prefix="/task", tags=["task"])
+app.include_router(user.router, prefix="/user", tags=["user"])
 
-from fastapi import APIRouter
 
-router = APIRouter()
-
-@router.get("/")
-async def all_tasks():
-    pass
-
-@router.get("/{task_id}")
-async def task_by_id(task_id: int):
-    pass
-
-@router.post("/create")
-async def create_task(task: CreateTask):
-    pass
-
-@router.put("/update")
-async def update_task(task_id: int, task: UpdateTask):
-    pass
-
-@router.delete("/delete")
-async def delete_task(task_id: int):
-    pass
-Создаёт экземпляр APIRouter.
-Определяет маршруты:
-GET / — возвращает все задачи.
-GET /{task_id} — возвращает задачу по ID.
-POST /create — создаёт новую задачу.
-PUT /update — обновляет существующую задачу.
-DELETE /delete — удаляет задачу по ID.
-user.py
-
-from fastapi import APIRouter
-
-router = APIRouter()
-
-@router.get("/")
-async def all_users():
-    pass
-
-@router.get("/{user_id}")
-async def user_by_id(user_id: int):
-    pass
-
-@router.post("/create")
-async def create_user(user: CreateUser):
-    pass
-
-@router.put("/update")
-async def update_user(user_id: int, user: UpdateUser):
-    pass
-
-@router.delete("/delete")
-async def delete_user(user_id: int):
-    pass
-Создаёт экземпляр APIRouter.
-Определяет маршруты:
-GET / — возвращает всех пользователей.
-GET /{user_id} — возвращает пользователя по ID.
-POST /create — создаёт нового пользователя.
-PUT /update — обновляет существующего пользователя.
-DELETE /delete — удаляет пользователя по ID.
-
-schemas.py
+schemas.py:
 
 from pydantic import BaseModel
 
@@ -118,45 +53,287 @@ class CreateTask(BaseModel):
     content: str
     priority: int
 
-class UpdateTask(BaseModel):
-    title: str
-    content: str
-    priority: int
-Определяет Pydantic модели для валидации данных:
-CreateUser и UpdateUser для пользователей.
-CreateTask и UpdateTask для задач.
-Каждая модель содержит атрибуты, которые будут использоваться при создании или обновлении объектов в базе данных.
+class UpdateTask(CreateTask):
+    pass
 
 
-Проверка Swagger
-
-Запуск сервера
-python -m uvicorn main:app --reload
-
-После запуска, открыть браузер и перейти по адресу http://127.0.0.1:8000/docs. Там автоматически сгенерированная документация Swagger для API.
-
-Теперь есть подготовленная структура для работы с API задач и пользователей!
-
-
-В файлах __init__.py обычно размещают код, который позволяет сделать директорию распознаваемой как пакет Python. Также можно импортировать необходимые компоненты или функции из других модулей пакета.
-
-Вот пример содержимого для каждого __init__.py:
-
-app/__init__.py:
-# Здесь можно оставить файл пустым, если нет дополнительных инициализаций
-
-
-app/routers/__init__.py:
+routers/task.py:
 
 from fastapi import APIRouter
 
-# Импортируем роутеры
-from .task import router as task_router
-from .user import router as user_router
-
-# Создаем главный роутер и объединяем маршруты
 router = APIRouter()
-router.include_router(task_router)
-router.include_router(user_router)
 
-Основная задача __init__.py в этом случае — создать модульный интерфейс, который сводит все маршруты к одному APIRouter, который мы затем будем подключать в main.py.
+@router.get("/")
+async def all_tasks():
+    pass
+
+@router.get("/{task_id}")
+async def task_by_id(task_id: int):
+    pass
+
+@router.post("/create")
+async def create_task():
+    pass
+
+@router.put("/update")
+async def update_task():
+    pass
+
+@router.delete("/delete")
+async def delete_task():
+    pass
+
+
+routers/user.py:
+
+from fastapi import APIRouter
+
+router = APIRouter()
+
+@router.get("/")
+async def all_users():
+    pass
+
+@router.get("/{user_id}")
+async def user_by_id(user_id: int):
+    pass
+
+@router.post("/create")
+async def create_user():
+    pass
+
+@router.put("/update")
+async def update_user():
+    pass
+
+@router.delete("/delete")
+async def delete_user():
+    pass
+
+
+Задание 2: Модели SQLAlchemy
+db.py:
+
+from sqlalchemy import create_engine
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
+
+DATABASE_URL = 'sqlite:///taskmanager.db'
+
+engine = create_engine(DATABASE_URL)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
+Base = declarative_base()
+models/task.py:
+
+from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
+from sqlalchemy.orm import relationship
+from . import Base
+
+class Task(Base):
+    __tablename__ = 'tasks'
+    
+    id = Column(Integer, primary_key=True, index=True)
+    title = Column(String)
+    content = Column(String)
+    priority = Column(Integer, default=0)
+    completed = Column(Boolean, default=False)
+    user_id = Column(Integer, ForeignKey('users.id'), nullable=False, index=True)
+    slug = Column(String, unique=True, index=True)
+    
+    user = relationship("User", back_populates="tasks")
+models/user.py:
+
+from sqlalchemy import Column, Integer, String
+from sqlalchemy.orm import relationship
+from . import Base
+
+class User(Base):
+    __tablename__ = 'users'
+    
+    id = Column(Integer, primary_key=True, index=True)
+    username = Column(String)
+    firstname = Column(String)
+    lastname = Column(String)
+    age = Column(Integer)
+    slug = Column(String, unique=True, index=True)
+
+    tasks = relationship("Task", back_populates="user")
+models/__init__.py:
+
+from .user import User
+from .task import Task
+
+Создайте таблицы в базе данных с помощью:
+
+# main.py
+if __name__ == "__main__":
+    import uvicorn
+    from models import Base
+    from db import engine
+
+    Base.metadata.create_all(bind=engine)
+    uvicorn.run(app, host="127.0.0.1", port=8000)
+
+Задание 3: Миграции Alembic
+Установите Alembic:
+
+pip install alembic
+
+Инициализация Alembic:
+
+alembic init alembic
+Измените alembic.ini:
+
+TOML, also INI
+
+# Обновите строку sqlAlchemy.url
+sqlalchemy.url = sqlite:///taskmanager.db
+
+Измените env.py:
+
+from models import Base  # добавьте код импорта
+target_metadata = Base.metadata  # обновите целевой метаданные
+
+Сгенерируйте миграцию:
+
+alembic revision --autogenerate -m "Initial migration"
+
+Примените миграции:
+
+alembic upgrade head
+
+Задание 4: Маршрутизация пользователей
+Создайте файл db_depends.py:
+
+from sqlalchemy.orm import Session
+from .db import SessionLocal
+
+def get_db() -> Session:
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+Обновите routers/user.py:
+
+from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy.orm import Session
+from backend.db_depends import get_db
+from models import User
+from schemas import CreateUser, UpdateUser
+from sqlalchemy import select, insert, update, delete
+from slugify import slugify
+
+router = APIRouter()
+
+@router.get("/")
+async def all_users(db: Session = Depends(get_db)):
+    users = db.execute(select(User)).scalars().all()
+    return users
+
+@router.get("/{user_id}")
+async def user_by_id(user_id: int, db: Session = Depends(get_db)):
+    user = db.execute(select(User).where(User.id == user_id)).scalar_one_or_none()
+    if user is None:
+        raise HTTPException(status_code=404, detail="User was not found")
+    return user
+
+@router.post("/create")
+async def create_user(user: CreateUser, db: Session = Depends(get_db)):
+    db_user = User(**user.dict(), slug=slugify(user.username))
+    db.add(db_user)
+    db.commit()
+    return {'status_code': status.HTTP_201_CREATED, 'transaction': 'Successful'}
+
+@router.put("/update")
+async def update_user(user_id: int, user: UpdateUser, db: Session = Depends(get_db)):
+    db_user = db.execute(select(User).where(User.id == user_id)).scalar_one_or_none()
+    if db_user is None:
+        raise HTTPException(status_code=404, detail="User was not found")
+    
+    for key, value in user.dict().items():
+        setattr(db_user, key, value)
+
+    db.commit()
+    return {'status_code': status.HTTP_200_OK, 'transaction': 'User update is successful!'}
+
+@router.delete("/delete")
+async def delete_user(user_id: int, db: Session = Depends(get_db)):
+    db_user = db.execute(select(User).where(User.id == user_id)).scalar_one_or_none()
+    if db_user is None:
+        raise HTTPException(status_code=404, detail="User was not found")
+    
+    db.delete(db_user)
+    db.commit()
+    return {'status_code': status.HTTP_204_NO_CONTENT, 'transaction': 'User deleted successfully!'}
+
+Задание 5: Маршрутизация заданий
+Обновите routers/task.py с Вашей логикой функций:
+
+from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy.orm import Session
+from backend.db_depends import get_db
+from models import Task, User
+from schemas import CreateTask, UpdateTask
+from sqlalchemy import insert, select, update, delete
+from slugify import slugify
+
+router = APIRouter()
+
+@router.get("/")
+async def all_tasks(db: Session = Depends(get_db)):
+    tasks = db.execute(select(Task)).scalars().all()
+    return tasks
+
+@router.get("/{task_id}")
+async def task_by_id(task_id: int, db: Session = Depends(get_db)):
+    task = db.execute(select(Task).where(Task.id == task_id)).scalar_one_or_none()
+    if task is None:
+        raise HTTPException(status_code=404, detail="Task was not found")
+    return task
+
+@router.post("/create")
+async def create_task(task: CreateTask, user_id: int, db: Session = Depends(get_db)):
+    user = db.execute(select(User).where(User.id == user_id)).scalar_one_or_none()
+    if user is None:
+        raise HTTPException(status_code=404, detail="User was not found")
+    
+    db_task = Task(**task.dict(), user_id=user_id, slug=slugify(task.title))
+    db.add(db_task)
+    db.commit()
+    return {'status_code': status.HTTP_201_CREATED, 'transaction': 'Successful'}
+
+@router.put("/update")
+async def update_task(task_id: int, task: UpdateTask, db: Session = Depends(get_db)):
+    db_task = db.execute(select(Task).where(Task.id == task_id)).scalar_one_or_none()
+    if db_task is None:
+        raise HTTPException(status_code=404, detail="Task was not found")
+    
+    for key, value in task.dict().items():
+        setattr(db_task, key, value)
+
+    db.commit()
+    return {'status_code': status.HTTP_200_OK, 'transaction': 'Task update is successful!'}
+
+@router.delete("/delete")
+async def delete_task(task_id: int, db: Session = Depends(get_db)):
+    db_task = db.execute(select(Task).where(Task.id == task_id)).scalar_one_or_none()
+    if db_task is None:
+        raise HTTPException(status_code=404, detail="Task was not found")
+    
+    db.delete(db_task)
+    db.commit()
+    return {'status_code': status.HTTP_204_NO_CONTENT, 'transaction': 'Task deleted successfully!'}
+
+@router.get("/user/{user_id}/tasks")
+async def tasks_by_user_id(user_id: int, db: Session = Depends(get_db)):
+    tasks = db.execute(select(Task).where(Task.user_id == user_id)).scalars().all()
+    return tasks
+
+Результаты и проверки
+Теперь Вы можете запустить сервер FastAPI и протестировать все маршруты через Swagger UI (обычно доступный по /docs). Убедитесь, что все операции по созданию, получению, обновлению и удалению работают корректно.
+
+Для создания и проверки данных, используйте интерфейс Swagger и следуйте инструкциям, указанным в заданиях.
+
