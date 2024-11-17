@@ -1,17 +1,15 @@
-from django.shortcuts import render, redirect
+from django.views import View
+from django.shortcuts import render
 
-def index(request):
-    return render(request, 'third_task/index.html')
+class HomeView(View):
+    def get(self, request):
+        return render(request, "fourth_task/platform.html")
 
-def shop(request):
-    items = {
-        'item1': 'Игра A - 1000 руб.',
-        'item2': 'Игра B - 1500 руб.',
-        'item3': 'Игра C - 2000 руб.',
-    }
-    return render(request, 'third_task/shop.html', {'items': items})
+class StoreView(View):
+    def get(self, request):
+        context = {'games': ['Atomic Heart', 'Cyberpunk 2077']}
+        return render(request, "fourth_task/games.html", context)
 
-def cart(request):
-    return render(request, 'third_task/cart.html')
-
-context = {'games': ['Atomic Heart', 'Cyberpunk 2077']}
+class CartView(View):
+    def get(self, request):
+        return render(request, "fourth_task/cart.html")
