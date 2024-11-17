@@ -1,10 +1,10 @@
-# Домашнее задание по теме
+#
 # ННазаров ПВ
-# module_17_2.py
+# module_17.py
 
 from fastapi import APIRouter
 
-router = APIRouter(prefix="/task", tags=["task"])
+router = APIRouter()
 
 @router.get("/")
 async def all_tasks():

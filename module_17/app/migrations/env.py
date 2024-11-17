@@ -7,6 +7,8 @@ from alembic import context
 
 from backend.db import Base
 
+from models import Base  # добавьте код импорта
+
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

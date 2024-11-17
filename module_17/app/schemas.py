@@ -1,6 +1,6 @@
-# Домашнее задание по теме "Модели SQLALchemy. Отношения между таблицами."
+#
 # ННазаров ПВ
-# module_17_2.py
+# module_17.py
 
 from pydantic import BaseModel
 
@@ -20,7 +20,5 @@ class CreateTask(BaseModel):
     content: str
     priority: int
 
-class UpdateTask(BaseModel):
-    title: str
-    content: str
-    priority: int
+class UpdateTask(CreateTask):
+    pass

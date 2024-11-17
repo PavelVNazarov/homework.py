@@ -1,21 +1,24 @@
 # pip install python-slugify
 # Назаров ПВ
-# module_17_4.py
+# module_17.py
 
 from fastapi import FastAPI
-from backend.db import engine
-#from .models import Base
-from backend.db import Base
+from routers import task, user
+
+
 app = FastAPI()
 
-# Создание таблиц
-Base.metadata.create_all(bind=engine)
-
 @app.get("/")
-def read_root():
+async def root():
     return {"message": "Welcome to Taskmanager"}
 
-# Запуск приложения
+app.include_router(task.router, prefix="/task", tags=["task"])
+app.include_router(user.router, prefix="/user", tags=["user"])
+
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    from models import Base
+    from db import engine
+
+    Base.metadata.create_all(bind=engine)
+    uvicorn.run(app, host="127.0.0.1", port=8000)
