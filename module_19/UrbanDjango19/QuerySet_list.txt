@@ -1,0 +1,21 @@
+список QuerySet запросов в порядке вызовов, которые использовали для внесения изменений в БД
+
+# Создаем покупателей
+buyer1 = Buyer.objects.create(name='John Doe', balance=100.00, age=25)  # старше 18
+buyer2 = Buyer.objects.create(name='Jane Doe', balance=50.00, age=16)   # младше 18
+buyer3 = Buyer.objects.create(name='Alice Smith', balance=150.00, age=30)  # старше 18
+
+# Создаем игры
+game1 = Game.objects.create(title='Game A', cost=59.99, size=15.0, description='Exciting game', age_limited=True)
+game2 = Game.objects.create(title='Game B', cost=49.99, size=10.0, description='Another game', age_limited=False)
+game3 = Game.objects.create(title='Game C', cost=29.99, size=5.0, description='Fun game', age_limited=True)
+
+# Назначаем покупателей
+game1.buyers.set([buyer1, buyer3])  # Оба покупателя могут купить эту игру
+game2.buyers.set([buyer1])           # Только взрослый покупатель
+game3.buyers.set([buyer1, buyer3])  # Оба взрослые
+
+# Проверяем связи
+print(buyer1.games.all())  # Вернет все игры, купленные buyer1
+print(buyer2.games.all())  # Не должно вернуть ничего
+print(buyer3.games.all())  # Вернет игры, купленные buyer3
