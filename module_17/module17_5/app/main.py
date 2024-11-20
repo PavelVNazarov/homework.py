@@ -1,9 +1,9 @@
-# pip install python-slugify
+# uvicorn app.main:app --reload
 # Назаров ПВ
 # module_17.py
 
 from fastapi import FastAPI
-from routers import task, user
+from .routers import task, user
 
 
 app = FastAPI()
@@ -18,7 +18,7 @@ app.include_router(user.router, prefix="/user", tags=["user"])
 if __name__ == "__main__":
     import uvicorn
     from models import Base
-    from db import engine
+    from backend.db import engine
 
     Base.metadata.create_all(bind=engine)
     uvicorn.run(app, host="127.0.0.1", port=8000)
