@@ -1,3 +1,28 @@
+app/
+    backend/
+        db.py
+        db_depends.py
+    migrations/
+        versions/
+        env.py
+        README
+        script.py.maco
+    models/
+        __init__.py
+        task.py
+        user.py
+    routers/
+        __init__.py
+        task.py
+        user.py
+    __init__.py
+    alembic.ini
+    main.py
+    schemas.py
+    taskmanager.db
+
+
+
 1. Установка Alembic
 Откройте терминал и выполните команду:
 pip install alembic
