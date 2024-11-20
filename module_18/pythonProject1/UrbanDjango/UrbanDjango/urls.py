@@ -26,9 +26,9 @@ Including another URLconf
 # ]
 
 from django.contrib import admin
-from django.urls import path, include  # добавить include
+from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('register/', include('task5.urls')),  # добавьте этот маршрут
+    path('register/', include('task5.urls')), 
 ]
