@@ -1,7 +1,8 @@
-# Домашнее задание по теме "Модели SQLALchemy. Отношения между таблицами."
-# ННазаров ПВ
-# module_17_2.py
 
+# ННазаров ПВ
+# module_17.py
+from .user import User
+from .task import Task
 from fastapi import APIRouter
 
 # Импортируем роутеры
