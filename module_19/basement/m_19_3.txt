@@ -1,3 +1,35 @@
+структура проекта
+my_project/
+|     my_project/
+|    |    __init__.py
+|    |    asgi.py
+|    |    settings.py
+|    |    urls.py
+|    |    wsgi.py
+|    db.sqlite3
+|    manage.py
+|     task1/
+|    |    migrations/
+|    |    |    __init__.py
+|    |    __init__.py
+|    |    admin.py
+|    |    apps.py
+|    |    models.py
+|    |    tests.py
+|    |    urls.py
+|    |    views.py
+├── templates/
+|    |    fifth_task/
+|    |    |   <>registration_page.html
+|    |    fourth_task/
+|    |    |    <>cart.html
+|    |    |    <>games.html
+|    |    |    <>index.html
+|    |    |    <>menu.html
+|    |    |    <>platform.html
+|    |    |    <>shop.html
+
+
 Часть 1: Подготовка
 Перемещение представлений и шаблонов
 Перенесите представления и шаблоны из предыдущих заданий (Главная страница, Список товаров, Корзина, Регистрация) в приложение task1.
