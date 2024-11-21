@@ -1,26 +1,21 @@
 <!-- templates/fourth_task/menu.html -->
 <!--{% block pagename %}{% endblock %}-->
-
+<style>
+    nav a {
+        display: block; /* Изменяет поведение ссылок на блочное, чтобы они располагались друг под другом */
+        margin: 10px 0; /* Добавляет отступ между ссылками */
+        text-decoration: none; /* Убирает подчеркивание */
+        color: #000; /* Цвет текста ссылок */
+    }
+    nav a:hover {
+        color: #007BFF; /* Цвет текста при наведении */
+    }
+</style>
 {% block menu %}
 <nav>
-<!--    <a href="/">Главная</a>-->
-<!--    <a href="/games/">Магазин</a>-->
-<!--    <a href="/cart/">Корзина</a>-->
-</nav>
-{% endblock %}
-
-{% block content %}{% endblock %}
-
-<!-- templates/fourth_task/menu.html -->
-{% block pagename %}{% endblock %}
-
-{% block menu %}
-<nav>
-    <ul>
-        <li><a href="{% url 'main_page' %}">Главная</a></li>
-        <li><a href="{% url 'goods_list' %}">Магазин</a></li>
-        <li><a href="{% url 'cart' %}">Корзина</a></li>
-    </ul>
+    <a href="/">Главная</a>
+    <a href="{% url 'goods_list' %}">Магазин</a>
+    <a href="{% url 'cart' %}">Корзина</a>
 </nav>
 {% endblock %}
 

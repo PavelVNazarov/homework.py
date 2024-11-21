@@ -4,7 +4,7 @@ from .forms import UserRegister
 
 class HomeView(View):
     def get(self, request):
-        return render(request, "fourth_task/platform.html")
+        return render(request, 'fourth_task/platform.html')
 
 class StoreView(View):
     def get(self, request):
@@ -15,29 +15,33 @@ class CartView(View):
     def get(self, request):
         return render(request, "fourth_task/cart.html")
 
-
 # Псевдо-список существующих пользователей
 users = ["user1", "user2", "user3"]
+
+def handle_sign_up(form, info):
+    if form.is_valid():
+        username = form.cleaned_data['username']
+        password = form.cleaned_data['password']
+        repeat_password = form.cleaned_data['repeat_password']
+        age = form.cleaned_data['age']
+
+        if password != repeat_password:
+            info['error'] = 'Пароли не совпадают'
+        elif age < 18:
+            info['error'] = 'Вы должны быть старше 18'
+        elif username in users:
+            info['error'] = 'Пользователь уже существует'
+        else:
+            return True, username
+    return False, None
 
 def sign_up_by_django(request):
     info = {}
     if request.method == "POST":
         form = UserRegister(request.POST)
-        if form.is_valid():
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password']
-            repeat_password = form.cleaned_data['repeat_password']
-            age = form.cleaned_data['age']
-
-            if password != repeat_password:
-                info['error'] = 'Пароли не совпадают'
-            elif age < 18:
-                info['error'] = 'Вы должны быть старше 18'
-            elif username in users:
-                info['error'] = 'Пользователь уже существует'
-            else:
-                return render(request, 'fifth_task/registration_page.html', {"info": info, "success": f"Приветствуем, {username}!"})
-
+        success, username = handle_sign_up(form, info)
+        if success:
+            return render(request, 'fifth_task/registration_page.html', {"info": info, "success": f"Приветствуем, {username}!"})
     else:
         form = UserRegister()
 
@@ -45,5 +49,4 @@ def sign_up_by_django(request):
     return render(request, 'fifth_task/registration_page.html', info)
 
 def sign_up_by_html(request):
-    # Можно реализовать аналогично первому представлению
     return sign_up_by_django(request)
