@@ -1,9 +1,11 @@
-{% extends "fourth_task/menu.html" %}
+<!--{% extends "fourth_task/menu.html" %}-->
 
 {% block pagename %}Корзина{% endblock %}
 
 {% block content %}
     <h1>Корзина</h1>
-    <p>Здесь Вы можете управлять своими играми.</p>
-    <!--<a href="/">Вернуться на главную</a>-->
+    <a href="/">Главная</a>
+    <a href="{% url 'goods_list' %}">Магазин</a>
+    <a href="{% url 'sign_up' %}">Регистрация</a>
+    <p>Извините, Ваша корзина пуста.</p>
 {% endblock %}

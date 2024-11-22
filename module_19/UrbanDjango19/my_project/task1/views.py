@@ -1,6 +1,7 @@
 from django.views import View
 from django.shortcuts import render
 from .forms import UserRegister
+from .models import Game, Buyer
 
 class HomeView(View):
     def get(self, request):
@@ -50,3 +51,22 @@ def sign_up_by_django(request):
 
 def sign_up_by_html(request):
     return sign_up_by_django(request)
+
+
+def home(request):
+    return render(request, 'task1/home.html')
+
+def product_list(request):
+    games = Game.objects.all()
+    return render(request, 'task1/product_list.html', {'games': games})
+
+def cart(request):
+    return render(request, 'task1/cart.html')
+
+def register(request):
+    if request.method == 'POST':
+        name = request.POST['name']
+        if not Buyer.objects.filter(name=name).exists():
+            buyer = Buyer.objects.create(name=name, balance=0, age=18)  # Возраст можно изменить
+            buyer.save()
+    return render(request, 'task1/register.html')

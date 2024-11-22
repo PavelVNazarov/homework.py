@@ -3,6 +3,7 @@
 from django.urls import path
 from . import views
 from .views import sign_up_by_django, sign_up_by_html, HomeView, StoreView, CartView
+from .views import home, product_list, cart, register
 
 urlpatterns = [
     path('', HomeView.as_view(), name='main_page'),
@@ -12,3 +13,10 @@ urlpatterns = [
     path('django_sign_up/', sign_up_by_html, name='django_sign_up'),
     path('games/', StoreView.as_view(), name='games_list'),
 ]
+
+# urlpatterns = [
+#     path('', home, name='home'),
+#     path('products/', product_list, name='product_list'),
+#     path('cart/', cart, name='cart'),
+#     path('register/', register, name='register'),
+# ]
