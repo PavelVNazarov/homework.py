@@ -1,7 +1,8 @@
 from django.views import View
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .forms import UserRegister
 from .models import Game, Buyer
+
 
 class HomeView(View):
     def get(self, request):
@@ -17,7 +18,7 @@ class CartView(View):
         return render(request, "fourth_task/cart.html")
 
 # Псевдо-список существующих пользователей
-users = ["user1", "user2", "user3"]
+# users = ["user1", "user2", "user3"]
 
 def handle_sign_up(form, info):
     if form.is_valid():
@@ -60,13 +61,26 @@ def product_list(request):
     games = Game.objects.all()
     return render(request, 'task1/product_list.html', {'games': games})
 
+def game_list(request):
+    games = Game.objects.all()  # Получаем все записи из модели Game
+    return render(request, 'games.html', {'games': games})
+
 def cart(request):
     return render(request, 'task1/cart.html')
 
+
 def register(request):
     if request.method == 'POST':
-        name = request.POST['name']
-        if not Buyer.objects.filter(name=name).exists():
-            buyer = Buyer.objects.create(name=name, balance=0, age=18)  # Возраст можно изменить
-            buyer.save()
+        username = request.POST.get('name')
+
+        # Проверяем, существует ли пользователь
+        if not Buyer.objects.filter(name=username).exists():
+            # Если не существует, создаем нового пользователя
+            Buyer.objects.create(name=username)
+            return redirect('success_url')  # перенаправление на успешную страницу
+        else:
+            # Если существует, отображаем сообщение об ошибке
+            error_message = "Пользователь с таким именем уже существует."
+            return render(request, 'task1/register.html', {'error': error_message})
+
     return render(request, 'task1/register.html')

@@ -9,7 +9,10 @@
     <a href="{% url 'sign_up' %}">Регистрация</a>
     <ul>
         {% for game in games %}
-            <li>{{ game }} <button>Купить</button></li>
+            <div>
+                <h2>{{ game.name }} | {{ game.description }}. Стоимость: {{ game.price }}</h2>
+                <button>Купить</button>
+            </div>
         {% endfor %}
     </ul>
 {% endblock %}
