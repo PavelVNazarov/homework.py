@@ -10,11 +10,12 @@ class Buyer(models.Model):
 
 class Game(models.Model):
     title = models.CharField(max_length=100)
-    cost = models.DecimalField(max_digits=10, decimal_places=2)
-    size = models.DecimalField(max_digits=10, decimal_places=2)
+    cost = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)  # Значение по умолчанию
+    size = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     description = models.TextField()
     age_limited = models.BooleanField(default=False)
     buyers = models.ManyToManyField(Buyer, related_name='games')
+    price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
 
     def __str__(self):
         return self.title
