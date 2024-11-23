@@ -1,0 +1,146 @@
+Часть 1: Создание приложения Django и вывод постов с пагинацией
+Установи Django (если у тебя его еще нет):
+
+pip install django
+
+Создай новый проект Django:
+
+django-admin startproject blog_project
+cd blog_project
+
+Создай новое приложение:
+
+python manage.py startapp blog
+
+Добавь приложение в настройки проекта:
+В settings.py добавь 'blog', в INSTALLED_APPS.
+
+Создай модель:
+В blog/models.py добавь модель для поста:
+
+from django.db import models
+
+class Post(models.Model):
+    title = models.CharField(max_length=200)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
+
+Создай и применить миграции:
+
+python manage.py makemigrations
+python manage.py migrate
+
+Создай представление (view):
+В blog/views.py добавь представление для отображения постов с пагинацией:
+
+from django.shortcuts import render
+from .models import Post
+from django.core.paginator import Paginator
+
+def post_list(request):
+    post_list = Post.objects.all()
+    paginator = Paginator(post_list, 5)  # 5 постов на странице
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'blog/post', {'page_obj': page_obj})
+
+Создай шаблон:
+Создай папку templates/blog/ в директории приложения, затем создай файл post_list.html:
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Posts</title>
+</head>
+<body>
+    <h1>Blog Posts</h1>
+    <ul>
+        {% for post in page_obj %}
+            <li>{{ post.title }} - {{ post.content }}</li>
+        {% endfor %}
+    </ul>
+
+    <div class="pagination">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="?page=1">&laquo; first</a>
+                <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+            </span>
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">next</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+</body>
+</html>
+
+Настрой маршруты (urls):
+В blog/urls.py создай файл и добавь следующее:
+
+from django.urls import path
+from .views import post_list
+
+urlpatterns = [
+    path('', post_list, name='post_list'),
+]
+
+Затем подключи его в blog_project/urls.py:
+
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', include('blog.urls')),
+]
+
+
+Запусти сервер:
+
+python manage.py runserver
+
+Часть 2: Кастомизация пагинации и выбор количества постов на странице
+
+Добавь форму выбора количества постов на странице:
+Измени post_list.html:
+
+<form method="get">
+    <label for="post_count">Постов на странице:</label>
+    <select name="post_count" id="post_count" onchange="this.form.submit()">
+        <option value="5" {% if request.GET.post_count == '5' %}selected{% endif %}>5</option>
+        <option value="10" {% if request.GET.post_count == '10' %}selected{% endif %}>10</option>
+        <option value="15" {% if request.GET.post_count == '15' %}selected{% endif %}>15</option>
+    </select>
+    <input type="hidden" name="page" value="{{ page_obj.number }}">
+</form>
+
+<ul>
+    {% for post in page_obj %}
+        <li>{{ post.title }} - {{ post.content }}</li>
+    {% endfor %}
+</ul>
+
+Измени представление, чтобы учитывать выбор количества постов:
+В blog/views.py обнови post_list:
+
+def post_list(request):
+    post_list = Post.objects.all()
+    post_count = int(request.GET.get('post_count', 5))  # По умолчанию 5
+    paginator = Paginator(post_list, post_count)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'blog/post_list.html', {'page_obj': page_obj, 'request': request})
+
+Создай свой собственный шаблон пагинации:
+Измени блок <div class="pagination">, чтобы добавить стили по своему усмотрению.
