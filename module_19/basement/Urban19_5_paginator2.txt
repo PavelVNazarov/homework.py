@@ -1,0 +1,144 @@
+разберем выполнение заданий шаг за шагом. Начнем с первого задания по созданию приложения Django с пагинацией.
+
+Шаг 1: Установка Django
+Если у тебя еще не установлен Django, установи его, выполнив команду:
+
+pip install django
+
+Шаг 2: Создание проекта и приложения
+Создай новый проект и приложение:
+
+django-admin startproject myproject
+cd myproject
+django-admin startapp blog
+
+Шаг 3: Определение модели
+Открой файл blog/models.py и добавь модель для поста блога:
+
+from django.db import models
+
+class Post(models.Model):
+    title = models.CharField(max_length=200)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
+
+Шаг 4: Регистрация модели в админке
+Открой blog/admin.py и зарегистрируй модель:
+
+from django.contrib import admin
+from .models import Post
+
+admin.site.register(Post)
+
+Шаг 5: Миграции
+Не забудь создать и применить миграции:
+
+python manage.py makemigrations
+python manage.py migrate
+
+Шаг 6: Настройка представления (view)
+Открой blog/views.py и добавь следующее представление для пагинации:
+
+from django.shortcuts import render
+from .models import Post
+from django.core.paginator import Paginator
+
+def post_list(request):
+    posts = Post.objects.all()
+    paginator = Paginator(posts, 5)  # Показывать 5 постов на странице
+
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'blog/post_list.html', {'page_obj': page_obj})
+
+Шаг 7: Настройка URL
+Открой blog/urls.py и добавь URL-адрес для представления:
+
+from django.urls import path
+from .views import post_list
+
+urlpatterns = [
+    path('', post_list, name='post_list'),
+]
+
+И не забудь подключить эти URL в myproject/urls.py:
+
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', include('blog.urls')),
+]
+
+Шаг 8: Создание шаблона
+Создай папку blog/templates/blog/ и файл post_list.html внутри нее. Добавь следующий код:
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Блог</title>
+    <style>
+        /* Простейшие стили для пагинации */
+        .pagination {
+            display: flex;
+            list-style: none;
+            padding: 0;
+        }
+
+        .pagination li {
+            margin: 5px;
+        }
+
+        .pagination a {
+            text-decoration: none;
+            padding: 5px 10px;
+            border: 1px solid #ccc;
+            color: #333;
+        }
+
+        .pagination .active a {
+            background-color: #007bff;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>Список постов</h1>
+    <div>
+        {% for post in page_obj %}
+            <h2>{{ post.title }}</h2>
+            <p>{{ post.content }}</p>
+        {% endfor %}
+    </div>
+
+    <div class="pagination">
+        <span>Страницы:</span>
+        <ul>
+            {% for i in page_obj.paginator.page_range %}
+                <li{% if page_obj.number == i %} class="active"{% endif %}>
+                    <a href="?page={{ i }}">{{ i }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div>
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">Следующая</a>
+        {% endif %}
+    </div>
+</body>
+</html>
+
+Шаг 9: Запуск сервера
+Теперь можно запустить сервер и проверить все:
+
+python manage.py runserver
+Шаг 10: Добавление кастомного шаблона пагинации
+Для изменения блока <div class="pagination">, Вы можете изменить стили или структуру HTML по своему усмотрению в файле post_list.html. Например, добавление выпадающего списка для выбора количества постов на странице потребует дополнительно JavaScript и изменения текущего запроса.
