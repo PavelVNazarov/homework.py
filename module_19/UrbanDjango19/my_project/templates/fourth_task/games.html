@@ -4,13 +4,13 @@
 
 {% block content %}
     <h1>Магазин</h1>
-    <a href="/">Главная</a>
-    <a href="{% url 'cart' %}">Корзина</a>
-    <a href="{% url 'sign_up' %}">Регистрация</a>
+    <li><a href="/">Главная</a></li>
+    <li><a href="{% url 'cart' %}">Корзина</a></li>
+    <li><a href="{% url 'sign_up' %}">Регистрация</a></li>
     <ul>
         {% for game in games %}
             <div>
-                <h2>{{ game.name }} | {{ game.description }}. Стоимость: {{ game.price }}</h2>
+                <h2>{{ game.title }} | {{ game.description }}. Стоимость: {{ game.price }}</h2>
                 <button>Купить</button>
             </div>
         {% endfor %}

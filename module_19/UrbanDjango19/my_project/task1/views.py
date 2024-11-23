@@ -57,13 +57,13 @@ def sign_up_by_html(request):
 def home(request):
     return render(request, 'task1/home.html')
 
-def product_list(request):
-    games = Game.objects.all()
-    return render(request, 'task1/product_list.html', {'games': games})
+# def product_list(request):
+#     games = Game.objects.all()
+#     return render(request, 'task1/product_list.html', {'games': games})
 
 def game_list(request):
     games = Game.objects.all()  # Получаем все записи из модели Game
-    return render(request, 'games.html', {'games': games})
+    return render(request, 'fourth_task/games.html', {'games': games})
 
 def cart(request):
     return render(request, 'task1/cart.html')

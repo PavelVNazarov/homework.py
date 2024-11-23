@@ -4,8 +4,8 @@
 
 {% block content %}
     <h1>Корзина</h1>
-    <a href="/">Главная</a>
-    <a href="{% url 'goods_list' %}">Магазин</a>
-    <a href="{% url 'sign_up' %}">Регистрация</a>
+    <li><a href="/">Главная</a></li>
+    <li><a href="{% url 'games_list' %}">Магазин</a></li>
+    <li><a href="{% url 'sign_up' %}">Регистрация</a></li>
     <p>Извините, Ваша корзина пуста.</p>
 {% endblock %}
