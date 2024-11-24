@@ -57,7 +57,7 @@ async def main_menu(message: types.Message):
 async def get_buying_list(message: types.Message):
     for product in products_info:
         #await message.reply(product[0])  # Отправляем информацию
-        await message.reply(f'Развание: {product[0]} | Описание: {product[1]} | Цена: {product[2]}')
+        await message.reply(f'Название: {product[0]} | Описание: {product[1]} | Цена: {product[2]}')
         # Загружаем изображение из URL
         async with aiohttp.ClientSession() as session:
             async with session.get(product[3]) as resp:
