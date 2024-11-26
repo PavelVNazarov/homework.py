@@ -17,14 +17,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import RedirectView
-from blog.views import update_post, get_all_posts, delete_post, filter_posts
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', RedirectView.as_view(url='post_list/')),
+    path('', RedirectView.as_view(url='/post_list/')),
     path('post_list/', include('blog.urls')),
-    path('update_post/', update_post, name='update_post'),
-    path('get_all_posts/', get_all_posts, name='get_all_posts'),
-    path('delete_post/', delete_post, name='delete_post'),
-    path('filter_posts/', filter_posts, name='filter_posts'),
 ]
