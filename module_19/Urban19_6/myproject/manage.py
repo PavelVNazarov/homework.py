@@ -1,3 +1,7 @@
+# python manage.py runserver
+# python manage.py makemigrations
+# python manage.py migrate
+
 #!/usr/bin/env python
 """Django's command-line utility for administrative tasks."""
 import os
