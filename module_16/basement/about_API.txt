@@ -1,3 +1,5 @@
+https://uguide.ru/tablica-osnovnykh-tegov-html-s-primerami - Таблица основных тегов html с примерами
+
 для старта пишем в терминале python -m uvicorn main:app
 переходим по цифрам  http://127.0.0.1:8000 или http://localhost:8000
 Если зайти по адресу http://localhost:8000/docs, то мы увидим удобный интерфейс для тестирования наших эндпоинтов.
