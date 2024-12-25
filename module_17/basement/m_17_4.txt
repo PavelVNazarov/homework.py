@@ -1,7 +1,5 @@
 реализуем логику работы функций маршрутов в файле user.py. Вот пример того, как это может выглядеть:
 
-Python
-Копировать
 from fastapi import APIRouter, Depends, status, HTTPException
 from sqlalchemy.orm import Session
 from backend.db_depends import get_db
@@ -60,6 +58,7 @@ def delete_user(user_id: int, db: Annotated[Session, Depends(get_db)]):
     db.execute(delete(User).where(User.id == user_id))
     db.commit()
     return {'status_code': status.HTTP_200_OK, 'transaction': 'User deleted successfully'}
+
 Пояснения:
 Импорт необходимых модулей - все зависимости импортированы.
 Алгоритмы функций:
