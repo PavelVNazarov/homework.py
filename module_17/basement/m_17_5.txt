@@ -1,8 +1,7 @@
 начнем с описания логики функций в task.py, а затем перейдем к изменениям в user.py.
 
 task.py
-Python
-Копировать
+
 from fastapi import APIRouter, Depends, status, HTTPException
 from sqlalchemy.orm import Session
 from backend.db_depends import get_db
@@ -58,11 +57,10 @@ def delete_task(task_id: int, db: Session = Depends(get_db)):
     db.execute(delete(Task).where(Task.id == task_id))
     db.commit()
     return {'status_code': status.HTTP_200_OK, 'transaction': 'Task deleted successfully!'}
+
 user.py
 Теперь изменим user.py, чтобы добавить маршрут для получения всех задач конкретного пользователя и удалять все задачи при удалении пользователя.
 
-Python
-Копировать
 @router.get("/{user_id}/tasks")
 def tasks_by_user_id(user_id: int, db: Session = Depends(get_db)):
     tasks = db.execute(select(Task).where(Task.user_id == user_id)).scalars().all()
