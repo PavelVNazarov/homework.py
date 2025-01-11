@@ -35,8 +35,6 @@ cursor.executemany("INSERT INTO Users (username, email, age, balance) VALUES (?,
 
 Обновление баланса пользователей:
 
-Python
-Копировать
 cursor.execute("UPDATE Users SET balance = 500 WHERE id % 2")
 Устанавливает balance равным 500 для каждой второй записи (где id четное) в таблице.
 
